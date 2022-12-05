@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "js-cookie": "^3.0.1",
+    "react-router-dom": "^6.4.4"
+  },
+  "devDependencies": {
+    "@types/js-cookie": "^3.0.2",
+    "@types/react-router-dom": "^5.3.3"
+  }
+}
