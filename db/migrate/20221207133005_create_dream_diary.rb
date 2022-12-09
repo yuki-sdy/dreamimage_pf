@@ -9,7 +9,7 @@ class CreateDreamDiary < ActiveRecord::Migration[6.1]
       t.integer :dream_type, null: false, default: 0
       t.integer :state, null: false, default: 0
       t.text :image
-      t.string :daiary_ogp
+      t.string :diary_ogp
       t.references :user, foreign_key: true
 
       t.timestamps

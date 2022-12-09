@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 2022_12_07_133005) do
     t.integer "dream_type", default: 0, null: false
     t.integer "state", default: 0, null: false
     t.text "image"
-    t.string "daiary_ogp"
+    t.string "diary_ogp"
     t.bigint "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
