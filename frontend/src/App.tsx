@@ -2,6 +2,8 @@ import React, { useState, useEffect, createContext } from "react"
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom"
 
 import CommonLayout from "./components/layout/CommonLayout"
+import DreamDiaries from "./components/pages/DreamDiaries"
+import DreamDiaryShow from "./components/pages/DreamDiaryShow"
 import Home from "./components/pages/Home"
 import SignIn from "./components/pages/SignIn"
 import SignUp from "./components/pages/SignUp"
@@ -71,6 +73,8 @@ const App: React.FC = () => {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/" element={<Private children={<Home />} />} />
+            <Route path="/dreamdiaries" element={<Private children={<DreamDiaries />} />} />
+            <Route path="/dreamdiaries/:id" element={<Private children={<DreamDiaryShow />} />} />
           </Routes>
         </CommonLayout>
       </AuthContext.Provider>
