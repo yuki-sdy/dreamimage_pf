@@ -23,3 +23,19 @@ export interface User {
   image?: string
   allowPasswordChange: boolean
 }
+
+//夢絵日記
+export interface DreamDiary {
+  id: number
+  title: string
+  body: string
+  prompt: string
+  dream_date: Date
+  impression: number
+  dream_type: number
+  state: number
+  ogp: string
+  image: string
+  userId: number | undefined
+
+}
