@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 2022_12_07_133005) do
     t.date "dream_date"
     t.integer "impression", default: 0, null: false
     t.integer "dream_type", default: 0, null: false
-    t.integer "state", default: 0, null: false
+    t.boolean "state", default: false, null: false
     t.text "image"
     t.string "diary_ogp"
     t.bigint "user_id"
