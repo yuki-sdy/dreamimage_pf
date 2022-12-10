@@ -30,12 +30,15 @@ export interface DreamDiary {
   title: string
   body: string
   prompt: string
-  dream_date: Date
+  dreamDate: Date
   impression: number
-  dream_type: number
-  state: number
+  dreamType: number
+  state: boolean
   ogp: string
   image: string
   userId: number | undefined
+}
 
+export interface DreamDiaryFormData extends FormData {
+  append(name: keyof DreamDiary, value: String | Blob, fileName?: string): any
 }
