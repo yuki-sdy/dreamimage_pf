@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
-import { DreamDiary } from "../../interfaces"
-import { getDreamDiaries } from "../../lib/api/dreamdiaries"
+import { DreamDiary } from "../../../interfaces"
+import { getDreamDiaries } from "../../../lib/api/dreamdiaries"
 import { Grid, List, ListItemText, makeStyles, Theme } from "@material-ui/core"
 
 const useStyles = makeStyles((theme: Theme) => ({

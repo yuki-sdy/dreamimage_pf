@@ -12,20 +12,17 @@ class Api::V1::DreamDiariesController < ApplicationController
 
   def create
     dream_diary = DreamDiary.new(dream_diary_params)
-    if dream_diaries.save
-      render json: {status: 200, dream_diary: dream_diary }
+    if dream_diary.save
+      id = DreamDiary.maximum(:id)
+      render json: {status: 200, dream_diary: dream_diary, id: id }
     else
       render json: { status:500, dream_diary: "作成に失敗しました" }
     end
   end
 
-  def edit
-    render json: { status: 200, dream_diary: @dream_diary }
-  end
-
   def update
     if @dream_diary.update(dream_diary_params)
-      render json: {status: 200, dream_diary: dream_diary }
+      render json: {status: 200, dream_diary: @dream_diary, id: @dream_diary.id }
     else
       render json: { status:500, dream_diary: "更新に失敗しました" }
     end
@@ -33,7 +30,7 @@ class Api::V1::DreamDiariesController < ApplicationController
 
   def destroy
     if @dream_diary.destroy
-      render json: {status: 200 }
+      render json: { status: 200, dream_diary: '削除しました' }
     else
       render json: { status:500, dream_diary: "削除できません" }
     end
@@ -46,6 +43,6 @@ class Api::V1::DreamDiariesController < ApplicationController
   end
 
   def dream_diary_params
-    params.permit()
+    params.permit(:title, :body, :prompt, :diary_ogp, :state, :impression, :dream_type, :dream_date, :user_id)
   end
 end
