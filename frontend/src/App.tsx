@@ -2,6 +2,11 @@ import React, { useState, useEffect, createContext } from "react"
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom"
 
 import CommonLayout from "./components/layout/CommonLayout"
+import DreamDiaries from "./components/pages/dreamDiaries/DreamDiaries"
+import DreamDiaryEditForm from "./components/pages/dreamDiaries/DreamDiaryEditForm"
+import DreamDiaryForm from "./components/pages/dreamDiaries/DreamDiaryForm"
+import DreamDiaryShow from "./components/pages/dreamDiaries/DreamDiaryShow"
+
 import Home from "./components/pages/Home"
 import SignIn from "./components/pages/SignIn"
 import SignUp from "./components/pages/SignUp"
@@ -71,6 +76,13 @@ const App: React.FC = () => {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/" element={<Private children={<Home />} />} />
+            <Route path="/dreamdiaries" element={<Private children={<DreamDiaries />} />} />
+            <Route path="/dreamdiaries/:id" 
+              element={<Private children={<DreamDiaryShow />} />} />
+            <Route path="/dreamdiaries/new" 
+              element={<Private children={<DreamDiaryForm />} />} />
+            <Route path="/dreamdiaries/:id/edit" 
+              element={<Private children={<DreamDiaryEditForm />} />} />
           </Routes>
         </CommonLayout>
       </AuthContext.Provider>

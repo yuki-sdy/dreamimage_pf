@@ -23,3 +23,22 @@ export interface User {
   image?: string
   allowPasswordChange: boolean
 }
+
+//夢絵日記
+export interface DreamDiary {
+  id: number
+  title: string
+  body: string
+  prompt: string
+  dreamDate: Date
+  impression: number
+  dreamType: number
+  state: boolean
+  ogp: string
+  image: string
+  userId: number | undefined
+}
+
+export interface DreamDiaryFormData extends FormData {
+  append(name: keyof DreamDiary, value: String | Blob, fileName?: string): any
+}
