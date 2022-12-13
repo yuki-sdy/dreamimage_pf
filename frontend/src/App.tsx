@@ -3,8 +3,10 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-d
 
 import CommonLayout from "./components/layout/CommonLayout"
 import DreamDiaries from "./components/pages/dreamDiaries/DreamDiaries"
+import DreamDiaryBackForm from "./components/pages/dreamDiaries/DreamDiaryBackForm"
 import DreamDiaryEditForm from "./components/pages/dreamDiaries/DreamDiaryEditForm"
 import DreamDiaryForm from "./components/pages/dreamDiaries/DreamDiaryForm"
+import DreamDiaryPreview from "./components/pages/dreamDiaries/DreamDiaryPreview"
 import DreamDiaryShow from "./components/pages/dreamDiaries/DreamDiaryShow"
 
 import Home from "./components/pages/Home"
@@ -81,6 +83,14 @@ const App: React.FC = () => {
               element={<Private children={<DreamDiaryShow />} />} />
             <Route path="/dreamdiaries/new" 
               element={<Private children={<DreamDiaryForm />} />} />
+            <Route index />
+              <Route path="/dreamdiaries/preview" 
+                element={<Private children={<DreamDiaryPreview />} />} />
+            <Route/>
+            <Route index />
+              <Route path="/dreamdiaries/back"
+                element={<Private children={<DreamDiaryBackForm />} />} />
+            <Route/>
             <Route path="/dreamdiaries/:id/edit" 
               element={<Private children={<DreamDiaryEditForm />} />} />
           </Routes>
