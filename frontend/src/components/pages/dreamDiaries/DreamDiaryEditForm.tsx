@@ -1,17 +1,16 @@
-import React, { useEffect, useState, useCallback, useContext, memo } from "react"
+import React, { useEffect, useState, useCallback, useContext } from "react"
 import { Box, Button, Card, CardContent, CardHeader, Checkbox, FormControl, FormControlLabel, FormGroup, Grid, IconButton, InputLabel, makeStyles, MenuItem, Select, TextField, Theme } from "@material-ui/core"
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers"
 import { PhotoCamera } from "@material-ui/icons"
 import AlertMessage from "../../utils/AlertMessage"
 
-import { DreamDiary, DreamDiaryFormData } from "../../../interfaces"
+import { DreamDiaryFormData } from "../../../interfaces"
 import { DreamDiaryUpdate, getDreamDiary } from "../../../lib/api/dreamdiaries"
 import { useLocation, useNavigate } from "react-router-dom"
 import { dream_types, impressions } from "../../../data/dreamdiaryEnums"
 import DateFnsUtils from "@date-io/date-fns"
 import CancelIcon from "@material-ui/icons/Cancel"
 import { AuthContext } from "../../../App"
-import { useForm } from "react-hook-form"
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
@@ -54,20 +53,20 @@ const DreamDiaryEditForm: React.FC = () => {
 
   const sampleLocation = useLocation();
   const id = parseInt(sampleLocation.pathname.split('/')[2])
+  const check = sampleLocation.pathname.split('/').pop()
 
   const [loading, setLoading] = useState<boolean>(true)
-  const [dreamDiary, setDreamDiary] = useState<DreamDiary>()
   
   const [title, setTitle] = useState<string>("")
   const [body, setBody] = useState<string>("")
   const [prompt, setPrompt] = useState<string>("")
   const [diaryOgp, setDiaryOgp] = useState<string>("")
 
-  const [state, setState] = useState<number>(0)
+  const [state, setState] = useState<boolean>(false)
   const [impression, setImpression] = useState<number>()
   const [dreamType, setDreamType] = useState<number>()
   const [dreamDate, setDreamDate] = useState<Date | null>(new Date("2023-01-01"))
-console.log('aaaa')
+
   const [image, setImage] = useState<string>("")
   const [preview, setPreview] = useState<string>("")
   const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false)
@@ -78,10 +77,14 @@ console.log('aaaa')
       console.log(res)
 
       if (res.status === 200) {
-        setDreamDiary(res.data.dreamDiary)
-
-        // APIデータを編集フォームに持ってくるやり方が分からん
-        // setTitle(String(dreamDiary?.title))
+        // setDreamDiary(res.data.dreamDiary)
+        setTitle(String(res.data.dreamDiary?.title))
+        setBody(String(res.data.dreamDiary?.body))
+        setPrompt(String(res.data.dreamDiary?.prompt))
+        setImpression(res.data.dreamDiary.impression)
+        setDreamType(res.data.dreamDiary.dreamType)
+        setState(Boolean(res.data.dreamDiary.state))
+        setDreamDate(res.data.dreamDiary.dreamDate)
 
       } else {
         console.log("No diary")
@@ -136,15 +139,6 @@ console.log('aaaa')
 
       if (res.status === 200) {
         navigation(`/dreamdiaries/${id}`)
-
-        setTitle("")
-        setBody("")
-        setPrompt("")
-        setDiaryOgp("")
-        setState(0)
-        setImpression(undefined)
-        setDreamType(undefined)
-        setDreamDate(null)
 
         console.log("Diary updated!")
       } else {
@@ -240,8 +234,9 @@ console.log('aaaa')
                 <FormControlLabel
                   defaultChecked
                   control={<Checkbox /> } 
-                  value={state} 
-                  onChange={(state: any) => setState(state as number)} label="公開" />
+                  value={Boolean(state)} 
+                  onChange={(state: any) => setState(state => !state)} 
+                  label={ Boolean(state) === true ? "公開切替え：公開中" : "公開切替え：非公開中" } />
               </FormGroup>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <Grid container justify="space-around">

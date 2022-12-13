@@ -9,7 +9,7 @@ class Api::V1::DreamDiariesController < ApplicationController
   def show
     render json: { status: 200, dream_diary: @dream_diary }
   end
-
+  
   def create
     dream_diary = DreamDiary.new(dream_diary_params)
     if dream_diary.save
@@ -32,8 +32,22 @@ class Api::V1::DreamDiariesController < ApplicationController
     if @dream_diary.destroy
       render json: { status: 200, dream_diary: '削除しました' }
     else
-      render json: { status:500, dream_diary: "削除できません" }
+      render json: { status: 500, dream_diary: "削除できません" }
     end
+  end
+
+  def preview
+    dream_diary = DreamDiary.new(dream_diary_params)
+    if dream_diary.valid?
+      render json: { status: 200, dream_diary: dream_diary }
+    else
+      render json: { status: 401, dream_diary: dream_diary }
+    end
+  end
+
+  def back
+    dream_diary = DreamDiary.new(dream_diary_params)
+    render json: { status: 200, dream_diary: dream_diary }
   end
 
   private

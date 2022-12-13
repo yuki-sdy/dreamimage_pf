@@ -1,12 +1,12 @@
-import React, { useState, useCallback, useContext } from "react"
+import React, { useEffect, useState, useCallback, useContext } from "react"
 import { Box, Button, Card, CardContent, CardHeader, Checkbox, FormControl, FormControlLabel, FormGroup, Grid, IconButton, InputLabel, makeStyles, MenuItem, Select, TextField, Theme } from "@material-ui/core"
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers"
 import { PhotoCamera } from "@material-ui/icons"
 import AlertMessage from "../../utils/AlertMessage"
 
-import { DreamDiaryFormData } from "../../../interfaces"
+import { DreamDiary, DreamDiaryFormData } from "../../../interfaces"
 import { DreamDiaryPreview } from "../../../lib/api/dreamdiaries"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { dream_types, impressions } from "../../../data/dreamdiaryEnums"
 import DateFnsUtils from "@date-io/date-fns"
 import CancelIcon from "@material-ui/icons/Cancel"
@@ -46,17 +46,24 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }))
 
-const DreamDiaryForm: React.FC = () => {
+const DreamDiaryBackForm: React.FC = () => {
   const classes = useStyles()
   const navigation = useNavigate()
   const { currentUser } = useContext(AuthContext)
 
-  const [title, setTitle] = useState<string>("")
-  const [body, setBody] = useState<string>("")
+  const sampleLocation = useLocation();
+  const id = parseInt(sampleLocation.pathname.split('/')[2])
+  const check = sampleLocation.pathname.split('/').pop()
+  
+  const location = useLocation()
+  const [dreamDiaryForm, setDreamDiaryForm] = useState<DreamDiaryFormData>(location.state.dreamDiary)
+  const [title, setTitle] = useState<string>(location.state.dreamDiary.title)
+  const [body, setBody] = useState<string>(location.state.dreamDiary.body)
   const [prompt, setPrompt] = useState<string>("")
   const [diaryOgp, setDiaryOgp] = useState<string>("")
+  console.log(title)
 
-  const [state, setState] = useState<number>(0)
+  const [state, setState] = useState<boolean>(false)
   const [impression, setImpression] = useState<number>()
   const [dreamType, setDreamType] = useState<number>()
   const [dreamDate, setDreamDate] = useState<Date | null>(new Date("2023-01-01"))
@@ -116,10 +123,10 @@ const DreamDiaryForm: React.FC = () => {
   }
 
   return (
-    <>
+        <>
       <form noValidate autoComplete="off">
         <Card className={classes.card}>
-          <CardHeader className={classes.header} title="夢絵日記 新規作成" />
+          <CardHeader className={classes.header} title="夢絵日記 編集" />
           <CardContent>
             <TextField
               variant="outlined"
@@ -192,13 +199,14 @@ const DreamDiaryForm: React.FC = () => {
                 }
               </Select>
             </FormControl>
-            <FormGroup>
-            <FormControlLabel
+              <FormGroup>
+                <FormControlLabel
                   defaultChecked
                   control={<Checkbox /> } 
-                  value={state} 
-                  onChange={(state: any) => setState(state as number)} label="公開する" />
-            </FormGroup>
+                  value={Boolean(state)} 
+                  onChange={(state: any) => setState(state => !state)} 
+                  label={ Boolean(state) === true ? "公開切替え：公開中" : "公開切替え：非公開中" } />
+              </FormGroup>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <Grid container justify="space-around">
                 <KeyboardDatePicker
@@ -283,4 +291,4 @@ const DreamDiaryForm: React.FC = () => {
   )
 }
 
-export default DreamDiaryForm
+export default DreamDiaryBackForm

@@ -1,6 +1,6 @@
 import { Button, makeStyles, Theme } from "@material-ui/core"
 import React, { useContext, useEffect, useState } from "react"
-import { Link, useLocation, useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { AuthContext } from "../../../App"
 
 import { DreamDiary } from "../../../interfaces"
@@ -72,6 +72,7 @@ const DreamDiaryShow: React.FC = () => {
           <div>{`title: ${dreamDiary?.title}`}</div>
           <div>{`body: ${dreamDiary?.body}`}</div>
           <div>{`state: ${dreamDiary?.state}`}</div>
+          <div>{`dreamDate: ${dreamDiary?.dreamDate}`}</div>
           <Button
             color="inherit"
             className={classes.linkBtn}
