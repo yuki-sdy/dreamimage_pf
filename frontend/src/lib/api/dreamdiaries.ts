@@ -22,9 +22,19 @@ export const getDreamDiary = (id: number) => {
   })
 }
 
-//createへのpostリクエスト、newから
+//previewへのpostリクエスト、newから
+export const DreamDiaryPreview = (data: DreamDiaryFormData) => {
+  return client.post("dream_diaries/preview", data )
+}
+
+//createへのpostリクエスト、previewから
 export const DreamDiaryCreate = (data: DreamDiaryFormData) => {
   return client.post("dream_diaries", data )
+}
+
+//backへのpostリクエスト、previewから
+export const DreamDiaryBack = (data: DreamDiaryFormData) => {
+  return client.post("dream_diaries/back", data )
 }
 
 // updateへのputリクエスト、editから
