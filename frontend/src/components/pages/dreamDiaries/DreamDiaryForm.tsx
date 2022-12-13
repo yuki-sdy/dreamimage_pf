@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useCallback, useContext } from "react"
+import React, { useState, useCallback, useContext } from "react"
 import { Box, Button, Card, CardContent, CardHeader, Checkbox, FormControl, FormControlLabel, FormGroup, Grid, IconButton, InputLabel, makeStyles, MenuItem, Select, TextField, Theme } from "@material-ui/core"
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers"
 import { PhotoCamera } from "@material-ui/icons"
 import AlertMessage from "../../utils/AlertMessage"
 
 import { DreamDiaryFormData } from "../../../interfaces"
-import { DreamDiaryCreate } from "../../../lib/api/dreamdiaries"
+import { DreamDiaryPreview } from "../../../lib/api/dreamdiaries"
 import { useNavigate } from "react-router-dom"
 import { dream_types, impressions } from "../../../data/dreamdiaryEnums"
 import DateFnsUtils from "@date-io/date-fns"
@@ -95,27 +95,17 @@ const DreamDiaryForm: React.FC = () => {
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-
     const data = createFormData()
     
     try {
       console.log(data)
-      const res = await DreamDiaryCreate(data)
+      const res = await DreamDiaryPreview(data)
       console.log(res)
 
       if (res.status === 200) {
-        navigation(`/dreamdiaries/${res.data.id}`)
+        navigation('/dreamdiaries/preview',
+         { state: {dreamDiary: res.data.dreamDiary} })
 
-        setTitle("")
-        setBody("")
-        setPrompt("")
-        setDiaryOgp("")
-        setState(0)
-        setImpression(undefined)
-        setDreamType(undefined)
-        setDreamDate(null)
-
-        console.log("Diary created!")
       } else {
         setAlertMessageOpen(true)
       }
@@ -207,7 +197,7 @@ const DreamDiaryForm: React.FC = () => {
                   defaultChecked
                   control={<Checkbox /> } 
                   value={state} 
-                  onChange={(state: any) => setState(state as number)} label="公開" />
+                  onChange={(state: any) => setState(state as number)} label="公開する" />
             </FormGroup>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <Grid container justify="space-around">

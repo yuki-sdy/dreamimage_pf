@@ -4,7 +4,7 @@ import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/picker
 import { PhotoCamera } from "@material-ui/icons"
 import AlertMessage from "../../utils/AlertMessage"
 
-import { DreamDiary, DreamDiaryFormData } from "../../../interfaces"
+import { DreamDiaryFormData } from "../../../interfaces"
 import { DreamDiaryUpdate, getDreamDiary } from "../../../lib/api/dreamdiaries"
 import { useLocation, useNavigate } from "react-router-dom"
 import { dream_types, impressions } from "../../../data/dreamdiaryEnums"
@@ -53,6 +53,8 @@ const DreamDiaryEditForm: React.FC = () => {
 
   const sampleLocation = useLocation();
   const id = parseInt(sampleLocation.pathname.split('/')[2])
+  const check = sampleLocation.pathname.split('/').pop()
+
   const [loading, setLoading] = useState<boolean>(true)
   
   const [title, setTitle] = useState<string>("")
@@ -232,9 +234,9 @@ const DreamDiaryEditForm: React.FC = () => {
                 <FormControlLabel
                   defaultChecked
                   control={<Checkbox /> } 
-                  value={state} 
+                  value={Boolean(state)} 
                   onChange={(state: any) => setState(state => !state)} 
-                  label={ Boolean(state) === true ? "公開中(チェックで切替え)" : "非公開中(チェックで切替え)" } />
+                  label={ Boolean(state) === true ? "公開切替え：公開中" : "公開切替え：非公開中" } />
               </FormGroup>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <Grid container justify="space-around">
