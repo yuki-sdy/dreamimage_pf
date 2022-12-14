@@ -9,6 +9,8 @@ Rails.application.routes.draw do
         post 'back', on: :collection
       end
 
+      post 'images/create'
+
       mount_devise_token_auth_for 'User', at: 'auth', controllers: {
         registrations: 'api/v1/auth/registrations'
       }

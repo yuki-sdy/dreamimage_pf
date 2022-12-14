@@ -57,6 +57,6 @@ class Api::V1::DreamDiariesController < ApplicationController
   end
 
   def dream_diary_params
-    params.permit(:title, :body, :prompt, :diary_ogp, :state, :impression, :dream_type, :dream_date, :user_id)
+    params.permit(:title, :body, :prompt, :diary_ogp, :state, :impression, :dream_type, :dream_date, :image, :user_id)
   end
 end

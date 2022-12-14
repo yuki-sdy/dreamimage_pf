@@ -1,4 +1,4 @@
-class CreateDreamDiary < ActiveRecord::Migration[6.1]
+class CreateDreamDiaries < ActiveRecord::Migration[6.1]
   def change
     create_table :dream_diaries do |t|
       t.string :title

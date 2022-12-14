@@ -50,3 +50,8 @@ export const DreamDiaryDestroy = (id: number | undefined) => {
     "uid": Cookies.get("_uid")
   }})  
 }
+
+// image#createへのpostリクエスト
+export const ImageCreate = (prompts: string, id: number | undefined) => {
+  return client.post("images/create", { prompts: prompts, user_id: id })
+}
