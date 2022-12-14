@@ -73,13 +73,23 @@ const DreamDiaryShow: React.FC = () => {
           <div>{`body: ${dreamDiary?.body}`}</div>
           <div>{`state: ${dreamDiary?.state}`}</div>
           <div>{`dreamDate: ${dreamDiary?.dreamDate}`}</div>
-          <Button
-            color="inherit"
-            className={classes.linkBtn}
-            onClick={handleDeleteDreamDiary}
-          >
-            削除する
-          </Button>
+          {
+            dreamDiary?.image ? (
+              <img
+              src={dreamDiary?.image}
+              alt="preview img"
+            />
+            ) : null
+          }
+          <div>
+            <Button
+              color="inherit"
+              className={classes.linkBtn}
+              onClick={handleDeleteDreamDiary}
+            >
+              この日記を削除する
+            </Button>
+          </div>
           </>
           ) : (<></>) 
       }
