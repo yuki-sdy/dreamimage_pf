@@ -5,7 +5,7 @@ import { PhotoCamera } from "@material-ui/icons"
 import AlertMessage from "../../utils/AlertMessage"
 
 import { DreamDiaryFormData } from "../../../interfaces"
-import { DreamDiaryPreview } from "../../../lib/api/dreamdiaries"
+import { DreamDiaryPreview, ImageCreate } from "../../../lib/api/dreamdiaries"
 import { useNavigate } from "react-router-dom"
 import { dream_types, impressions } from "../../../data/dreamdiaryEnums"
 import DateFnsUtils from "@date-io/date-fns"
@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginBottom: "1.5rem"
   },
   preview: {
-    width: "100%"
+    width: "50%"
   }
 }))
 
@@ -82,17 +82,40 @@ const DreamDiaryForm: React.FC = () => {
 
     formData.append("title", title)
     formData.append("body", body)
-    formData.append("prompt", prompt)
     formData.append("diaryOgp", diaryOgp)
     formData.append("state", String(state))
     formData.append("impression", String(impression))
     formData.append("dreamType", String(dreamType))
     formData.append("dreamDate", String(dreamDate))
+    formData.append("prompt", prompt)
+    formData.append("image", image)
     formData.append("userId", String(currentUser?.id))
 
     return formData
   }
 
+  // 画像生成する
+  const handlePromptsSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+
+    try {
+      const res = await ImageCreate(prompt, currentUser?.id)
+      console.log(res)
+
+      if (res.status === 200) {
+        setPreview(res.data.image)
+        setImage(res.data.image)
+
+      } else {
+        setAlertMessageOpen(true)
+      }
+    } catch (err) {
+      console.log(err)
+      setAlertMessageOpen(true)
+    }
+  }
+
+  //フォームを送信する
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     const data = createFormData()
@@ -140,17 +163,6 @@ const DreamDiaryForm: React.FC = () => {
               value={body}
               margin="dense"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBody(e.target.value)}
-            />
-            <TextField
-              variant="outlined"
-              required
-              fullWidth
-              label="呪文"
-              type="prompt"
-              value={prompt}
-              margin="dense"
-              autoComplete="current-password"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPrompt(e.target.value)}
             />
             <FormControl
               variant="outlined"
@@ -239,6 +251,29 @@ const DreamDiaryForm: React.FC = () => {
                 </IconButton>
               </label>
             </div>
+            <TextField
+              variant="outlined"
+              required
+              fullWidth
+              label="呪文"
+              type="prompt"
+              value={prompt}
+              margin="dense"
+              autoComplete="current-password"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPrompt(e.target.value)}
+            />
+            <div style={{ textAlign: "right"}} >
+            <Button
+                type="submit"
+                variant="outlined"
+                color="primary"
+                disabled={!prompt ? true : false}
+                className={classes.submitBtn}
+                onClick={handlePromptsSubmit}
+              >
+                絵を生成してみる
+              </Button>
+            </div>
             {
               preview ? (
                 <Box
@@ -258,12 +293,12 @@ const DreamDiaryForm: React.FC = () => {
                 </Box>
               ) : null
             }
-            <div style={{ textAlign: "right"}} >
+            <div style={{ textAlign: "center"}} >
               <Button
                 type="submit"
                 variant="outlined"
                 color="primary"
-                disabled={!title || !body ? true : false} // 空欄があった場合はボタンを押せないように
+                disabled={!title || !body || !prompt ? true : false} // 空欄があった場合はボタンを押せないように
                 className={classes.submitBtn}
                 onClick={handleSubmit}
               >
