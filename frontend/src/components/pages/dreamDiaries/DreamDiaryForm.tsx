@@ -65,18 +65,6 @@ const DreamDiaryForm: React.FC = () => {
   const [preview, setPreview] = useState<string>("")
   const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false)
 
-    // アップロードした画像のデータを取得
-    const uploadImage = useCallback((e :any) => {
-      const file = e.target.files[0]
-      setImage(file)
-    }, [])
-  
-    // 画像プレビューを表示
-    const previewImage = useCallback((e :any) => {
-      const file = e.target.files[0]
-      setPreview(window.URL.createObjectURL(file))
-    }, [])
-
   const createFormData = (): DreamDiaryFormData => {
     const formData = new FormData()
 
@@ -230,27 +218,6 @@ const DreamDiaryForm: React.FC = () => {
                 />
               </Grid>
             </MuiPickersUtilsProvider>
-            <div className={classes.imageUploadBtn}>
-              <input
-                accept="image/*"
-                className={classes.input}
-                id="icon-button-file"
-                type="file"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  uploadImage(e)
-                  previewImage(e)
-                }}
-              />
-              <label htmlFor="icon-button-file">
-                <IconButton
-                  color="primary"
-                  aria-label="upload picture"
-                  component="span"
-                >
-                  <PhotoCamera />
-                </IconButton>
-              </label>
-            </div>
             <TextField
               variant="outlined"
               required
@@ -302,7 +269,7 @@ const DreamDiaryForm: React.FC = () => {
                 className={classes.submitBtn}
                 onClick={handleSubmit}
               >
-                送信
+                内容を確認する
               </Button>
             </div>
           </CardContent>
