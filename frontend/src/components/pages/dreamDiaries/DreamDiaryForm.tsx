@@ -1,7 +1,7 @@
-import React, { useState, useCallback, useContext } from "react"
+import React, { useState, useContext } from "react"
 import { Box, Button, Card, CardContent, CardHeader, Checkbox, FormControl, FormControlLabel, FormGroup, Grid, IconButton, InputLabel, makeStyles, MenuItem, Select, TextField, Theme } from "@material-ui/core"
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers"
-import { PhotoCamera } from "@material-ui/icons"
+import CircularProgress from '@material-ui/core/CircularProgress'
 import AlertMessage from "../../utils/AlertMessage"
 
 import { DreamDiaryFormData } from "../../../interfaces"
@@ -56,26 +56,15 @@ const DreamDiaryForm: React.FC = () => {
   const [prompt, setPrompt] = useState<string>("")
   const [diaryOgp, setDiaryOgp] = useState<string>("")
 
-  const [state, setState] = useState<number>(0)
+  const [state, setState] = useState<boolean>(false)
   const [impression, setImpression] = useState<number>()
   const [dreamType, setDreamType] = useState<number>()
   const [dreamDate, setDreamDate] = useState<Date | null>(new Date("2023-01-01"))
 
   const [image, setImage] = useState<string>("")
   const [preview, setPreview] = useState<string>("")
+  const [imageLoading, setImageLoading] = useState<boolean>(false)
   const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false)
-
-    // アップロードした画像のデータを取得
-    const uploadImage = useCallback((e :any) => {
-      const file = e.target.files[0]
-      setImage(file)
-    }, [])
-  
-    // 画像プレビューを表示
-    const previewImage = useCallback((e :any) => {
-      const file = e.target.files[0]
-      setPreview(window.URL.createObjectURL(file))
-    }, [])
 
   const createFormData = (): DreamDiaryFormData => {
     const formData = new FormData()
@@ -97,6 +86,7 @@ const DreamDiaryForm: React.FC = () => {
   // 画像生成する
   const handlePromptsSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
+    setImageLoading(true)
 
     try {
       const res = await ImageCreate(prompt, currentUser?.id)
@@ -113,6 +103,7 @@ const DreamDiaryForm: React.FC = () => {
       console.log(err)
       setAlertMessageOpen(true)
     }
+    setImageLoading(false)
   }
 
   //フォームを送信する
@@ -144,6 +135,14 @@ const DreamDiaryForm: React.FC = () => {
         <Card className={classes.card}>
           <CardHeader className={classes.header} title="夢絵日記 新規作成" />
           <CardContent>
+            <FormGroup style={{ float: "right"}}>
+              <FormControlLabel
+                control={<Checkbox /> } 
+                value={Boolean(state)}
+                checked={Boolean(state)}
+                onChange={(state: any) => setState(state => !state)} 
+                label={Boolean(state) === true ? "公開中" : "公開する"} />
+            </FormGroup>
             <TextField
               variant="outlined"
               required
@@ -204,13 +203,6 @@ const DreamDiaryForm: React.FC = () => {
                 }
               </Select>
             </FormControl>
-            <FormGroup>
-            <FormControlLabel
-                  defaultChecked
-                  control={<Checkbox /> } 
-                  value={state} 
-                  onChange={(state: any) => setState(state as number)} label="公開する" />
-            </FormGroup>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <Grid container justify="space-around">
                 <KeyboardDatePicker
@@ -230,27 +222,6 @@ const DreamDiaryForm: React.FC = () => {
                 />
               </Grid>
             </MuiPickersUtilsProvider>
-            <div className={classes.imageUploadBtn}>
-              <input
-                accept="image/*"
-                className={classes.input}
-                id="icon-button-file"
-                type="file"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  uploadImage(e)
-                  previewImage(e)
-                }}
-              />
-              <label htmlFor="icon-button-file">
-                <IconButton
-                  color="primary"
-                  aria-label="upload picture"
-                  component="span"
-                >
-                  <PhotoCamera />
-                </IconButton>
-              </label>
-            </div>
             <TextField
               variant="outlined"
               required
@@ -271,7 +242,14 @@ const DreamDiaryForm: React.FC = () => {
                 className={classes.submitBtn}
                 onClick={handlePromptsSubmit}
               >
-                絵を生成してみる
+                {
+                  imageLoading ? (
+                    <CircularProgress
+                      size="1.5rem" />
+                  ):(
+                    "絵を生成してみる"
+                  )
+                }
               </Button>
             </div>
             {
@@ -298,11 +276,11 @@ const DreamDiaryForm: React.FC = () => {
                 type="submit"
                 variant="outlined"
                 color="primary"
-                disabled={!title || !body || !prompt ? true : false} // 空欄があった場合はボタンを押せないように
+                disabled={!title || !body || !prompt ? true : false}
                 className={classes.submitBtn}
                 onClick={handleSubmit}
               >
-                送信
+                内容を確認する
               </Button>
             </div>
           </CardContent>

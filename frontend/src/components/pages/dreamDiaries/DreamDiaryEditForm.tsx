@@ -1,12 +1,12 @@
-import React, { useEffect, useState, useCallback, useContext } from "react"
+import React, { useEffect, useState, useContext } from "react"
 import { Box, Button, Card, CardContent, CardHeader, Checkbox, FormControl, FormControlLabel, FormGroup, Grid, IconButton, InputLabel, makeStyles, MenuItem, Select, TextField, Theme } from "@material-ui/core"
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers"
-import { PhotoCamera } from "@material-ui/icons"
+import CircularProgress from '@material-ui/core/CircularProgress'
 import AlertMessage from "../../utils/AlertMessage"
 
 import { DreamDiaryFormData } from "../../../interfaces"
-import { DreamDiaryUpdate, getDreamDiary } from "../../../lib/api/dreamdiaries"
-import { useLocation, useNavigate } from "react-router-dom"
+import { DreamDiaryPreview, getDreamDiary, ImageCreate } from "../../../lib/api/dreamdiaries"
+import { useNavigate, useParams } from "react-router-dom"
 import { dream_types, impressions } from "../../../data/dreamdiaryEnums"
 import DateFnsUtils from "@date-io/date-fns"
 import CancelIcon from "@material-ui/icons/Cancel"
@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginBottom: "1.5rem"
   },
   preview: {
-    width: "100%"
+    width: "50%"
   }
 }))
 
@@ -51,11 +51,11 @@ const DreamDiaryEditForm: React.FC = () => {
   const navigation = useNavigate()
   const { currentUser } = useContext(AuthContext)
 
-  const sampleLocation = useLocation();
-  const id = parseInt(sampleLocation.pathname.split('/')[2])
-  const check = sampleLocation.pathname.split('/').pop()
+  const params = useParams()
+  // const check = sampleLocation.pathname.split('/').pop()
 
   const [loading, setLoading] = useState<boolean>(true)
+  const [imageLoading, setImageLoading] = useState<boolean>(false)
   
   const [title, setTitle] = useState<string>("")
   const [body, setBody] = useState<string>("")
@@ -73,7 +73,7 @@ const DreamDiaryEditForm: React.FC = () => {
 
   const handleDreamDiary = async () => {
     try {
-      const res = await getDreamDiary(id)
+      const res = await getDreamDiary(Number(params.id))
       console.log(res)
 
       if (res.status === 200) {
@@ -85,6 +85,7 @@ const DreamDiaryEditForm: React.FC = () => {
         setDreamType(res.data.dreamDiary.dreamType)
         setState(Boolean(res.data.dreamDiary.state))
         setDreamDate(res.data.dreamDiary.dreamDate)
+        setImage(res.data.dreamDiary.image)
 
       } else {
         console.log("No diary")
@@ -100,29 +101,41 @@ const DreamDiaryEditForm: React.FC = () => {
     handleDreamDiary()
   }, [])
 
-    // アップロードした画像のデータを取得
-    const uploadImage = useCallback((e :any) => {
-      const file = e.target.files[0]
-      setImage(file)
-    }, [])
-  
-    // 画像プレビューを表示
-    const previewImage = useCallback((e :any) => {
-      const file = e.target.files[0]
-      setPreview(window.URL.createObjectURL(file))
-    }, [])
+  // 画像生成する
+  const handlePromptsSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    setImageLoading(true)
+
+    try {
+      const res = await ImageCreate(prompt, currentUser?.id)
+      console.log(res)
+
+      if (res.status === 200) {
+        setPreview(res.data.image)
+        setImage(res.data.image)
+
+      } else {
+        setAlertMessageOpen(true)
+      }
+    } catch (err) {
+      console.log(err)
+      setAlertMessageOpen(true)
+    }
+    setImageLoading(false)
+  }
 
   const createFormData = (): DreamDiaryFormData => {
     const formData = new FormData()
 
     formData.append("title", title)
     formData.append("body", body)
-    formData.append("prompt", prompt)
     formData.append("diaryOgp", diaryOgp)
     formData.append("state", String(state))
     formData.append("impression", String(impression))
     formData.append("dreamType", String(dreamType))
     formData.append("dreamDate", String(dreamDate))
+    formData.append("prompt", prompt)
+    formData.append("image", image)
     formData.append("userId", String(currentUser?.id))
 
     return formData
@@ -130,17 +143,16 @@ const DreamDiaryEditForm: React.FC = () => {
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-
     const data = createFormData()
     
     try {
       console.log(data)
-      const res = await DreamDiaryUpdate(id, data)
+      const res = await DreamDiaryPreview(data)
 
       if (res.status === 200) {
-        navigation(`/dreamdiaries/${id}`)
-
-        console.log("Diary updated!")
+        navigation('/dreamdiaries/preview',
+         { state: {dreamDiary: res.data.dreamDiary,
+                  dreamDiaryId: params.id} })
       } else {
         setAlertMessageOpen(true)
       }
@@ -159,6 +171,14 @@ const DreamDiaryEditForm: React.FC = () => {
         <Card className={classes.card}>
           <CardHeader className={classes.header} title="夢絵日記 編集" />
           <CardContent>
+          <FormGroup style={{ float: "right"}}>
+              <FormControlLabel
+                control={<Checkbox /> } 
+                value={Boolean(state)}
+                checked={Boolean(state)}
+                onChange={(state: any) => setState(state => !state)} 
+                label={Boolean(state) === true ? "公開中" : "公開する"} />
+            </FormGroup>
             <TextField
               variant="outlined"
               required
@@ -178,17 +198,6 @@ const DreamDiaryEditForm: React.FC = () => {
               value={body}
               margin="dense"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBody(e.target.value)}
-            />
-            <TextField
-              variant="outlined"
-              required
-              fullWidth
-              label="呪文"
-              type="prompt"
-              value={prompt}
-              margin="dense"
-              autoComplete="current-password"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPrompt(e.target.value)}
             />
             <FormControl
               variant="outlined"
@@ -230,14 +239,6 @@ const DreamDiaryEditForm: React.FC = () => {
                 }
               </Select>
             </FormControl>
-              <FormGroup>
-                <FormControlLabel
-                  defaultChecked
-                  control={<Checkbox /> } 
-                  value={Boolean(state)} 
-                  onChange={(state: any) => setState(state => !state)} 
-                  label={ Boolean(state) === true ? "公開切替え：公開中" : "公開切替え：非公開中" } />
-              </FormGroup>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <Grid container justify="space-around">
                 <KeyboardDatePicker
@@ -257,29 +258,54 @@ const DreamDiaryEditForm: React.FC = () => {
                 />
               </Grid>
             </MuiPickersUtilsProvider>
-            <div className={classes.imageUploadBtn}>
-              <input
-                accept="image/*"
-                className={classes.input}
-                id="icon-button-file"
-                type="file"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  uploadImage(e)
-                  previewImage(e)
-                }}
-              />
-              <label htmlFor="icon-button-file">
-                <IconButton
-                  color="primary"
-                  aria-label="upload picture"
-                  component="span"
-                >
-                  <PhotoCamera />
-                </IconButton>
-              </label>
+            <TextField
+              variant="outlined"
+              required
+              fullWidth
+              label="呪文"
+              type="prompt"
+              value={prompt}
+              margin="dense"
+              autoComplete="current-password"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPrompt(e.target.value)}
+            />
+            <div style={{ textAlign: "right"}} >
+            <Button
+                type="submit"
+                variant="outlined"
+                color="primary"
+                disabled={!prompt ? true : false}
+                className={classes.submitBtn}
+                onClick={handlePromptsSubmit}
+              >
+                {
+                  imageLoading ? (
+                    <CircularProgress
+                      size="1.5rem" />
+                  ):(
+                    "絵を生成してみる"
+                  )
+                }
+              </Button>
             </div>
-            {
-              preview ? (
+            { preview ? (
+              <Box
+              className={classes.box}
+            >
+              <IconButton
+                color="inherit"
+                onClick={() => setImage("")}
+              >
+                <CancelIcon />
+              </IconButton>
+              <img
+                src={preview}
+                alt="preview img"
+                className={classes.preview}
+              />
+            </Box>
+            ) : (
+              image ? (
                 <Box
                   className={classes.box}
                 >
@@ -290,14 +316,14 @@ const DreamDiaryEditForm: React.FC = () => {
                     <CancelIcon />
                   </IconButton>
                   <img
-                    src={preview}
+                    src={image}
                     alt="preview img"
                     className={classes.preview}
                   />
                 </Box>
               ) : null
-            }
-            <div style={{ textAlign: "right"}} >
+            )}
+            <div style={{ textAlign: "center"}} >
               <Button
                 type="submit"
                 variant="outlined"
@@ -306,7 +332,7 @@ const DreamDiaryEditForm: React.FC = () => {
                 className={classes.submitBtn}
                 onClick={handleSubmit}
               >
-                送信
+                内容を確認する
               </Button>
             </div>
           </CardContent>
