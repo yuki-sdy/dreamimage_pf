@@ -56,8 +56,8 @@ const DreamDiaryBackForm: React.FC = () => {
   const location = useLocation()
   const [title, setTitle] = useState<string>(location.state.dreamDiary.title)
   const [body, setBody] = useState<string>(location.state.dreamDiary.body)
+  const [content, setContent] = useState<string>(location.state.dreamDiary.content)
   const [prompt, setPrompt] = useState<string>(location.state.dreamDiary.prompt)
-  const [diaryOgp, setDiaryOgp] = useState<string>("")
 
   const [state, setState] = useState<boolean>(location.state.dreamDiary.state)
   const [impression, setImpression] = useState<number>(location.state.dreamDiary.impression)
@@ -97,7 +97,7 @@ const DreamDiaryBackForm: React.FC = () => {
 
     formData.append("title", title)
     formData.append("body", body)
-    formData.append("diaryOgp", diaryOgp)
+    formData.append("content", content)
     formData.append("state", String(state))
     formData.append("impression", String(impression))
     formData.append("dreamType", String(dreamType))
@@ -121,10 +121,11 @@ const DreamDiaryBackForm: React.FC = () => {
         if (paramsId) {
           navigation('/dreamdiaries/preview',
            { state: {dreamDiary: res.data.dreamDiary,
+                     diaryOgp: res.data.diaryOgp,
                      dreamDiaryId: paramsId} })
         } else {
           navigation('/dreamdiaries/preview',
-           { state: {dreamDiary: res.data.dreamDiary} })
+           { state: {dreamDiary: res.data.dreamDiary, diaryOgp: res.data.diaryOgp} })
         }
       } else {
         setAlertMessageOpen(true)
@@ -273,6 +274,16 @@ const DreamDiaryBackForm: React.FC = () => {
                 alt="preview img"
                 className={classes.preview}
               />
+              <TextField
+                variant="outlined"
+                fullWidth
+                multiline
+                rows={4}
+                label="この日記に対するコメントをください！"
+                value={content}
+                margin="dense"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setContent(e.target.value)}
+              />
             </Box>
             ) : (
               image ? (
@@ -290,6 +301,16 @@ const DreamDiaryBackForm: React.FC = () => {
                     alt="preview img"
                     className={classes.preview}
                   />
+                <TextField
+                  variant="outlined"
+                  fullWidth
+                  multiline
+                  rows={4}
+                  label="この日記に対するコメントをください！"
+                  value={content}
+                  margin="dense"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setContent(e.target.value)}
+                />
                 </Box>
               ) : null
             )}

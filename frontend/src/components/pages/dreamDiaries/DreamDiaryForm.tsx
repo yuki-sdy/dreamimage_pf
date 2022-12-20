@@ -53,8 +53,8 @@ const DreamDiaryForm: React.FC = () => {
 
   const [title, setTitle] = useState<string>("")
   const [body, setBody] = useState<string>("")
+  const [content, setContent] = useState<string>("")
   const [prompt, setPrompt] = useState<string>("")
-  const [diaryOgp, setDiaryOgp] = useState<string>("")
 
   const [state, setState] = useState<boolean>(false)
   const [impression, setImpression] = useState<number>()
@@ -71,7 +71,7 @@ const DreamDiaryForm: React.FC = () => {
 
     formData.append("title", title)
     formData.append("body", body)
-    formData.append("diaryOgp", diaryOgp)
+    formData.append("content", content)
     formData.append("state", String(state))
     formData.append("impression", String(impression))
     formData.append("dreamType", String(dreamType))
@@ -118,7 +118,7 @@ const DreamDiaryForm: React.FC = () => {
 
       if (res.status === 200) {
         navigation('/dreamdiaries/preview',
-         { state: {dreamDiary: res.data.dreamDiary} })
+         { state: {dreamDiary: res.data.dreamDiary, diaryOgp: res.data.diaryOgp} })
 
       } else {
         setAlertMessageOpen(true)
@@ -267,6 +267,16 @@ const DreamDiaryForm: React.FC = () => {
                     src={preview}
                     alt="preview img"
                     className={classes.preview}
+                  />
+                  <TextField
+                    variant="outlined"
+                    fullWidth
+                    multiline
+                    rows={4}
+                    label="この日記に対するコメントをください！"
+                    value={content}
+                    margin="dense"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setContent(e.target.value)}
                   />
                 </Box>
               ) : null
