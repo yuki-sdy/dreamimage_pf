@@ -18,13 +18,14 @@ ActiveRecord::Schema.define(version: 2022_12_13_083623) do
   create_table "dream_diaries", force: :cascade do |t|
     t.string "title"
     t.string "body"
+    t.string "content"
     t.string "prompt"
     t.date "dream_date"
     t.integer "impression", default: 0, null: false
     t.integer "dream_type", default: 0, null: false
     t.boolean "state", default: false, null: false
-    t.text "image"
-    t.string "diary_ogp"
+    t.text "image", default: ""
+    t.text "diary_ogp", default: ""
     t.bigint "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
