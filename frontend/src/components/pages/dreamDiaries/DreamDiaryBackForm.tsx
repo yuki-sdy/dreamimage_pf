@@ -154,7 +154,7 @@ const DreamDiaryBackForm: React.FC = () => {
               variant="outlined"
               required
               fullWidth
-              label="タイトル"
+              label="タイトル(40字以内)"
               value={title}
               margin="dense"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
@@ -165,7 +165,7 @@ const DreamDiaryBackForm: React.FC = () => {
               fullWidth
               multiline
               rows={4}
-              label="夢の内容"
+              label="夢の内容(125字以内)"
               value={body}
               margin="dense"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBody(e.target.value)}
@@ -233,7 +233,7 @@ const DreamDiaryBackForm: React.FC = () => {
               variant="outlined"
               required
               fullWidth
-              label="呪文"
+              label="呪文(40字以内)"
               type="prompt"
               value={prompt}
               margin="dense"
@@ -279,7 +279,7 @@ const DreamDiaryBackForm: React.FC = () => {
                 fullWidth
                 multiline
                 rows={4}
-                label="この日記に対するコメントをください！"
+                label="この日記に対するコメントをください！(80字以内)"
                 value={content}
                 margin="dense"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setContent(e.target.value)}
@@ -306,7 +306,7 @@ const DreamDiaryBackForm: React.FC = () => {
                   fullWidth
                   multiline
                   rows={4}
-                  label="この日記に対するコメントをください！"
+                  label="この日記に対するコメントをください！(80字以内)"
                   value={content}
                   margin="dense"
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setContent(e.target.value)}
