@@ -29,12 +29,13 @@ export interface DreamDiary {
   id: number
   title: string
   body: string
+  content: string
   prompt: string
   dreamDate: Date
   impression: number
   dreamType: number
   state: boolean
-  ogp: string
+  diaryOgp: string
   image: string
   userId: number | undefined
 }

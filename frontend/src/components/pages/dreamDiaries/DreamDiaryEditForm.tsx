@@ -59,8 +59,8 @@ const DreamDiaryEditForm: React.FC = () => {
   
   const [title, setTitle] = useState<string>("")
   const [body, setBody] = useState<string>("")
+  const [content, setContent] = useState<string>("")
   const [prompt, setPrompt] = useState<string>("")
-  const [diaryOgp, setDiaryOgp] = useState<string>("")
 
   const [state, setState] = useState<boolean>(false)
   const [impression, setImpression] = useState<number>()
@@ -80,6 +80,7 @@ const DreamDiaryEditForm: React.FC = () => {
         // setDreamDiary(res.data.dreamDiary)
         setTitle(String(res.data.dreamDiary?.title))
         setBody(String(res.data.dreamDiary?.body))
+        setContent(String(res.data.dreamDiary?.content))
         setPrompt(String(res.data.dreamDiary?.prompt))
         setImpression(res.data.dreamDiary.impression)
         setDreamType(res.data.dreamDiary.dreamType)
@@ -129,7 +130,7 @@ const DreamDiaryEditForm: React.FC = () => {
 
     formData.append("title", title)
     formData.append("body", body)
-    formData.append("diaryOgp", diaryOgp)
+    formData.append("content", content)
     formData.append("state", String(state))
     formData.append("impression", String(impression))
     formData.append("dreamType", String(dreamType))
@@ -152,7 +153,8 @@ const DreamDiaryEditForm: React.FC = () => {
       if (res.status === 200) {
         navigation('/dreamdiaries/preview',
          { state: {dreamDiary: res.data.dreamDiary,
-                  dreamDiaryId: params.id} })
+                  dreamDiaryId: params.id, 
+                  diaryOgp: res.data.diaryOgp} })
       } else {
         setAlertMessageOpen(true)
       }
@@ -183,7 +185,7 @@ const DreamDiaryEditForm: React.FC = () => {
               variant="outlined"
               required
               fullWidth
-              label="タイトル"
+              label="タイトル(40字以内)"
               value={title}
               margin="dense"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
@@ -194,7 +196,7 @@ const DreamDiaryEditForm: React.FC = () => {
               fullWidth
               multiline
               rows={4}
-              label="夢の内容"
+              label="夢の内容(125字以内)"
               value={body}
               margin="dense"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBody(e.target.value)}
@@ -262,7 +264,7 @@ const DreamDiaryEditForm: React.FC = () => {
               variant="outlined"
               required
               fullWidth
-              label="呪文"
+              label="呪文(40字以内)"
               type="prompt"
               value={prompt}
               margin="dense"
@@ -303,6 +305,16 @@ const DreamDiaryEditForm: React.FC = () => {
                 alt="preview img"
                 className={classes.preview}
               />
+                <TextField
+                  variant="outlined"
+                  fullWidth
+                  multiline
+                  rows={4}
+                  label="この日記に対するコメントをください！(80字以内)"
+                  value={content}
+                  margin="dense"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setContent(e.target.value)}
+                />
             </Box>
             ) : (
               image ? (
@@ -319,6 +331,16 @@ const DreamDiaryEditForm: React.FC = () => {
                     src={image}
                     alt="preview img"
                     className={classes.preview}
+                  />
+                  <TextField
+                    variant="outlined"
+                    fullWidth
+                    multiline
+                    rows={4}
+                    label="この日記に対するコメントをください！(80字以内)"
+                    value={content}
+                    margin="dense"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setContent(e.target.value)}
                   />
                 </Box>
               ) : null

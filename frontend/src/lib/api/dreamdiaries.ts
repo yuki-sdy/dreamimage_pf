@@ -28,8 +28,8 @@ export const DreamDiaryPreview = (data: DreamDiaryFormData) => {
 }
 
 //createへのpostリクエスト、previewから
-export const DreamDiaryCreate = (data: DreamDiaryFormData) => {
-  return client.post("dream_diaries", data )
+export const DreamDiaryCreate = (data: DreamDiaryFormData, diaryOgp: string) => {
+  return client.post("dream_diaries", {dreamDiary: data, diaryOgp: diaryOgp } )
 }
 
 //backへのpostリクエスト、previewから
@@ -38,8 +38,8 @@ export const DreamDiaryBack = (data: DreamDiaryFormData) => {
 }
 
 // updateへのputリクエスト、editから
-export const DreamDiaryUpdate = (id: number, data: DreamDiaryFormData) => {
-  return client.put(`dream_diaries/${id}`, data)
+export const DreamDiaryUpdate = (id: number, data: DreamDiaryFormData, diaryOgp: string) => {
+  return client.put(`dream_diaries/${id}`, { dreamDiary: data, diaryOgp: diaryOgp })
 }
 
 // destroyへのdeleteリクエスト

@@ -84,19 +84,24 @@ const DreamDiaryShow: React.FC = () => {
           <>
           <div>{`title: ${dreamDiary?.title}`}</div>
           <div>{`body: ${dreamDiary?.body}`}</div>
+          <div>{`content: ${dreamDiary?.content}`}</div>
           <div>{`prompt: ${dreamDiary?.prompt}`}</div>
           <div>{`impression: ${diaryImpression()}`}</div>
           <div>{`dreamType: ${diaryDreamType()}`}</div>
           <div>{`state: ${dreamDiary?.state}`}</div>
           <div>{`dreamDate: ${dreamDiary?.dreamDate}`}</div>
-          {
-            dreamDiary?.image ? (
+          <div>
               <img
               src={dreamDiary?.image}
               alt="preview img"
             />
-            ) : null
-          }
+          </div>
+          <div>
+              <img
+              src={dreamDiary?.diaryOgp}
+              alt="preview img"
+            />
+          </div>
           <div>
             <Button
               color="inherit"

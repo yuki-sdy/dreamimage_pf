@@ -12,14 +12,17 @@ const DreamDiaryPreview: React.FC = () => {
   const [dreamDiaryForm, setDreamDiaryForm] = useState<DreamDiaryFormData>(location.state.dreamDiary)
   const [title, setTitle] = useState<string>(location.state.dreamDiary.title)
   const [body, setBody] = useState<string>(location.state.dreamDiary.body)
+  const [content, setContent] = useState<string>(location.state.dreamDiary.content)
   const [prompt, setPrompt] = useState<string>(location.state.dreamDiary.prompt)
   const [state, setState] = useState<number>(location.state.dreamDiary.state)
   const [impression, setImpression] = useState<number>(location.state.dreamDiary.impression)
   const [dreamType, setDreamType] = useState<number>(location.state.dreamDiary.dreamType)
   const [dreamDate, setDreamDate] = useState<Date | null>(location.state.dreamDiary.dreamDate)
   const [image, setImage] = useState<string>(location.state.dreamDiary.image)
-  const [paramsId, setParamsId] = useState<Number>(location.state.dreamDiaryId)
 
+  const [paramsId, setParamsId] = useState<Number>(location.state.dreamDiaryId)
+  const [diaryOgp, setDiaryOgp] = useState<string>(location.state.diaryOgp)
+  
   const navigation = useNavigate()
 
   const diaryImpression = (): string => {
@@ -35,7 +38,7 @@ const DreamDiaryPreview: React.FC = () => {
     
     try {
       if (paramsId) {
-        const res = await DreamDiaryUpdate(Number(paramsId), dreamDiaryForm)
+        const res = await DreamDiaryUpdate(Number(paramsId), dreamDiaryForm, String(diaryOgp))
 
         if (res.status === 200) {
           navigation(`/dreamdiaries/${paramsId}`,
@@ -43,7 +46,7 @@ const DreamDiaryPreview: React.FC = () => {
         }
 
        } else {
-         const res = await DreamDiaryCreate(dreamDiaryForm)
+         const res = await DreamDiaryCreate(dreamDiaryForm, String(diaryOgp))
    
          if (res.status === 200) {
            navigation(`/dreamdiaries/${res.data.id}`,
@@ -76,6 +79,7 @@ const DreamDiaryPreview: React.FC = () => {
       <div>この内容でよろしいですか？</div>
       <div>{`title: ${title}`}</div>
       <div>{`body: ${body}`}</div>
+      <div>{`content: ${content}`}</div>
       <div>{`prompt: ${prompt}`}</div>
       <div>{`state: ${state}`}</div>
       <div>{`impression: ${diaryImpression()}`}</div>
@@ -84,6 +88,12 @@ const DreamDiaryPreview: React.FC = () => {
       <div>
           <img
             src={image}
+            alt="preview img"
+          />
+      </div>
+      <div>
+          <img
+            src={diaryOgp}
             alt="preview img"
           />
       </div>
