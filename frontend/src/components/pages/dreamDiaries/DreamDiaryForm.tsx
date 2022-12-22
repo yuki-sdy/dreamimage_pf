@@ -22,7 +22,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     textTransform: "none"
   },
   header: {
-    textAlign: "center"
+    backgroundImage: "url(/formtitle.png)",
+    backgroundSize: "70%",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center center",
   },
   card: {
     padding: theme.spacing(2),
@@ -132,8 +135,8 @@ const DreamDiaryForm: React.FC = () => {
   return (
     <>
       <form noValidate autoComplete="off">
+        <div style={{height: "100px"}} className={classes.header} />
         <Card className={classes.card}>
-          <CardHeader className={classes.header} title="夢絵日記 新規作成" />
           <CardContent>
             <FormGroup style={{ float: "right"}}>
               <FormControlLabel
