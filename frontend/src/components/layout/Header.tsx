@@ -25,6 +25,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   linkBtn: {
     textTransform: "none"
+  },
+  headerImage: {
+    position: "relative",
+    height: "60vh",
+    backgroundImage: "url(/header.png)",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center center",
+    backgroundSize: "cover"
   }
 }))
 
@@ -88,7 +96,7 @@ const Header: React.FC = () => {
 
   return (
     <>
-      <AppBar position="static">
+      <AppBar position="static" style={{ color: "black", backgroundColor: "#fcfbfd" }}>
         <Toolbar>
           <IconButton
             edge="start"
@@ -103,10 +111,11 @@ const Header: React.FC = () => {
             variant="h6"
             className={classes.title}
           >
-            DreamDiary
+            夢絵日記
           </Typography>
           <AuthButtons />
         </Toolbar>
+      <div className={classes.headerImage}/>
       </AppBar>
     </>
   )
