@@ -16,6 +16,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   link: {
     textDecoration: "none",
     color: "inherit"
+  },
+  preview: {
+    width: "80%"
   }
 }))
 
@@ -82,24 +85,11 @@ const DreamDiaryShow: React.FC = () => {
      {
         !loading ? (
           <>
-          <div>{`title: ${dreamDiary?.title}`}</div>
-          <div>{`body: ${dreamDiary?.body}`}</div>
-          <div>{`content: ${dreamDiary?.content}`}</div>
-          <div>{`prompt: ${dreamDiary?.prompt}`}</div>
-          <div>{`impression: ${diaryImpression()}`}</div>
-          <div>{`dreamType: ${diaryDreamType()}`}</div>
-          <div>{`state: ${dreamDiary?.state}`}</div>
-          <div>{`dreamDate: ${dreamDiary?.dreamDate}`}</div>
-          <div>
-              <img
-              src={dreamDiary?.image}
-              alt="preview img"
-            />
-          </div>
-          <div>
+          <div style={{textAlign: "center"}}>
               <img
               src={dreamDiary?.diaryOgp}
-              alt="preview img"
+              alt="diaryOgp img"
+              className={classes.preview}
             />
           </div>
           <div>
