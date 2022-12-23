@@ -74,6 +74,9 @@ const DreamDiaryEditForm: React.FC = () => {
   const handleDreamDiary = async () => {
     try {
       const res = await getDreamDiary(Number(params.id))
+      if (currentUser?.id !== res.data.dreamDiary.userId) {
+        navigation('/dreamdiaries')
+      }
       console.log(res)
 
       if (res.status === 200) {

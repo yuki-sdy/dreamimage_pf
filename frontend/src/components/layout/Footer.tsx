@@ -9,21 +9,18 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginRight: theme.spacing(2),
   },
   footer: {
-    backgroundColor: "#f5f1f9"
-  },
-  linkBtn: {
-    textTransform: "none"
-  },
-  footerImage: {
     height: "200px",
     backgroundImage: "url(/footer.png)",
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center center",
     backgroundSize: "cover",
-    // desplay: "flex",
-    // alignItems: "center",
-    // justifyContent: "center"
-  }
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  linkBtn: {
+    textTransform: "none"
+  },
 }))
 
 const Footer: React.FC = () => {
@@ -32,7 +29,6 @@ const Footer: React.FC = () => {
   return (
     <>
     <div className={classes.footer}>
-    <div className={classes.footerImage} />
       <Typography variant="body2" color="textSecondary" align="center">
         {'Copyright © '}
         <Link color="inherit" to="/">

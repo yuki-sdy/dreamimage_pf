@@ -69,24 +69,53 @@ const Header: React.FC = () => {
     if (!loading) {
       if (isSignedIn) {
         return (
-          <Button
-            color="inherit"
-            className={classes.linkBtn}
-            onClick={handleSignOut}
-          >
-            サインアウト
-          </Button>
+          <>
+            <Button
+              component={Link}
+              to="/mypage"
+              color="inherit"
+              className={classes.linkBtn}
+            >
+              マイページ
+            </Button>
+            <Button
+              color="inherit"
+              className={classes.linkBtn}
+              onClick={handleSignOut}
+            >
+              ログアウト
+            </Button>
+          </>
         )
       } else {
         return (
-          <Button
+          <>
+            <Button
+              component={Link}
+              to="/"
+              color="inherit"
+              className={classes.linkBtn}
+            >
+              作ってみる
+            </Button>
+            <Button
+              component={Link}
+              to="/signin"
+              color="inherit"
+              className={classes.linkBtn}
+            >
+              ログイン
+            </Button>
+            <Button
             component={Link}
-            to="/signin"
-            color="inherit"
+            to="/signup"
+            color="secondary"
+            variant="outlined"
             className={classes.linkBtn}
           >
-            サインイン
+            無料登録
           </Button>
+        </>
         )
       }
     } else {
@@ -113,6 +142,14 @@ const Header: React.FC = () => {
           >
             夢絵日記
           </Typography>
+          <Button
+              component={Link}
+              to="/dreamdiaries"
+              color="inherit"
+              className={classes.linkBtn}
+            >
+              夢絵日記一覧
+            </Button>
           <AuthButtons />
         </Toolbar>
       <div className={classes.headerImage}/>

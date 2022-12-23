@@ -21,10 +21,11 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
 
   return (
     <>
+    <body style={{backgroundColor: "#f5f1f9"}}>
       <header>
         <Header />
       </header>
-      <main style={{backgroundColor: "#f5f1f9"}}>
+      <main>
         <Container maxWidth="lg" className={classes.container}>
           <Grid container justify="center">
             <Grid item>
@@ -36,6 +37,7 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
       <footer>
         <Footer />
       </footer>
+    </body>
     </>
   )
 }
