@@ -1,15 +1,43 @@
-import React, { useState } from "react"
-import { Button } from "@material-ui/core"
+import React, { useContext, useState } from "react"
+import { Button, makeStyles, Theme } from "@material-ui/core"
 import { useLocation, useNavigate } from "react-router-dom"
 
 import { DreamDiaryFormData } from "../../../interfaces"
 import { DreamDiaryBack, DreamDiaryCreate, DreamDiaryUpdate } from "../../../lib/api/dreamdiaries"
 import { dream_types, impressions } from "../../../data/dreamdiaryEnums"
+import { AuthContext } from "../../../App"
 
+
+const useStyles = makeStyles((theme: Theme) => ({
+  linkBtn: {
+    textTransform: "none"
+  },
+  link: {
+    textDecoration: "none",
+    color: "inherit"
+  },
+  preview: {
+    width: "80%"
+  },
+  text: {
+    textAlign: "center",
+    paddingTop: "20px",
+    fontSize: "20px"
+  },
+  submitBtn: {
+    paddingTop: theme.spacing(2),
+    textAlign: "center",
+    flexGrow: 1,
+    textTransform: "none"
+  },
+}))
 
 const DreamDiaryPreview: React.FC = () => {
+  const classes = useStyles()
+  const { currentUser } = useContext(AuthContext)
   const location = useLocation()
   const [dreamDiaryForm, setDreamDiaryForm] = useState<DreamDiaryFormData>(location.state.dreamDiary)
+  const [userId, setUserId] = useState<number>(location.state.dreamDiary.userId)
   const [title, setTitle] = useState<string>(location.state.dreamDiary.title)
   const [body, setBody] = useState<string>(location.state.dreamDiary.body)
   const [content, setContent] = useState<string>(location.state.dreamDiary.content)
@@ -35,6 +63,9 @@ const DreamDiaryPreview: React.FC = () => {
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
+    if (currentUser?.id !== userId) {
+      navigation('/dreamdiaries')
+    }
     
     try {
       if (paramsId) {
@@ -76,43 +107,35 @@ const DreamDiaryPreview: React.FC = () => {
 
   return (
     <>
-      <div>この内容でよろしいですか？</div>
-      <div>{`title: ${title}`}</div>
-      <div>{`body: ${body}`}</div>
-      <div>{`content: ${content}`}</div>
-      <div>{`prompt: ${prompt}`}</div>
-      <div>{`state: ${state}`}</div>
-      <div>{`impression: ${diaryImpression()}`}</div>
-      <div>{`dreamType: ${diaryDreamType()}`}</div>
-      <div>{`dreamDate: ${dreamDate}`}</div>
-      <div>
-          <img
-            src={image}
-            alt="preview img"
-          />
+      <div className={classes.text}>
+        この内容でよろしいですか？
       </div>
-      <div>
+      <div style={{textAlign: "center"}}>
           <img
             src={diaryOgp}
             alt="preview img"
+            className={classes.preview}
           />
       </div>
-      <Button
-        type="submit"
-        variant="outlined"
-        color="primary"
-        onClick={handleBack}
-      >
-      編集画面へ戻る
-      </Button>
-      <Button
-        type="submit"
-        variant="outlined"
-        color="primary"
-        onClick={handleSubmit}
-      >
-      この内容で作成する
-      </Button>
+      <div className={classes.submitBtn}>
+        <Button
+          type="submit"
+          variant="outlined"
+          color="primary"
+          onClick={handleBack}
+        >
+        編集画面へ戻る
+        </Button>
+        <Button
+          type="submit"
+          variant="outlined"
+          color="secondary"
+          onClick={handleSubmit}
+          style={{marginLeft: "80px"}}
+        >
+        この内容で作成する
+        </Button>
+      </div>
     </>
   )
 }

@@ -19,7 +19,7 @@ class OgpCreator
     result = base_image.composite(MiniMagick::Image.open('image.png')) do |config|
       config.compose 'Over'
       config.gravity 'NorthEast'
-      config.geometry '+220+300'#位置調整
+      config.geometry '+60+140'#位置調整
     end
 
     title = prepare_text(title)
@@ -35,15 +35,14 @@ class OgpCreator
       config.fill 'black'
       config.gravity GRAVITY
       config.pointsize 35
-      config.draw "text -150, -490 '#{title}'"
-      config.pointsize 30
-      config.draw "text 360, -510 '#{date}'"
-      config.draw "text 360, -470 '#{type}・#{impression}'"
-      config.draw "text 150, 430 '#{content}'"
+      config.draw "text -135, -485 '#{title}'"
       config.pointsize 25
+      config.draw "text 390, -500 '#{date}'"
+      config.draw "text 390, -460 '#{type}・#{impression}'"
+      config.draw "text 150, 430 '#{content}'"
       config.draw "text 150, 320 '「#{prompt}」'"
       config.pointsize 35
-      insert_vertical_word(body, 395, 345, 35, config)
+      insert_vertical_word(body, 205, 175, 35, config)
     end
   end
   
@@ -56,7 +55,7 @@ class OgpCreator
     blob = Base64.decode64(base64_string)
     image = MiniMagick::Image.read(blob)
     image = image.combine_options do |c|
-      c.resize '720x720'
+      c.resize '710x710'
     end
     image.write 'image.png'
   end

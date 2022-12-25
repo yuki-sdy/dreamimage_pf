@@ -12,6 +12,8 @@ import DateFnsUtils from "@date-io/date-fns"
 import CancelIcon from "@material-ui/icons/Cancel"
 import { AuthContext } from "../../../App"
 
+import FormTitleImage from "../../../images/formtitle.png"
+
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
     marginTop: theme.spacing(6)
@@ -22,11 +24,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     textTransform: "none"
   },
   header: {
-    textAlign: "center"
+    width: "50%",
   },
   card: {
     padding: theme.spacing(2),
-    maxWidth: 800
+    maxWidth: 800,
+    margin: "auto"
   },
   inputFileButton: {
     textTransform: "none",
@@ -132,8 +135,10 @@ const DreamDiaryForm: React.FC = () => {
   return (
     <>
       <form noValidate autoComplete="off">
+        <div style={{textAlign: "center"}}>
+          <img src={ FormTitleImage } className={classes.header} />
+        </div>
         <Card className={classes.card}>
-          <CardHeader className={classes.header} title="夢絵日記 新規作成" />
           <CardContent>
             <FormGroup style={{ float: "right"}}>
               <FormControlLabel

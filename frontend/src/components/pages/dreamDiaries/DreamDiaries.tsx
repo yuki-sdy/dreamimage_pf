@@ -5,6 +5,7 @@ import { DreamDiary } from "../../../interfaces"
 import { getDreamDiaries } from "../../../lib/api/dreamdiaries"
 import { Grid, List, ListItemText, makeStyles, Theme } from "@material-ui/core"
 import AlertMessage from "../../utils/AlertMessage"
+import CardComp from "./organisms/CardComp"
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -49,27 +50,31 @@ const DreamDiaries: React.FC = () => {
 
   return (
     <>
-    <div style={ { textAlign: "right", marginBottom: "15px" } }>
-      <Link to={'/dreamdiaries/new'} className={classes.link}>
-        新しく日記を作る
-      </Link>
-    </div>
      {
         !loading ? (
           dreamDiaries.length > 0 ? (
+            <>
+            <h3 style={{textAlign:"center"}}>みんなの夢絵日記</h3>
+            <Grid container justify="flex-start" style={{width: "100%"}}>
+            {
             dreamDiaries.map((dreamDiary: DreamDiary, index: number) => {
               return (
-                <Grid container key={index} justify="center">
-                  <List>
-                    <Link to={`/dreamdiaries/${dreamDiary.id}`} className={classes.link}>
-                      <div className={classes.root}>
-                      <ListItemText primary={dreamDiary.title} />
-                      </div>
-                    </Link>
-                  </List>
+                <Grid item container key={index} xs={12} md={4} lg={3} sm={6} spacing={1} justify="center">
+                  <CardComp
+                    id={dreamDiary.id}
+                    image={dreamDiary.image}
+                    title={dreamDiary.title}
+                    content={dreamDiary.content}
+                    dreamDate={dreamDiary.dreamDate}
+                    impression={dreamDiary.impression}
+                    dreamType={dreamDiary.dreamType}
+                    />
                 </Grid>
               )
             })
+          }
+          </Grid>
+          </>
           ) : (<></>)
           )
         : (<></>) 
