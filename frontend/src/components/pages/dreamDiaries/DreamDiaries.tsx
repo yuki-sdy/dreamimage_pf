@@ -50,11 +50,6 @@ const DreamDiaries: React.FC = () => {
 
   return (
     <>
-    <div style={ { textAlign: "right", marginBottom: "15px" } }>
-      <Link to={'/dreamdiaries/new'} className={classes.link}>
-        新しく日記を作る
-      </Link>
-    </div>
      {
         !loading ? (
           dreamDiaries.length > 0 ? (

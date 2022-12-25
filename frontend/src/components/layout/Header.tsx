@@ -11,6 +11,8 @@ import Button from "@material-ui/core/Button"
 import IconButton from "@material-ui/core/IconButton"
 import MenuIcon from "@material-ui/icons/Menu"
 
+import CreateIcon from "@material-ui/icons/Create"
+
 import { signOut } from "../../lib/api/auth"
 import { AuthContext } from "../../App"
 
@@ -25,6 +27,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   linkBtn: {
     textTransform: "none"
+  },
+  writeBtn: {
+    textTransform: "none",
+    backgroundColor: "#884898",
+    color: "white",
+    "&:hover" : {
+      backgroundColor: "#b660cc"
+    }
   },
   headerImage: {
     position: "relative",
@@ -84,6 +94,15 @@ const Header: React.FC = () => {
               onClick={handleSignOut}
             >
               ログアウト
+            </Button>
+            <Button
+              component={Link}
+              to="/dreamdiaries/new"
+              variant="contained"
+              startIcon={<CreateIcon />}
+              className={classes.writeBtn}
+            >
+              日記投稿
             </Button>
           </>
         )

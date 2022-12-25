@@ -1,6 +1,6 @@
 import React from "react"
 import Card from "@material-ui/core/Card"
-import { CardActionArea, CardContent, CardMedia, makeStyles, Theme, Typography } from "@material-ui/core"
+import { CardContent, CardMedia, makeStyles, Theme, Typography } from "@material-ui/core"
 import { dream_types, impressions } from "../../../../data/dreamdiaryEnums"
 import { Link } from "react-router-dom"
 
