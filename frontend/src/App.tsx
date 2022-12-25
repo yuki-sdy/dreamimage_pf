@@ -10,6 +10,7 @@ import DreamDiaryPreview from "./components/pages/dreamDiaries/DreamDiaryPreview
 import DreamDiaryShow from "./components/pages/dreamDiaries/DreamDiaryShow"
 
 import Home from "./components/pages/Home"
+import MyPage from "./components/pages/MyPage"
 import SignIn from "./components/pages/SignIn"
 import SignUp from "./components/pages/SignUp"
 
@@ -75,22 +76,21 @@ const App: React.FC = () => {
       <AuthContext.Provider value={{ loading, setLoading, isSignedIn, setIsSignedIn, currentUser, setCurrentUser}}>
         <CommonLayout>
           <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/dreamdiaries" element={<DreamDiaries/>} />
+            <Route path="/dreamdiaries/:id" element={<DreamDiaryShow />} />
+
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
-            <Route path="/" element={<Private children={<Home />} />} />
-            <Route path="/dreamdiaries" element={<Private children={<DreamDiaries />} />} />
-            <Route path="/dreamdiaries/:id" 
-              element={<Private children={<DreamDiaryShow />} />} />
+            <Route path="/mypage" 
+              element={<Private children={<MyPage />} />} />
+
             <Route path="/dreamdiaries/new" 
               element={<Private children={<DreamDiaryForm />} />} />
-            <Route index />
-              <Route path="/dreamdiaries/preview" 
+            <Route path="/dreamdiaries/preview" 
                 element={<Private children={<DreamDiaryPreview />} />} />
-            <Route/>
-            <Route index />
-              <Route path="/dreamdiaries/back"
+            <Route path="/dreamdiaries/back"
                 element={<Private children={<DreamDiaryBackForm />} />} />
-            <Route/>
             <Route path="/dreamdiaries/:id/edit" 
               element={<Private children={<DreamDiaryEditForm />} />} />
           </Routes>
