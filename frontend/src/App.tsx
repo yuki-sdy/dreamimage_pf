@@ -79,6 +79,8 @@ const App: React.FC = () => {
             <Route path="/" element={<Home />} />
             <Route path="/dreamdiaries" element={<DreamDiaries/>} />
             <Route path="/dreamdiaries/:id" element={<DreamDiaryShow />} />
+            <Route path="/dreamdiaries/preview" element={<DreamDiaryPreview />} />
+            <Route path="/dreamdiaries/back" element={<DreamDiaryBackForm />} />
 
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
@@ -87,10 +89,6 @@ const App: React.FC = () => {
 
             <Route path="/dreamdiaries/new" 
               element={<Private children={<DreamDiaryForm />} />} />
-            <Route path="/dreamdiaries/preview" 
-                element={<Private children={<DreamDiaryPreview />} />} />
-            <Route path="/dreamdiaries/back"
-                element={<Private children={<DreamDiaryBackForm />} />} />
             <Route path="/dreamdiaries/:id/edit" 
               element={<Private children={<DreamDiaryEditForm />} />} />
           </Routes>

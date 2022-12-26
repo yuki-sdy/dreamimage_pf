@@ -37,7 +37,7 @@ const DreamDiaryPreview: React.FC = () => {
   const { currentUser } = useContext(AuthContext)
   const location = useLocation()
   const [dreamDiaryForm, setDreamDiaryForm] = useState<DreamDiaryFormData>(location.state.dreamDiary)
-  const [userId, setUserId] = useState<number>(location.state.dreamDiary.userId)
+  const [userId, setUserId] = useState<number | undefined>(location.state.dreamDiary.userId)
   const [title, setTitle] = useState<string>(location.state.dreamDiary.title)
   const [body, setBody] = useState<string>(location.state.dreamDiary.body)
   const [content, setContent] = useState<string>(location.state.dreamDiary.content)
@@ -63,20 +63,20 @@ const DreamDiaryPreview: React.FC = () => {
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-    if (currentUser?.id !== userId) {
-      navigation('/dreamdiaries')
-    }
     
     try {
       if (paramsId) {
+        if (currentUser?.id !== userId) {
+          navigation('/dreamdiaries')
+        }
         const res = await DreamDiaryUpdate(Number(paramsId), dreamDiaryForm, String(diaryOgp))
-
+        
         if (res.status === 200) {
           navigation(`/dreamdiaries/${paramsId}`,
           { state: true })
         }
-
-       } else {
+        
+      } else {
          const res = await DreamDiaryCreate(dreamDiaryForm, String(diaryOgp))
    
          if (res.status === 200) {

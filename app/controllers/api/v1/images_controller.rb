@@ -2,13 +2,22 @@ class Api::V1::ImagesController < ApplicationController
   require 'net/http'
 
   def create
-    current_user = User.find(image_params[:user_id]) if image_params[:user_id]
-    res = create_image(image_params[:prompts])
-    if res[:status] == '200'
-      current_user.images.create(image: res[:image])
-      render json: { status: 200, image: res[:image] }
-    else
-      render json: { status:500, image: "作成に失敗しました" }
+    current_user = image_params[:user_id] ? User.find(image_params[:user_id]) : nil
+    current_box = checked_box(current_user)
+    if !current_box.limit?
+      res = create_image(image_params[:prompts])
+      if res[:status] == '200'
+
+        if current_user
+          current_user.images.create(image: res[:image], image_box_id: current_box.id)
+        else
+          Image.create(image: res[:image], image_box_id: current_box.id)
+        end
+
+        render json: { status: 200, image: res[:image] }
+      else
+        render json: { status:500, image: "作成に失敗しました" }
+      end
     end
   end
 
