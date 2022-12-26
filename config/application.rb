@@ -21,6 +21,7 @@ Bundler.require(*Rails.groups)
 
 module DreamimageApi
   class Application < Rails::Application
+    config.autoload_paths += Dir["#{config.root}/lib"]
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
 
