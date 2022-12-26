@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_13_083623) do
+ActiveRecord::Schema.define(version: 2022_12_25_095724) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,11 +32,22 @@ ActiveRecord::Schema.define(version: 2022_12_13_083623) do
     t.index ["user_id"], name: "index_dream_diaries_on_user_id"
   end
 
-  create_table "images", force: :cascade do |t|
-    t.text "image"
+  create_table "image_boxes", force: :cascade do |t|
+    t.boolean "limit", default: false, null: false
+    t.integer "user_type", default: 0, null: false
     t.bigint "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_image_boxes_on_user_id"
+  end
+
+  create_table "images", force: :cascade do |t|
+    t.text "image", null: false
+    t.bigint "user_id"
+    t.bigint "image_box_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["image_box_id"], name: "index_images_on_image_box_id"
     t.index ["user_id"], name: "index_images_on_user_id"
   end
 
@@ -66,5 +77,7 @@ ActiveRecord::Schema.define(version: 2022_12_13_083623) do
   end
 
   add_foreign_key "dream_diaries", "users"
+  add_foreign_key "image_boxes", "users"
+  add_foreign_key "images", "image_boxes"
   add_foreign_key "images", "users"
 end

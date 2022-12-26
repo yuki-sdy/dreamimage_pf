@@ -11,7 +11,7 @@ class CreateDreamDiaries < ActiveRecord::Migration[6.1]
       t.boolean :state, null: false, default: false
       t.text :image, default: ""
       t.text :diary_ogp, default: ""
-      t.references :user, foreign_key: true
+      t.references :user, foreign_key: true, default: ""
 
       t.timestamps
     end

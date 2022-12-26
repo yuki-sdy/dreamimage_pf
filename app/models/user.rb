@@ -9,4 +9,5 @@ class User < ActiveRecord::Base
 
   has_many :dream_diaries
   has_many :images
+  has_one :image_box
 end
