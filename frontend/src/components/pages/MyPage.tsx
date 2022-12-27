@@ -10,6 +10,7 @@ import CardComp from "./dreamDiaries/organisms/CardComp"
 import AlertMessage from "../utils/AlertMessage"
 import { DreamDiary } from "../../interfaces"
 import { getMypage } from "../../lib/api/mypages"
+import CreateIcon from "@material-ui/icons/Create"
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconButton: {
@@ -28,6 +29,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   link: {
     textDecoration: "none"
+  },
+  writeBtn: {
+    textTransform: "none",
+    backgroundColor: "#884898",
+    color: "white",
+    "&:hover" : {
+      backgroundColor: "#b660cc"
+    }
   },
 }))
 
@@ -65,30 +74,6 @@ const MyPage: React.FC = () => {
     handleDreamDiaries()
   }, [])
 
-    //退会処理
-    const handleDeleteAccount = async (e: React.MouseEvent<HTMLButtonElement>) => {
-      const res = await deleteAccount(currentUser?.id)
-      console.log(res)
-  
-      if (res.data.success === true) {
-        // アカウント削除時には各Cookieを削除
-        Cookies.remove("_access_token")
-        Cookies.remove("_client")
-        Cookies.remove("_uid")
-  
-        setIsSignedIn(false)
-        navigation("/signin")
-  
-        console.log("Succeeded in delete account")
-      } else {
-        console.log("Failed in delete account")
-      }
-  
-      try {
-      } catch (err) {
-        console.log(err)
-      }
-    }
 
   return(
     <>
@@ -117,7 +102,19 @@ const MyPage: React.FC = () => {
           }
           </Grid>
           </>
-          ) : (<></>)
+          ) : (
+          <>
+          <h3>日記がありません！</h3>
+            <Button
+              component={Link}
+              to="/dreamdiaries/new"
+              variant="contained"
+              startIcon={<CreateIcon />}
+              className={classes.writeBtn}
+            >
+              日記を作成する
+            </Button>
+          </>)
           )
         : (<></>) 
       }
@@ -127,23 +124,6 @@ const MyPage: React.FC = () => {
         severity="success"
         message="日記を削除しました。"
       />
-      {
-        isSignedIn && currentUser ? (
-          <>
-            <h2>メールアドレス: {currentUser?.email}</h2>
-            <h2>名前: {currentUser?.name}</h2>
-          <Button
-              color="inherit"
-              className={classes.linkBtn}
-              onClick={handleDeleteAccount}
-            >
-              退会
-            </Button>
-          </>
-        ) : (
-          <></>
-        )
-      }
     </>
   )
 }

@@ -11,6 +11,7 @@ import DreamDiaryShow from "./components/pages/dreamDiaries/DreamDiaryShow"
 
 import Home from "./components/pages/Home"
 import MyPage from "./components/pages/MyPage"
+import Profile from "./components/pages/Profile"
 import SignIn from "./components/pages/SignIn"
 import SignUp from "./components/pages/SignUp"
 
@@ -84,8 +85,11 @@ const App: React.FC = () => {
 
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
+            
             <Route path="/mypage" 
               element={<Private children={<MyPage />} />} />
+            <Route path="/profile" 
+              element={<Private children={<Profile />} />} />
 
             <Route path="/dreamdiaries/new" 
               element={<Private children={<DreamDiaryForm />} />} />
