@@ -24,6 +24,8 @@ module DreamimageApi
     config.autoload_paths += Dir["#{config.root}/lib"]
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
+    # Don't use csrf tokens
+    config.action_controller.allow_forgery_protection = false
 
     # Configuration for the application, engines, and railties goes here.
     #
