@@ -1,6 +1,5 @@
 import React, { useContext } from "react"
 import { useNavigate, Link } from "react-router-dom"
-import Cookies from "js-cookie"
 
 import { makeStyles, Theme } from "@material-ui/core/styles"
 
@@ -13,8 +12,8 @@ import MenuIcon from "@material-ui/icons/Menu"
 
 import CreateIcon from "@material-ui/icons/Create"
 
-import { signOut } from "../../lib/api/auth"
 import { AuthContext } from "../../App"
+import AccountMenu from "./AccountMenu"
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconButton: {
@@ -51,28 +50,6 @@ const Header: React.FC = () => {
   const classes = useStyles();
   const navigation = useNavigate();
 
-  const handleSignOut = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    try {
-      const res = await signOut()
-
-      if (res.data.success === true) {
-        // サインアウト時には各Cookieを削除
-        Cookies.remove("_access_token")
-        Cookies.remove("_client")
-        Cookies.remove("_uid")
-
-        setIsSignedIn(false)
-        navigation("/signin")
-
-        console.log("Succeeded in sign out")
-      } else {
-        console.log("Failed in sign out")
-      }
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
   const AuthButtons = () => {
     // 認証完了後はサインアウト用のボタンを表示
     // 未認証時は認証用のボタンを表示
@@ -80,21 +57,7 @@ const Header: React.FC = () => {
       if (isSignedIn) {
         return (
           <>
-            <Button
-              component={Link}
-              to="/mypage"
-              color="inherit"
-              className={classes.linkBtn}
-            >
-              マイページ
-            </Button>
-            <Button
-              color="inherit"
-              className={classes.linkBtn}
-              onClick={handleSignOut}
-            >
-              ログアウト
-            </Button>
+            <AccountMenu/>
             <Button
               component={Link}
               to="/dreamdiaries/new"
