@@ -3,7 +3,8 @@ class Api::V1::DreamDiariesController < ApplicationController
   before_action :set_dream_diary, only: %i[show edit update destroy]
 
   def index
-    render json: { status: 200, dream_diaries: DreamDiary.all }
+    dream_diaries = DreamDiary.where(state: true)
+    render json: { status: 200, dream_diaries: dream_diaries }
   end
 
   def show
@@ -12,6 +13,7 @@ class Api::V1::DreamDiariesController < ApplicationController
   
   def create
     dream_diary = DreamDiary.new(dream_diary_params_with_ogp)
+    dream_diary[:user_id] = nil if dream_diary[:user_id] == 0
     if dream_diary.save
       id = DreamDiary.maximum(:id)
       render json: {status: 200, dream_diary: dream_diary, id: id }

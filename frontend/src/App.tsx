@@ -11,6 +11,7 @@ import DreamDiaryShow from "./components/pages/dreamDiaries/DreamDiaryShow"
 
 import Home from "./components/pages/Home"
 import MyPage from "./components/pages/MyPage"
+import Profile from "./components/pages/Profile"
 import SignIn from "./components/pages/SignIn"
 import SignUp from "./components/pages/SignUp"
 
@@ -79,18 +80,19 @@ const App: React.FC = () => {
             <Route path="/" element={<Home />} />
             <Route path="/dreamdiaries" element={<DreamDiaries/>} />
             <Route path="/dreamdiaries/:id" element={<DreamDiaryShow />} />
+            <Route path="/dreamdiaries/preview" element={<DreamDiaryPreview />} />
+            <Route path="/dreamdiaries/back" element={<DreamDiaryBackForm />} />
 
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
+            
             <Route path="/mypage" 
               element={<Private children={<MyPage />} />} />
+            <Route path="/profile" 
+              element={<Private children={<Profile />} />} />
 
             <Route path="/dreamdiaries/new" 
               element={<Private children={<DreamDiaryForm />} />} />
-            <Route path="/dreamdiaries/preview" 
-                element={<Private children={<DreamDiaryPreview />} />} />
-            <Route path="/dreamdiaries/back"
-                element={<Private children={<DreamDiaryBackForm />} />} />
             <Route path="/dreamdiaries/:id/edit" 
               element={<Private children={<DreamDiaryEditForm />} />} />
           </Routes>
