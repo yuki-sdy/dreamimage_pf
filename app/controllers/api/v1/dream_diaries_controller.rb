@@ -3,7 +3,7 @@ class Api::V1::DreamDiariesController < ApplicationController
   before_action :set_dream_diary, only: %i[show edit update destroy]
 
   def index
-    dream_diaries = DreamDiary.find_by(state: true)
+    dream_diaries = DreamDiary.where(state: true)
     render json: { status: 200, dream_diaries: dream_diaries }
   end
 
