@@ -19,9 +19,23 @@ export interface User {
   provider: string
   email: string
   name: string
-  nickname?: string
-  image?: string
+  nickname: string
+  image: {
+    url: string
+  }
+  introduction: string
   allowPasswordChange: boolean
+}
+
+export interface UpdateUserData {
+  id: number | undefined | null
+  name?: string 
+  introduction?: string
+  image?: string
+}
+
+export interface UpdateUserFormData extends FormData {
+  append(name: keyof UpdateUserData, value: String | Blob, fileName?: string): any
 }
 
 //夢絵日記
@@ -38,6 +52,13 @@ export interface DreamDiary {
   diaryOgp: string
   image: string
   userId: number | undefined
+  user: {
+    id: number
+    name: string
+    image: {
+      url: string
+    }
+  }
 }
 
 export interface DreamDiaryFormData extends FormData {
