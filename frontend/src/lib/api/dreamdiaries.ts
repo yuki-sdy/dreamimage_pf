@@ -2,7 +2,7 @@ import { client } from "./client"
 import Cookies from "js-cookie"
 import { DreamDiaryFormData } from "../../interfaces"
 
-// indexへのgetリクエスト、全件取得
+// indexへのgetリクエスト、公開済み日記を全件取得
 export const getDreamDiaries = () => {
   return client.get("dream_diaries", { headers: {
     "access-token": Cookies.get("_access_token"),
