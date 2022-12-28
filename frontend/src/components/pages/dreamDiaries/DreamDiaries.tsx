@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react"
-import { Link, useLocation } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 
 import { DreamDiary } from "../../../interfaces"
 import { getDreamDiaries } from "../../../lib/api/dreamdiaries"
-import { Grid, List, ListItemText, makeStyles, Theme } from "@material-ui/core"
+import { Grid, makeStyles, Theme } from "@material-ui/core"
 import AlertMessage from "../../utils/AlertMessage"
 import CardComp from "./organisms/CardComp"
 
@@ -20,7 +20,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 const DreamDiaries: React.FC = () => {
-  const classes = useStyles()
   const location = useLocation()
 
   const [loading, setLoading] = useState<boolean>(true)
@@ -31,9 +30,10 @@ const DreamDiaries: React.FC = () => {
   const handleDreamDiaries = async () => {
     try {
       const res = await getDreamDiaries()
+      console.log(res.data)
 
       if (res.status === 200) {
-        setDreamDiaries(res.data.dreamDiaries)
+        setDreamDiaries(res.data)
       } else {
         console.log("No diary")
       }
@@ -59,7 +59,7 @@ const DreamDiaries: React.FC = () => {
             {
             dreamDiaries.map((dreamDiary: DreamDiary, index: number) => {
               return (
-                <Grid item container key={index} xs={12} md={4} lg={3} sm={6} spacing={1} justify="center">
+                <Grid item container key={index} xs={12} md={4} lg={3} sm={6} style={{margin: "auto"}} justify="center">
                   <CardComp
                     id={dreamDiary.id}
                     image={dreamDiary.image}
@@ -68,6 +68,8 @@ const DreamDiaries: React.FC = () => {
                     dreamDate={dreamDiary.dreamDate}
                     impression={dreamDiary.impression}
                     dreamType={dreamDiary.dreamType}
+                    userName={dreamDiary.user.name}
+                    userImage={dreamDiary.user.image.url}
                     />
                 </Grid>
               )

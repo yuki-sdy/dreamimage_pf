@@ -1,6 +1,6 @@
 import React from "react"
 import Card from "@material-ui/core/Card"
-import { CardContent, CardMedia, makeStyles, Theme, Typography } from "@material-ui/core"
+import { CardContent, CardMedia, makeStyles, Theme, Typography, Avatar } from "@material-ui/core"
 import { dream_types, impressions } from "../../../../data/dreamdiaryEnums"
 import { Link } from "react-router-dom"
 
@@ -12,6 +12,8 @@ export interface CardInfoProps {
   dreamDate: Date
   impression: number
   dreamType: number
+  userName: string
+  userImage: string
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -28,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   card: {
     padding: theme.spacing(2),
-    maxWidth: 800
+    boxShadow: "none"
   },
   inputFileButton: {
     textTransform: "none",
@@ -46,10 +48,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   link: {
     textDecoration: "none",
     color: "inherit"
-  }
+  },
+  avatar: {
+    width: theme.spacing(5),
+    height: theme.spacing(5)
+  },
 }))
 
-const CardComp = ({ image, title, content, dreamDate, impression, dreamType, id}: CardInfoProps) => {
+const CardComp = ({ image, title, content, dreamDate, impression, dreamType, id, userName, userImage}: CardInfoProps) => {
   const classes = useStyles()
 
   const diaryImpression = (impression :number): string => {
@@ -63,15 +69,27 @@ const CardComp = ({ image, title, content, dreamDate, impression, dreamType, id}
   return (
     <div className="product-card-top">
       <Link to={`/dreamdiaries/${id}`} className={classes.link}>
-      <Card className={classes.card} style={{minWidth: "250px", width: "200px", height:"310px", margin: "10px", background:"rgba(0, 0, 0, 0)"}}>
+      <Card className={classes.card} style={{minWidth: "230px", width: "180px", height:"290px", margin: "10px", background:"rgba(0, 0, 0, 0)", paddingTop: 0}}>
               <CardContent style={{display: "flex", flexDirection: "column"}}>
-                <CardMedia style={{textAlign: "center", paddingBottom: "10px"}}>
-                  <img src={image} width={"90%"}/>
+                <CardMedia style={{textAlign: "center", paddingBottom: "10px", width: "100%"}}>
+                  <img src={image} width={"90%"} style={{borderRadius: "20px"}}/>
                 </CardMedia>
+                <div style={{display: "flex"}}>
+                <Avatar
+                      alt="avatar"
+                      src={userImage}
+                      className={classes.avatar}
+                    />
+                  <div>
                   <Typography variant="h1" component="div" style={{fontSize: "17px", overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box",WebkitLineClamp: 2, WebkitBoxOrient: "vertical"}}>
                       {title}
                   </Typography>
-                  <div style={{paddingTop: "10px"}}>
+                  <Typography variant="body2" color="textSecondary" style={{overflow: "hidden",textOverflow: "ellipsis", whiteSpace: "nowrap"}}>
+                      {userName}
+                  </Typography>
+                  </div>
+                </div>
+                  <div style={{paddingTop: "3px"}}>
                   <Typography variant="body2" color="textSecondary" style={{overflow: "hidden",textOverflow: "ellipsis", whiteSpace: "nowrap"}}>
                       {content}
                   </Typography>

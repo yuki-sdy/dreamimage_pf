@@ -154,7 +154,8 @@ const DreamDiaryBackForm: React.FC = () => {
               variant="outlined"
               required
               fullWidth
-              label="タイトル(40字以内)"
+              label="タイトル(40字)"
+              placeholder="40文字以内で書いてください。"
               value={title}
               margin="dense"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
@@ -165,7 +166,8 @@ const DreamDiaryBackForm: React.FC = () => {
               fullWidth
               multiline
               rows={4}
-              label="夢の内容(125字以内)"
+              label="夢の内容(125字)"
+              placeholder="125文字以内で書いてください。"
               value={body}
               margin="dense"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBody(e.target.value)}
@@ -233,7 +235,8 @@ const DreamDiaryBackForm: React.FC = () => {
               variant="outlined"
               required
               fullWidth
-              label="呪文(40字以内)"
+              label="呪文(40字)"
+              placeholder="40文字以内で書いてください。"
               type="prompt"
               value={prompt}
               margin="dense"
@@ -279,7 +282,8 @@ const DreamDiaryBackForm: React.FC = () => {
                 fullWidth
                 multiline
                 rows={4}
-                label="この日記に対するコメントをください！(80字以内)"
+                label="この日記に対するコメントをください！(80字)"
+                placeholder="80文字以内で書いてください。"
                 value={content}
                 margin="dense"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setContent(e.target.value)}
@@ -306,7 +310,8 @@ const DreamDiaryBackForm: React.FC = () => {
                   fullWidth
                   multiline
                   rows={4}
-                  label="この日記に対するコメントをください！(80字以内)"
+                  label="この日記に対するコメントをください！(80字)"
+                  placeholder="80文字以内で書いてください。"
                   value={content}
                   margin="dense"
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setContent(e.target.value)}
