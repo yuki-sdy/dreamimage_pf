@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const AccountMenu: React.FC = () => {
   const classes = useStyles()
-  const { setIsSignedIn } = useContext(AuthContext)
+  const { setIsSignedIn, currentUser } = useContext(AuthContext)
   const navigation = useNavigate();
 
   const [anchorEl, setAnchorEl] = useState(null)
@@ -80,7 +80,10 @@ const AccountMenu: React.FC = () => {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar>M</Avatar>
+            <Avatar
+              alt="avatar"
+              src={currentUser?.image.url}
+              />
           </IconButton>
         </Tooltip>
       </Box>

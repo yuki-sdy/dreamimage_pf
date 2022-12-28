@@ -58,7 +58,7 @@ const MyPage: React.FC = () => {
       console.log(res.data)
 
       if (res.status === 200) {
-        setDreamDiaries(res.data.dreamDiaries)
+        setDreamDiaries(res.data)
         console.log(dreamDiaries)
       } else {
         console.log("No diary")
@@ -82,11 +82,11 @@ const MyPage: React.FC = () => {
           dreamDiaries.length > 0 ? (
             <>
             <h3 style={{textAlign:"center"}}>{currentUser?.name}の夢絵日記一覧</h3>
-            <Grid container justify="flex-start" style={{width: "100%"}}>
+            <Grid container style={{width: "100%"}}>
             {
             dreamDiaries.map((dreamDiary: DreamDiary, index: number) => {
               return (
-                <Grid item container key={index} xs={12} md={4} lg={3} sm={6} spacing={1} justify="center">
+                <Grid item container key={index} xs={12} md={4} lg={3} sm={6} style={{margin: "auto"}}justify="center">
                   <CardComp
                     id={dreamDiary.id}
                     image={dreamDiary.image}
@@ -95,6 +95,8 @@ const MyPage: React.FC = () => {
                     dreamDate={dreamDiary.dreamDate}
                     impression={dreamDiary.impression}
                     dreamType={dreamDiary.dreamType}
+                    userName={dreamDiary.user.name}
+                    userImage={dreamDiary.user.image.url}
                     />
                 </Grid>
               )
