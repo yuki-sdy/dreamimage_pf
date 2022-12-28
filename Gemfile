@@ -24,14 +24,16 @@ gem 'bootsnap', '>= 1.4.4', require: false
 
 gem 'devise'
 gem 'devise_token_auth'
-gem 'omniauth'
-gem 'omniauth-twitter'
-gem 'omniauth-rails_csrf_protection'
+# 実装保留
+# gem 'omniauth'
+# gem 'omniauth-twitter'
+# gem 'omniauth-rails_csrf_protection'
 gem 'dotenv-rails'
 
 gem 'carrierwave'
 gem 'mini_magick'
 gem 'whenever', require: false
+gem 'active_model_serializers'
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
