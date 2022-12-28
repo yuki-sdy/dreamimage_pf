@@ -44,10 +44,7 @@ const SignUp: React.FC = () => {
   const [password, setPassword] = useState<string>("")
   const [passwordConfirmation, setPasswordConfirmation] = useState<string>("")
   const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false)
-  
-  type Provider = 'twitter'
-  const [authProvider, setAuthProvider] = useState<Provider | null>(null)
-  const [openAuthWindow, setOpenAuthWindow] = useState<Window | null>(null)
+
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
@@ -58,59 +55,6 @@ const SignUp: React.FC = () => {
       password: password,
       passwordConfirmation: passwordConfirmation
     }
-
-    const openAuth = (provider: Provider): Window | null => {
-      const authURL = (provider :Provider) => `localhost/app/v1/${provider}`
-
-      // open with post method to protect from csrf
-      let blankForm = document.createElement('form')
-      blankForm.target = provider
-      blankForm.method = 'post'
-      blankForm.action = `${authURL(provider)}?omniauth_window_type=newWindow`
-    
-      // connect form
-      blankForm.style.display = 'none'
-      document.body.appendChild(blankForm)
-    
-      let authWindow = window.open('', provider)
-      console.log(blankForm.submit())
-    
-      // cut form
-      document.body.removeChild(blankForm)
-    
-      return authWindow
-    }
-
-    // useEffect(() => {
-    //   if (!openAuthWindow) return
-    //   window.addEventListener('message', (e) => {
-    //     const data = camelcaseKeys(e.data) as { [key: string]: any }
-    //     const authParamKeys = ['authToken', 'clientId', 'uid']
-    //     if (
-    //       !authParamKeys.reduce(
-    //         (acc: boolean, cur: string): boolean =>
-    //           acc && Object.keys(data).includes(cur),
-    //         true
-    //       )
-    //     ) {
-    //       return
-    //     }
-  
-    //     Cookies.set("_access_token", data.authToken) 
-    //     Cookies.set("_client", data.clientId) 
-    //     Cookies.set("_uid", data.uid) 
-        
-    //     setCurrentUser(data as User)
-  
-    //     clearInterval(timer)
-    //     setAuthProvider(null)
-    //     setOpenAuthWindow(null)
-    //   })
-  
-    //   const timer = setInterval(() => {
-    //     openAuthWindow.postMessage('requestCredentials', domainURL)
-    //   }, 200)
-    // }, [openAuthWindow])
 
     try {
       const res = await signUp(data)
@@ -192,13 +136,6 @@ const SignUp: React.FC = () => {
                 onClick={handleSubmit}
               >
                 送信
-              </Button>
-            </div>
-            <div>
-              <Button
-                type="submit"
-                onClick={() =>(openAuth('twitter'))}>
-                twitter
               </Button>
             </div>
           </CardContent>
