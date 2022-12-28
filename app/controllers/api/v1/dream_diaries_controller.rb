@@ -4,7 +4,7 @@ class Api::V1::DreamDiariesController < ApplicationController
 
   def index
     dream_diaries = DreamDiary.where(state: true)
-    render json: { status: 200, dream_diaries: dream_diaries }
+    render json: dream_diaries, include: [:user], status: 200
   end
 
   def show
