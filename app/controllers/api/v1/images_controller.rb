@@ -34,7 +34,7 @@ class Api::V1::ImagesController < ApplicationController
     # Request headers
     request['Content-Type'] = 'application/json'
     request['Cache-Control'] = 'no-cache'
-    request['Ocp-Apim-Subscription-Key'] = ''
+    request['Ocp-Apim-Subscription-Key'] = ENV['JAPANESE_STABELE_DEFUTION_KEY']
 
     # Request body
     request.body = {
