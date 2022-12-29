@@ -17,6 +17,7 @@ import { PhotoCamera } from "@material-ui/icons"
 import EditIcon from "@material-ui/icons/Edit"
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import CancelIcon from "@material-ui/icons/Cancel"
+import { Link } from "react-router-dom"
 
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -128,7 +129,6 @@ const Profile: React.FC = () => {
   }
 
 
-
     //退会処理
     const handleDeleteAccount = async (e: React.MouseEvent<HTMLButtonElement>) => {
       const res = await deleteAccount(currentUser?.id)
@@ -207,16 +207,31 @@ const Profile: React.FC = () => {
                         </Typography>
                       )
                     }
-                    <Button
+                  {
+                    currentUser.isGuest ? (
+                      <Button
                       variant="outlined"
-                      onClick={handleSignOut}
-                      color="primary"
+                      component={Link}
+                      to={'/dreamdiaries/new'}
+                      color="secondary"
                       fullWidth
-                      startIcon={<ExitToAppIcon />}
                       style={{ marginTop: "1rem"}}
                     >
-                      ログアウト
+                      新規登録
                     </Button>
+                    ) : (
+                      <Button
+                        variant="outlined"
+                        onClick={handleSignOut}
+                        color="primary"
+                        fullWidth
+                        startIcon={<ExitToAppIcon />}
+                        style={{ marginTop: "1rem"}}
+                      >
+                        ログアウト
+                      </Button>
+                    )
+                  }
                   </Grid>
                 </Grid>
               </CardContent>

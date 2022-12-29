@@ -11,6 +11,7 @@ import AlertMessage from "../utils/AlertMessage"
 import { DreamDiary } from "../../interfaces"
 import { getMypage } from "../../lib/api/mypages"
 import CreateIcon from "@material-ui/icons/Create"
+import { Alert } from "@material-ui/lab"
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconButton: {
@@ -74,6 +75,22 @@ const MyPage: React.FC = () => {
     handleDreamDiaries()
   }, [])
 
+  const GuestAlert = () => {
+    if (!loading) {
+      if (currentUser?.isGuest) {
+        return (
+          <Alert severity="warning" color="warning">
+            このアカウントを引き続き利用する場合は、本日中にヘッダーから新規登録を行ってください！
+          </Alert>
+        )
+      } else {
+        return <></>
+      }
+    } else {
+      return <></>
+    }
+  }
+
 
   return(
     <>
@@ -81,6 +98,7 @@ const MyPage: React.FC = () => {
         !loading ? (
           dreamDiaries.length > 0 ? (
             <>
+          <GuestAlert />
             <h3 style={{textAlign:"center"}}>{currentUser?.name}の夢絵日記一覧</h3>
             <Grid container style={{width: "100%"}}>
             {
