@@ -37,7 +37,7 @@ const SignUp: React.FC = () => {
   const classes = useStyles()
   const navigation = useNavigate()
 
-  const { setIsSignedIn, setCurrentUser } = useContext(AuthContext)
+  const { setIsSignedIn, setCurrentUser, currentUser } = useContext(AuthContext)
 
   const [name, setName] = useState<string>("")
   const [email, setEmail] = useState<string>("")
@@ -53,11 +53,12 @@ const SignUp: React.FC = () => {
       name: name,
       email: email,
       password: password,
-      passwordConfirmation: passwordConfirmation
+      passwordConfirmation: passwordConfirmation,
+
     }
 
     try {
-      const res = await signUp(data)
+      const res = await signUp(data, currentUser?.id)
       console.log(res)
 
       if (res.status === 200) {

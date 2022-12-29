@@ -2,7 +2,7 @@ class Api::V1::ImagesController < ApplicationController
   require 'net/http'
 
   def create
-    current_user = image_params[:user_id] ? User.find(image_params[:user_id]) : nil
+    current_user = User.find(image_params[:user_id])
     current_box = checked_box(current_user)
     if !current_box.limit?
       res = create_image(image_params[:prompts])
@@ -52,5 +52,21 @@ class Api::V1::ImagesController < ApplicationController
     image = response_body['image']
 
     return {status: status, image: image}
+  end
+
+  def checked_box(current_user)
+    if current_user.image_box.present?
+      current_box = current_user.image_box
+    else
+      current_box = current_user.is_guest? ? 
+      current_user.create_image_box!(user_type: 0) : current_user.create_image_box!(user_type: 1)
+    end
+
+    if current_box.user_type == 0
+      current_box.images.count >= 3 ? current_box.update(limit: true) : current_box.update(limit: false)
+    else
+      current_box.images.count >= 5 ? current_box.update(limit: true) : current_box.update(limit: false)
+    end
+    current_box
   end
 end

@@ -104,26 +104,32 @@ const AccountMenu: React.FC = () => {
       >
         <MenuItem
           component={Link}
-          to="/profile"
-          color="inherit"
-        >
-          プロフィール
-        </MenuItem>
-        <MenuItem
-          component={Link}
           to="/mypage"
           color="inherit"
         >
           マイページ
         </MenuItem>
-        <Divider />
         <MenuItem
-          component={Button}
+          component={Link}
+          to="/profile"
           color="inherit"
-          onClick={handleSignOut}
         >
-          ログアウト
+          プロフィール
         </MenuItem>
+        {
+          currentUser?.isGuest ? null : (
+            <>
+              <Divider />
+              <MenuItem
+                component={Button}
+                color="inherit"
+                onClick={handleSignOut}
+              >
+                ログアウト
+              </MenuItem>
+            </>
+          )
+        }
       </Menu>
     </>
   )

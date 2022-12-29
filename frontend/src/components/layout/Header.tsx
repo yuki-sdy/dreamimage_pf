@@ -14,6 +14,7 @@ import CreateIcon from "@material-ui/icons/Create"
 
 import { AuthContext } from "../../App"
 import AccountMenu from "./AccountMenu"
+import { getCurrentUser } from "../../lib/api/auth"
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconButton: {
@@ -25,7 +26,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     color: "inherit"
   },
   linkBtn: {
-    textTransform: "none"
+    textTransform: "none",
+    marginLeft: "15px"
   },
   writeBtn: {
     textTransform: "none",
@@ -46,17 +48,41 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 const Header: React.FC = () => {
-  const { loading, isSignedIn, setIsSignedIn } = useContext(AuthContext)
+  const { loading, isSignedIn, currentUser } = useContext(AuthContext)
   const classes = useStyles();
-  const navigation = useNavigate();
 
   const AuthButtons = () => {
     // 認証完了後はサインアウト用のボタンを表示
     // 未認証時は認証用のボタンを表示
     if (!loading) {
       if (isSignedIn) {
+        if (currentUser?.isGuest) {
         return (
           <>
+          <AccountMenu/>
+          <Button
+            component={Link}
+            to="/dreamdiaries/new"
+            variant="contained"
+            startIcon={<CreateIcon />}
+            className={classes.writeBtn}
+          >
+            日記投稿
+          </Button>
+          <Button
+            component={Link}
+            to="/signup"
+            color="secondary"
+            variant="outlined"
+            className={classes.linkBtn}
+          >
+            無料登録
+          </Button>
+          </>
+        )
+      }else {
+          return (
+            <>
             <AccountMenu/>
             <Button
               component={Link}
@@ -68,18 +94,11 @@ const Header: React.FC = () => {
               日記投稿
             </Button>
           </>
-        )
+          )
+        }
       } else {
         return (
           <>
-            <Button
-              component={Link}
-              to="/"
-              color="inherit"
-              className={classes.linkBtn}
-            >
-              作ってみる
-            </Button>
             <Button
               component={Link}
               to="/signin"

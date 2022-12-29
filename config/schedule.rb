@@ -9,4 +9,5 @@ set :output, "#{Rails.root}/log/cron.log"
 
 every 1.days, at: '0:00 am' do
   runner 'Batch::DeadlineCleaner.image_box_data_reset'
+  runner 'Batch::DeadlineCleaner.guest_user_data_reset'
 end
