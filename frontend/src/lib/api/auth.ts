@@ -4,8 +4,8 @@ import Cookies from "js-cookie"
 import { SignInData, SignUpData } from "../../interfaces"
 
 // サインアップ（新規アカウント作成）
-export const signUp = (data: SignUpData) => {
-  return client.post("auth", data)
+export const signUp = (data: SignUpData, currentId?: number | undefined) => {
+  return client.post("auth", {data, currentId})
 }
 
 // サインイン（ログイン）

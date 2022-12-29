@@ -4,6 +4,7 @@ export interface SignUpData {
   email: string
   password: string
   passwordConfirmation: string
+  isGuest?: boolean
 }
 
 // サインイン
@@ -24,6 +25,7 @@ export interface User {
     url: string
   }
   introduction: string
+  isGuest?: boolean
   allowPasswordChange: boolean
 }
 
