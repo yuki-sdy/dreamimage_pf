@@ -1,6 +1,6 @@
 import React, { useContext } from "react"
-import { useNavigate, Link } from "react-router-dom"
-
+import { Link } from "react-router-dom"
+import { AuthContext } from "../../App"
 import { makeStyles, Theme } from "@material-ui/core/styles"
 
 import AppBar from "@material-ui/core/AppBar"
@@ -9,12 +9,8 @@ import Typography from "@material-ui/core/Typography"
 import Button from "@material-ui/core/Button"
 import IconButton from "@material-ui/core/IconButton"
 import MenuIcon from "@material-ui/icons/Menu"
-
 import CreateIcon from "@material-ui/icons/Create"
-
-import { AuthContext } from "../../App"
 import AccountMenu from "./AccountMenu"
-import { getCurrentUser } from "../../lib/api/auth"
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconButton: {

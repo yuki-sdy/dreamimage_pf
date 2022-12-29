@@ -3,10 +3,10 @@ require 'base64'
 
 class OgpCreator
 
-  BASE_IMAGE_PATH = './app/assets/images/dreamdiary.png'
+  BASE_IMAGE_PATH = './public/images/dreamdiary.png'
   GRAVITY = 'center'
   TEXT_POSITION = '0,0'
-  FONT = './app/assets/fonts/timemachine-wa.ttf'
+  FONT = './public/fonts/timemachine-wa.ttf'
   INDENTION_COUNT = 20 #
   BODY_INDENTION_COUNT = 25 #
   ROW_LIMIT = 8
