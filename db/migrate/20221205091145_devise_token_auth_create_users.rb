@@ -34,6 +34,7 @@ class DeviseTokenAuthCreateUsers < ActiveRecord::Migration[6.1]
       t.string :image
       t.string :email
       t.string :introduction
+      t.boolean :is_guest, null: false, default: false
 
       ## Tokens
       t.json :tokens
