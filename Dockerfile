@@ -23,7 +23,7 @@ RUN mkdir /$APP_NAME
 WORKDIR /$APP_NAME
 
 # 別途インストールが必要なものがある場合は追加してください
-RUN apt-get update -qq && apt-get install -y build-essential
+RUN apt-get update -qq && apt-get install -y build-essential yarn
 
 RUN gem install bundler:$BUNDLER_VERSION
 
@@ -33,6 +33,7 @@ COPY Gemfile.lock /$APP_NAME/Gemfile.lock
 RUN bundle install
 
 COPY . /$APP_NAME/
+RUN cd /$APP_NAME/frontend/ && yarn build && cd
 
 COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
