@@ -23,3 +23,5 @@ test:
 production:
   <<: *default
   database: dreamimage_production
+  password: <%= ENV['DREANDIARY_DATABASE_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>
