@@ -23,11 +23,7 @@ RUN mkdir /$APP_NAME
 WORKDIR /$APP_NAME
 
 # 別途インストールが必要なものがある場合は追加してください
-RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
-&& wget --quiet -O - /tmp/pubkey.gpg https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
-&& echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
-&& apt-get update -qq \
-&& apt-get install -y build-essential nodejs yarn
+RUN apt-get update -qq && apt-get install -y build-essential
 
 RUN gem install bundler:$BUNDLER_VERSION
 
@@ -36,15 +32,7 @@ COPY Gemfile.lock /$APP_NAME/Gemfile.lock
 
 RUN bundle install
 
-COPY yarn.lock /$APP_NAME/yarn.lock
-COPY package.json /$APP_NAME/package.json
-
 COPY . /$APP_NAME/
-
-RUN SECRET_KEY_BASE="$(bundle exec rake secret)" bin/rails db:create \
-&& yarn install --production --frozen-lockfile \
-&& yarn cache clean \
-&& rm -rf /$APP_NAME/node_modules /$APP_NAME/tmp/cache
 
 COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
