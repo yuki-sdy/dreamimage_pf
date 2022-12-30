@@ -1,7 +1,9 @@
 #applicationのディレクトリ名で置き換えてください
-ARG APP_NAME=NewBeLab-Rails
+ARG APP_NAME=DreamImage_pf
 #使いたいrubyのimage名に置き換えてください
-ARG RUBY_IMAGE=ruby:3.1.2
+ARG RUBY_IMAGE=ruby:2.7.4
+#使いたいnodeのversionに置き換えてください(`15.14.0`ではなく`15`とか`16`とかのメジャーバージョン形式で書いてください)
+ARG NODE_VERSION='15'
 #インストールするbundlerのversionに置き換えてください
 ARG BUNDLER_VERSION=2.3.16
 
