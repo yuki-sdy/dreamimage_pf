@@ -1,9 +1,7 @@
 #applicationのディレクトリ名で置き換えてください
-ARG APP_NAME=DreamImage_pf
+ARG APP_NAME=NewBeLab-Rails
 #使いたいrubyのimage名に置き換えてください
-ARG RUBY_IMAGE=ruby:2.7.4
-#使いたいnodeのversionに置き換えてください(`15.14.0`ではなく`15`とか`16`とかのメジャーバージョン形式で書いてください)
-ARG NODE_VERSION='15'
+ARG RUBY_IMAGE=ruby:3.1.2
 #インストールするbundlerのversionに置き換えてください
 ARG BUNDLER_VERSION=2.3.16
 
@@ -23,7 +21,7 @@ RUN mkdir /$APP_NAME
 WORKDIR /$APP_NAME
 
 # 別途インストールが必要なものがある場合は追加してください
-RUN apt-get update -qq && apt-get install -y build-essential yarn
+RUN apt-get update -qq && apt-get install -y build-essential
 
 RUN gem install bundler:$BUNDLER_VERSION
 
@@ -33,7 +31,6 @@ COPY Gemfile.lock /$APP_NAME/Gemfile.lock
 RUN bundle install
 
 COPY . /$APP_NAME/
-RUN cd /$APP_NAME/frontend/ && yarn build && cd
 
 COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
