@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
   
   mount_uploader :image, ImageUploader
 
-  has_many :dream_diaries
-  has_many :images
-  has_one :image_box
+  has_many :dream_diaries, dependent: :nullify
+  has_many :images, dependent: :destroy
+  has_one :image_box, dependent: :destroy
 end
