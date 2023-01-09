@@ -13,5 +13,5 @@ class User < ActiveRecord::Base
 
   has_many :dream_diaries, dependent: :nullify
   has_many :images, dependent: :destroy
-  has_one :image_box, dependent: :destroy
+  has_many :image_boxes, dependent: :destroy
 end
