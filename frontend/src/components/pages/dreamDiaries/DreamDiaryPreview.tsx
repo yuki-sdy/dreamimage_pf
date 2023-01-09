@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const DreamDiaryPreview: React.FC = () => {
   const classes = useStyles()
-  const { currentUser } = useContext(AuthContext)
+  const { currentUser, setAlertMessageOpen } = useContext(AuthContext)
   const location = useLocation()
   const [dreamDiaryForm, setDreamDiaryForm] = useState<DreamDiaryFormData>(location.state.dreamDiary)
   const [userId, setUserId] = useState<number | undefined>(location.state.dreamDiary.userId)
@@ -82,6 +82,8 @@ const DreamDiaryPreview: React.FC = () => {
          if (res.status === 200) {
            navigation(`/dreamdiaries/${res.data.id}`,
            { state: 'success'  })
+           setAlertMessageOpen(true)
+           
          }
        }
     } catch (err) {

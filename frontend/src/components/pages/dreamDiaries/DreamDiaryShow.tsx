@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 const DreamDiaryShow: React.FC = () => {
-  const { currentUser, isSignedIn } = useContext(AuthContext)
+  const { currentUser, isSignedIn, alertMessageOpen, setAlertMessageOpen } = useContext(AuthContext)
   const params = useParams()
   const location = useLocation()
   const classes = useStyles()
@@ -39,7 +39,6 @@ const DreamDiaryShow: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true)
   const [dreamDiary, setDreamDiary] = useState<DreamDiary>()
 
-  const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(location.state)
   const [DlgOpen, setDlgOpen] = useState<boolean>(false)
 
   const handleDreamDiary = async () => {
@@ -122,6 +121,12 @@ const DreamDiaryShow: React.FC = () => {
           </div>
           ) : (<></>)
         }
+          <Button
+            component={Link}
+            to="/dreamdiaries"
+          >
+            一覧画面へ戻る
+          </Button>
           <CommonDialog // 削除確認ダイアログ
             message={"本当に削除しますか？"}
             open={DlgOpen}
