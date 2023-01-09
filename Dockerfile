@@ -22,8 +22,11 @@ ENV RAILS_LOG_TO_STDOUT true
 RUN mkdir /$APP_NAME
 WORKDIR /$APP_NAME
 
+RUN cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+
 # 別途インストールが必要なものがある場合は追加してください
 RUN apt-get update -qq && apt-get install -y build-essential
+RUN apt-get install -y cron
 
 RUN gem install bundler:$BUNDLER_VERSION
 
@@ -31,6 +34,8 @@ COPY Gemfile /$APP_NAME/Gemfile
 COPY Gemfile.lock /$APP_NAME/Gemfile.lock
 
 RUN bundle install
+RUN bundle exec whenever --update-crontab
+CMD ["cron", "-f"]
 
 COPY . /$APP_NAME/
 
