@@ -26,7 +26,6 @@ RUN cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
 # 別途インストールが必要なものがある場合は追加してください
 RUN apt-get update -qq && apt-get install -y build-essential
-RUN apt-get update && apt-get install -y cron && apt-get install -y vim
 
 RUN gem install bundler:$BUNDLER_VERSION
 
@@ -36,11 +35,8 @@ COPY Gemfile.lock /$APP_NAME/Gemfile.lock
 RUN bundle install
 
 COPY . /$APP_NAME/
-RUN bundle exec whenever --update-crontab
-RUN service cron start
 
 COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
 ENTRYPOINT ["entrypoint.sh"]
-
 EXPOSE 3000
