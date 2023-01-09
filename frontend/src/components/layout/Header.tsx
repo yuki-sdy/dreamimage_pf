@@ -7,8 +7,6 @@ import AppBar from "@material-ui/core/AppBar"
 import Toolbar from "@material-ui/core/Toolbar"
 import Typography from "@material-ui/core/Typography"
 import Button from "@material-ui/core/Button"
-import IconButton from "@material-ui/core/IconButton"
-import MenuIcon from "@material-ui/icons/Menu"
 import CreateIcon from "@material-ui/icons/Create"
 import AccountMenu from "./AccountMenu"
 
@@ -55,30 +53,30 @@ const Header: React.FC = () => {
         if (currentUser?.isGuest) {
         return (
           <>
-          <AccountMenu/>
-          <Button
-            component={Link}
-            to="/dreamdiaries/new"
-            variant="contained"
-            startIcon={<CreateIcon />}
-            className={classes.writeBtn}
-          >
-            日記投稿
-          </Button>
-          <Button
-            component={Link}
-            to="/signup"
-            color="secondary"
-            variant="outlined"
-            className={classes.linkBtn}
-          >
-            無料登録
-          </Button>
+            <AccountMenu/>
+            <Button
+              component={Link}
+              to="/dreamdiaries/new"
+              variant="contained"
+              startIcon={<CreateIcon />}
+              className={classes.writeBtn}
+            >
+              日記投稿
+            </Button>
+            <Button
+              component={Link}
+              to="/signup"
+              color="secondary"
+              variant="outlined"
+              className={classes.linkBtn}
+            >
+              新規登録
+            </Button>
           </>
         )
-      }else {
+      } else {
           return (
-            <>
+          <>
             <AccountMenu/>
             <Button
               component={Link}
@@ -110,7 +108,7 @@ const Header: React.FC = () => {
             variant="outlined"
             className={classes.linkBtn}
           >
-            無料登録
+            新規登録
           </Button>
         </>
         )
@@ -124,13 +122,6 @@ const Header: React.FC = () => {
     <>
       <AppBar position="static" style={{ color: "black", backgroundColor: "#fcfbfd" }}>
         <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.iconButton}
-            color="inherit"
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography
             component={Link}
             to="/"
