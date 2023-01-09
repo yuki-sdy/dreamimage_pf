@@ -71,7 +71,8 @@ const SignIn: React.FC = () => {
         setIsSignedIn(true)
         setCurrentUser(res.data.data)
 
-        navigation("/")
+        navigation("/mypage")
+        setAlertMessageOpen(true)
 
         console.log("Signed in successfully!")
       } else {
@@ -80,6 +81,7 @@ const SignIn: React.FC = () => {
     } catch (err) {
       console.log(err)
       setAlertMessageOpen(true)
+      console.log('呼ばれる')
     }
   }
 
@@ -87,7 +89,7 @@ const SignIn: React.FC = () => {
     <>
       <form noValidate autoComplete="off">
         <Card className={classes.card}>
-          <CardHeader className={classes.header} title="サインイン" />
+          <CardHeader className={classes.header} title="ログイン" />
           <CardContent>
             <TextField
               variant="outlined"

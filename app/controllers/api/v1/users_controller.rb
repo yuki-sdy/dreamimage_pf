@@ -3,9 +3,9 @@ class Api::V1::UsersController < ApplicationController
   
   def update
     if @user.update(user_params)
-      render json: { status: 200, user: @user }
+      render json: { status: 200, user: @user, message: "更新しました"}
     else
-      render json: { status: 500, message: "更新に失敗しました" }
+      render json: { status: 500, message: "更新に失敗しました", severity: "error" }
     end
   end
 

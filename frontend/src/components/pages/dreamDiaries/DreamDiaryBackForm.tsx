@@ -52,6 +52,7 @@ const DreamDiaryBackForm: React.FC = () => {
   const { currentUser } = useContext(AuthContext)
 
   const [imageLoading, setImageLoading] = useState<boolean>(false)
+  const [formLoading, setFormLoading] = useState<boolean>(false)
   
   const location = useLocation()
   const [title, setTitle] = useState<string>(location.state.dreamDiary.title)
@@ -111,6 +112,7 @@ const DreamDiaryBackForm: React.FC = () => {
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
+    setFormLoading(true)
     const data = createFormData()
     
     try {
@@ -134,6 +136,7 @@ const DreamDiaryBackForm: React.FC = () => {
       console.log(err)
       setAlertMessageOpen(true)
     }
+    setFormLoading(false)
   }
 
   return (
@@ -142,14 +145,6 @@ const DreamDiaryBackForm: React.FC = () => {
         <Card className={classes.card}>
           <CardHeader className={classes.header} title="夢絵日記 編集" />
           <CardContent>
-          <FormGroup style={{ float: "right"}}>
-              <FormControlLabel
-                control={<Checkbox /> } 
-                value={Boolean(state)}
-                checked={Boolean(state)}
-                onChange={(state: any) => setState(state => !state)} 
-                label={Boolean(state) === true ? "公開中" : "公開する"} />
-            </FormGroup>
             <TextField
               variant="outlined"
               required
@@ -235,7 +230,7 @@ const DreamDiaryBackForm: React.FC = () => {
               variant="outlined"
               required
               fullWidth
-              label="呪文(40字)"
+              label="キーワード(40字)"
               placeholder="40文字以内で書いてください。"
               type="prompt"
               value={prompt}
@@ -244,7 +239,20 @@ const DreamDiaryBackForm: React.FC = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPrompt(e.target.value)}
             />
             <div style={{ textAlign: "right"}} >
-            <Button
+            {
+              imageLoading ? (
+                <Button
+                type="submit"
+                variant="outlined"
+                color="primary"
+                disabled={ true }
+                className={classes.submitBtn}
+              >
+                <CircularProgress
+                  size="1.5rem" />
+              </Button>
+              ):(
+                <Button
                 type="submit"
                 variant="outlined"
                 color="primary"
@@ -252,15 +260,10 @@ const DreamDiaryBackForm: React.FC = () => {
                 className={classes.submitBtn}
                 onClick={handlePromptsSubmit}
               >
-                {
-                  imageLoading ? (
-                    <CircularProgress
-                      size="1.5rem" />
-                  ):(
-                    "絵を生成してみる"
-                  )
-                }
-              </Button>
+                絵を生成してみる
+                </Button>
+              )
+            }
             </div>
             { preview ? (
               <Box
@@ -320,16 +323,42 @@ const DreamDiaryBackForm: React.FC = () => {
               ) : null
             )}
             <div style={{ textAlign: "center"}} >
+            {
+                formLoading ? (
               <Button
                 type="submit"
                 variant="outlined"
                 color="primary"
-                disabled={!title || !body ? true : false} // 空欄があった場合はボタンを押せないように
+                disabled={ true }
+                className={classes.submitBtn}
+              >
+                <CircularProgress
+                  size="1.5rem" />
+              </Button>
+                ) : (
+              <>
+              <FormGroup>
+              <FormControlLabel
+                control={<Checkbox /> } 
+                value={Boolean(state)}
+                checked={Boolean(state)}
+                onChange={(state: any) => setState(state => !state)} 
+                label={"この日記を公開する"}
+                style={{margin: "auto"}} />
+              </FormGroup>
+              <Button
+                type="submit"
+                variant="outlined"
+                color="primary"
+                disabled={!title || !body || !prompt ? true : false}
                 className={classes.submitBtn}
                 onClick={handleSubmit}
               >
                 内容を確認する
               </Button>
+              </>
+                )
+              }
             </div>
           </CardContent>
         </Card>

@@ -16,25 +16,25 @@ class Api::V1::DreamDiariesController < ApplicationController
     dream_diary[:user_id] = nil if dream_diary[:user_id] == 0
     if dream_diary.save
       id = DreamDiary.maximum(:id)
-      render json: {status: 200, dream_diary: dream_diary, id: id }
+      render json: {status: 200, dream_diary: dream_diary, id: id, message: "夢絵日記を作成しました！"}
     else
-      render json: { status:500, dream_diary: "作成に失敗しました" }
+      render json: { status:500, message: "内容を確認してください", severity: "error" }
     end
   end
 
   def update
     if @dream_diary.update(dream_diary_params_with_ogp)
-      render json: {status: 200, dream_diary: @dream_diary, id: @dream_diary.id }
+      render json: {status: 200, dream_diary: @dream_diary, id: @dream_diary.id , message: "夢絵日記を更新しました！"}
     else
-      render json: { status:500, dream_diary: "更新に失敗しました" }
+      render json: { status:500, message: "更新に失敗しました", severity: "error" }
     end
   end
 
   def destroy
     if @dream_diary.destroy
-      render json: { status: 200, dream_diary: '削除しました' }
+      render json: { status: 200, message: '削除しました！'}
     else
-      render json: { status: 500, dream_diary: "削除できません" }
+      render json: { status: 500, message: "削除できません", severity: "error" }
     end
   end
 
@@ -51,7 +51,7 @@ class Api::V1::DreamDiariesController < ApplicationController
     if dream_diary.valid?
       render json: { status: 200, dream_diary: dream_diary, diary_ogp: diary_ogp }
     else
-      render json: { status: 401, dream_diary: dream_diary }
+      render json: { status: 500 }
     end
   end
 

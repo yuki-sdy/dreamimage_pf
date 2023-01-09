@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react"
-import { Box, Button, Card, CardContent, CardHeader, Checkbox, FormControl, FormControlLabel, FormGroup, Grid, IconButton, InputLabel, makeStyles, MenuItem, Select, TextField, Theme } from "@material-ui/core"
+import { Box, Button, Card, CardContent, Checkbox, FormControl, FormControlLabel, FormGroup, Grid, IconButton, InputLabel, makeStyles, MenuItem, Select, TextField, Theme } from "@material-ui/core"
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers"
 import CircularProgress from '@material-ui/core/CircularProgress'
 import AlertMessage from "../../utils/AlertMessage"
@@ -31,13 +31,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     maxWidth: 800,
     margin: "auto"
   },
-  inputFileButton: {
-    textTransform: "none",
-    color: theme.palette.primary.main
-  },
-  imageUploadBtn: {
-    textAlign: "right"
-  },
   input: {
     display: "none"
   },
@@ -67,6 +60,7 @@ const DreamDiaryForm: React.FC = () => {
   const [image, setImage] = useState<string>("")
   const [preview, setPreview] = useState<string>("")
   const [imageLoading, setImageLoading] = useState<boolean>(false)
+  const [formLoading, setFormLoading] = useState<boolean>(false)
   const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false)
 
   const createFormData = (): DreamDiaryFormData => {
@@ -112,6 +106,7 @@ const DreamDiaryForm: React.FC = () => {
   //フォームを送信する
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
+    setFormLoading(true)
     const data = createFormData()
     
     try {
@@ -130,6 +125,7 @@ const DreamDiaryForm: React.FC = () => {
       console.log(err)
       setAlertMessageOpen(true)
     }
+    setFormLoading(false)
   }
 
   return (
@@ -140,14 +136,6 @@ const DreamDiaryForm: React.FC = () => {
         </div>
         <Card className={classes.card}>
           <CardContent>
-            <FormGroup style={{ float: "right"}}>
-              <FormControlLabel
-                control={<Checkbox /> } 
-                value={Boolean(state)}
-                checked={Boolean(state)}
-                onChange={(state: any) => setState(state => !state)} 
-                label={Boolean(state) === true ? "公開中" : "公開する"} />
-            </FormGroup>
             <TextField
               variant="outlined"
               required
@@ -233,7 +221,7 @@ const DreamDiaryForm: React.FC = () => {
               variant="outlined"
               required
               fullWidth
-              label="呪文(40字)"
+              label="キーワード(40字)"
               placeholder="40文字以内で書いてください。"
               type="prompt"
               value={prompt}
@@ -242,23 +230,31 @@ const DreamDiaryForm: React.FC = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPrompt(e.target.value)}
             />
             <div style={{ textAlign: "right"}} >
-            <Button
-                type="submit"
-                variant="outlined"
-                color="primary"
-                disabled={!prompt ? true : false}
-                className={classes.submitBtn}
-                onClick={handlePromptsSubmit}
-              >
                 {
                   imageLoading ? (
+                    <Button
+                    type="submit"
+                    variant="outlined"
+                    color="primary"
+                    disabled={ true }
+                    className={classes.submitBtn}
+                  >
                     <CircularProgress
                       size="1.5rem" />
+                  </Button>
                   ):(
-                    "絵を生成してみる"
+                    <Button
+                    type="submit"
+                    variant="outlined"
+                    color="primary"
+                    disabled={!prompt ? true : false}
+                    className={classes.submitBtn}
+                    onClick={handlePromptsSubmit}
+                  >
+                    絵を生成してみる
+                    </Button>
                   )
                 }
-              </Button>
             </div>
             {
               preview ? (
@@ -291,6 +287,29 @@ const DreamDiaryForm: React.FC = () => {
               ) : null
             }
             <div style={{ textAlign: "center"}} >
+              {
+                formLoading ? (
+              <Button
+                type="submit"
+                variant="outlined"
+                color="primary"
+                disabled={ true }
+                className={classes.submitBtn}
+              >
+                <CircularProgress
+                  size="1.5rem" />
+              </Button>
+                ) : (
+              <>
+              <FormGroup>
+              <FormControlLabel
+                control={<Checkbox /> } 
+                value={Boolean(state)}
+                checked={Boolean(state)}
+                onChange={(state: any) => setState(state => !state)} 
+                label={"この日記を公開する"}
+                style={{margin: "auto"}} />
+              </FormGroup>
               <Button
                 type="submit"
                 variant="outlined"
@@ -301,6 +320,9 @@ const DreamDiaryForm: React.FC = () => {
               >
                 内容を確認する
               </Button>
+              </>
+                )
+              }
             </div>
           </CardContent>
         </Card>

@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 
 const MyPage: React.FC = () => {
-  const { isSignedIn, currentUser, setIsSignedIn } = useContext(AuthContext)
+  const { currentUser } = useContext(AuthContext)
   const classes = useStyles()
   const navigation = useNavigate()
   const location = useLocation()

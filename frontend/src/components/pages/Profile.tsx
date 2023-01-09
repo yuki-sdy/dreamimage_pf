@@ -58,7 +58,9 @@ const Profile: React.FC = () => {
   const [image, setImage] = useState<string>("")
   const [preview, setPreview] = useState<string>("")
 
-  const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(location.state)
+  const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false)
+  const [message, setMessage] = useState<string>("更新しました")
+  const [severity, setSeverity] = useState<"error" | "success" | "info" | "warning">("success")
 
     // アップロードした画像の情報を取得
     const uploadImage = useCallback((e :any) => {
@@ -81,23 +83,21 @@ const Profile: React.FC = () => {
 
     return formData
   }
-
+  
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-
+    
     const data = createFormData()
-
+    
     try {
       const res = await updateUser(currentUser?.id, data)
-      console.log(res)
-
+      
       if (res.status === 200) {
         setEditFormOpen(false)
         setCurrentUser(res.data.user)
-
-        console.log("Update user successfully!")
+        
       } else {
-        console.log(res.data.message)
+
       }
     } catch (err) {
       console.log(err)
@@ -110,13 +110,14 @@ const Profile: React.FC = () => {
     try {
       const res = await signOut()
 
-      if (res.data.success === true) {
+      if (res.data.status === 200) {
         // Cookieから各情報を削除
         Cookies.remove("_access_token")
         Cookies.remove("_client")
         Cookies.remove("_uid")
 
         setIsSignedIn(false)
+        setCurrentUser(undefined)
         navigation("/signin")
 
         console.log("Succeeded in sign out")
@@ -128,36 +129,44 @@ const Profile: React.FC = () => {
     }
   }
 
-
-    //退会処理
-    const handleDeleteAccount = async (e: React.MouseEvent<HTMLButtonElement>) => {
-      const res = await deleteAccount(currentUser?.id)
-      console.log(res)
-  
-      if (res.data.success === true) {
-        // アカウント削除時には各Cookieを削除
-        Cookies.remove("_access_token")
-        Cookies.remove("_client")
-        Cookies.remove("_uid")
-  
-        setIsSignedIn(false)
-        navigation("/signin")
-  
-        console.log("Succeeded in delete account")
-      } else {
-        console.log("Failed in delete account")
-      }
-  
-      try {
-      } catch (err) {
-        console.log(err)
-      }
-    }
-
   return(
       <>
       {
         isSignedIn && currentUser ? (
+          currentUser?.isGuest ? (
+            <>
+            <Card className={classes.card}>
+              <CardContent>
+                <Grid container justify="center">
+                  <Grid item>
+                    <Avatar
+                      alt="avatar"
+                      className={classes.avatar}
+                    />
+                  </Grid>
+                </Grid>
+                <Grid container justify="center">
+                  <Grid item style={{ marginTop: "1.5rem"}}>
+                    <Typography variant="body1" component="p" gutterBottom>
+                      ゲストとしてログイン中です
+                    </Typography>
+                    <Divider style={{ marginTop: "0.5rem"}}/>
+                      <Button
+                      variant="outlined"
+                      component={Link}
+                      to={'/signup'}
+                      color="secondary"
+                      fullWidth
+                      style={{ marginTop: "1rem"}}
+                    >
+                      新規登録
+                    </Button>
+                  </Grid>
+                </Grid>
+              </CardContent>
+            </Card>
+            </>
+          ) : (
           <>
             <Card className={classes.card}>
               <CardContent>
@@ -207,31 +216,16 @@ const Profile: React.FC = () => {
                         </Typography>
                       )
                     }
-                  {
-                    currentUser.isGuest ? (
-                      <Button
+                    <Button
                       variant="outlined"
-                      component={Link}
-                      to={'/dreamdiaries/new'}
-                      color="secondary"
+                      onClick={handleSignOut}
+                      color="primary"
                       fullWidth
+                      startIcon={<ExitToAppIcon />}
                       style={{ marginTop: "1rem"}}
                     >
-                      新規登録
+                      ログアウト
                     </Button>
-                    ) : (
-                      <Button
-                        variant="outlined"
-                        onClick={handleSignOut}
-                        color="primary"
-                        fullWidth
-                        startIcon={<ExitToAppIcon />}
-                        style={{ marginTop: "1rem"}}
-                      >
-                        ログアウト
-                      </Button>
-                    )
-                  }
                   </Grid>
                 </Grid>
               </CardContent>
@@ -319,21 +313,15 @@ const Profile: React.FC = () => {
                   </Button>
                 </DialogActions>
               </Dialog>
-          <Button
-              color="inherit"
-              className={classes.linkBtn}
-              onClick={handleDeleteAccount}
-            >
-              退会
-            </Button>
             </form>
-            <AlertMessage // 削除後のフラッシュ
-              open={alertMessageOpen}
-              setOpen={setAlertMessageOpen}
-              severity="success"
-              message="日記を削除しました。"
-            />
+            <AlertMessage // 作成や更新後のフラッシュ
+            open={alertMessageOpen}
+            setOpen={setAlertMessageOpen}
+            severity={severity}
+            message={message}
+          />
           </>
+          )
         ) : (
           <></>
         )
