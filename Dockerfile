@@ -41,10 +41,6 @@ COPY . /$APP_NAME/
 RUN bundle exec whenever --update-crontab
 
 RUN sed -i -e '/pam_loginuid.so/s/^/#/' /etc/pam.d/crond
-
-ADD cron.d /etc/cron.d/
-RUN chmod 0644 /etc/cron.d/*
-
 CMD crond && tail -f /dev/null
 
 COPY entrypoint.sh /usr/bin/
