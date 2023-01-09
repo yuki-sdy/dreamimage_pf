@@ -26,7 +26,9 @@ RUN cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
 # 別途インストールが必要なものがある場合は追加してください
 RUN apt-get update -qq && apt-get install -y build-essential
-RUN apt-get install -y cron
+RUN yum update -y --disableplugin=fastestmirror && \
+    yum install -y epel-release --disableplugin=fastestmirror && \
+    yum install -y --disableplugin=fastestmirror sudo cronie
 
 RUN gem install bundler:$BUNDLER_VERSION
 
@@ -36,10 +38,17 @@ COPY Gemfile.lock /$APP_NAME/Gemfile.lock
 RUN bundle install
 
 COPY . /$APP_NAME/
+RUN bundle exec whenever --update-crontab
+
+RUN sed -i -e '/pam_loginuid.so/s/^/#/' /etc/pam.d/crond
+
+ADD cron.d /etc/cron.d/
+RUN chmod 0644 /etc/cron.d/*
+
+CMD crond && tail -f /dev/null
 
 COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
 ENTRYPOINT ["entrypoint.sh"]
-CMD ["cron", "-f"]
 
 EXPOSE 3000
