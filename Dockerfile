@@ -26,7 +26,7 @@ RUN cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
 # 別途インストールが必要なものがある場合は追加してください
 RUN apt-get update -qq && apt-get install -y build-essential
-RUN apt-get install -y cron
+RUN apt-get update && apt-get install -y cron && apt-get install -y vim
 
 RUN gem install bundler:$BUNDLER_VERSION
 
@@ -37,9 +37,7 @@ RUN bundle install
 
 COPY . /$APP_NAME/
 RUN bundle exec whenever --update-crontab
-
-RUN sed -i -e '/pam_loginuid.so/s/^/#/' /etc/pam.d/crond
-CMD crond && tail -f /dev/null
+RUN service cron start
 
 COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
