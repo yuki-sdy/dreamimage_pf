@@ -86,7 +86,7 @@ const SignUp: React.FC = () => {
     <>
       <form noValidate autoComplete="off">
         <Card className={classes.card}>
-          <CardHeader className={classes.header} title="サインアップ" />
+          <CardHeader className={classes.header} title="新規登録" />
           <CardContent>
             <TextField
               variant="outlined"
