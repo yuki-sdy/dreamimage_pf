@@ -36,10 +36,10 @@ COPY Gemfile.lock /$APP_NAME/Gemfile.lock
 RUN bundle install
 
 COPY . /$APP_NAME/
-RUN bundle exec whenever --update-crontab
-CMD ["cron", "-f"]
 
 COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
 ENTRYPOINT ["entrypoint.sh"]
+CMD ["cron", "-f"]
+
 EXPOSE 3000
