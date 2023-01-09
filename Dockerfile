@@ -26,9 +26,7 @@ RUN cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
 # 別途インストールが必要なものがある場合は追加してください
 RUN apt-get update -qq && apt-get install -y build-essential
-RUN yum update -y --disableplugin=fastestmirror && \
-    yum install -y epel-release --disableplugin=fastestmirror && \
-    yum install -y --disableplugin=fastestmirror sudo cronie
+RUN apt-get install -y cron
 
 RUN gem install bundler:$BUNDLER_VERSION
 
