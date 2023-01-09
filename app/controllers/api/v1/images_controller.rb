@@ -7,7 +7,7 @@ class Api::V1::ImagesController < ApplicationController
     if !current_box.limit?
       res = create_image(image_params[:prompts])
       if res[:status] == '200'
-
+        
         if current_user
           current_user.images.create(image: res[:image], image_box_id: current_box.id)
         else
@@ -55,17 +55,20 @@ class Api::V1::ImagesController < ApplicationController
   end
 
   def checked_box(current_user)
-    if current_user.image_box.present?
-      current_box = current_user.image_box
+    if current_user.image_boxes.created_today.present?
+      current_box = current_user.image_boxes.created_today
     else
       current_box = current_user.is_guest? ? 
-      current_user.create_image_box!(user_type: 0) : current_user.create_image_box!(user_type: 1)
+      current_user.image_boxes.create!(user_type: 0)
+       : current_user.image_boxes.create!(user_type: 1)
     end
 
     if current_box.user_type == 0
-      current_box.images.count >= 30 ? current_box.update(limit: true) : current_box.update(limit: false)
+      current_box.images.count >= 3 ? current_box.update(limit: true)
+       : current_box.update(limit: false)
     else
-      current_box.images.count >= 50 ? current_box.update(limit: true) : current_box.update(limit: false)
+      current_box.images.count >= 5 ? current_box.update(limit: true)
+       : current_box.update(limit: false)
     end
     current_box
   end
