@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       resources :dream_diaries do
         post 'preview', on: :collection
         post 'back', on: :collection
+        resources :likes, only: %i[create destroy]
       end
       post 'images/create'
 
