@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_25_095724) do
+ActiveRecord::Schema.define(version: 2023_01_10_093808) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,6 +51,16 @@ ActiveRecord::Schema.define(version: 2022_12_25_095724) do
     t.index ["user_id"], name: "index_images_on_user_id"
   end
 
+  create_table "likes", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "dream_diary_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["dream_diary_id"], name: "index_likes_on_dream_diary_id"
+    t.index ["user_id", "dream_diary_id"], name: "index_likes_on_user_id_and_dream_diary_id", unique: true
+    t.index ["user_id"], name: "index_likes_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "provider", default: "email", null: false
     t.string "uid", default: "", null: false
@@ -82,4 +92,6 @@ ActiveRecord::Schema.define(version: 2022_12_25_095724) do
   add_foreign_key "image_boxes", "users"
   add_foreign_key "images", "image_boxes"
   add_foreign_key "images", "users"
+  add_foreign_key "likes", "dream_diaries"
+  add_foreign_key "likes", "users"
 end
