@@ -66,3 +66,10 @@ export interface DreamDiary {
 export interface DreamDiaryFormData extends FormData {
   append(name: keyof DreamDiary, value: String | Blob, fileName?: string): any
 }
+
+// いいね
+export interface Like {
+  id?: number
+  userId: number | undefined
+  dreamDiaryId: number | undefined
+}
