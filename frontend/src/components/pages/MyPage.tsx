@@ -115,6 +115,7 @@ const MyPage: React.FC = () => {
                     dreamType={dreamDiary.dreamType}
                     userName={dreamDiary.user.name}
                     userImage={dreamDiary.user.image.url}
+                    likeCount={dreamDiary.likeCount}
                     />
                 </Grid>
               )

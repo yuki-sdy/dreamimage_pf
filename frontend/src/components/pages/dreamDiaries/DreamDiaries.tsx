@@ -50,16 +50,16 @@ const DreamDiaries: React.FC = () => {
 
   return (
     <>
-     {
+         {
         !loading ? (
           dreamDiaries.length > 0 ? (
             <>
-            <h3 style={{textAlign:"center"}}>みんなの夢絵日記</h3>
-            <Grid container justify="flex-start" style={{width: "100%"}}>
+            <h3 style={{textAlign:"center"}}>みんなの夢絵日記一覧</h3>
+            <Grid container style={{width: "100%"}}>
             {
             dreamDiaries.map((dreamDiary: DreamDiary, index: number) => {
               return (
-                <Grid item container key={index} xs={12} md={4} lg={3} sm={6} style={{margin: "auto"}} justify="center">
+                <Grid item container key={index} xs={12} md={4} lg={3} sm={6} style={{margin: "auto"}}justify="center">
                   <CardComp
                     id={dreamDiary.id}
                     image={dreamDiary.image}
@@ -68,8 +68,9 @@ const DreamDiaries: React.FC = () => {
                     dreamDate={dreamDiary.dreamDate}
                     impression={dreamDiary.impression}
                     dreamType={dreamDiary.dreamType}
-                    userName={dreamDiary.user.name}
-                    userImage={dreamDiary.user.image.url}
+                    userName={dreamDiary.user === null ? '退会済みユーザー' : dreamDiary.user.name}
+                    userImage={dreamDiary.user === null ? '' : dreamDiary.user.image.url}
+                    likeCount={dreamDiary.likeCount}
                     />
                 </Grid>
               )
@@ -77,7 +78,10 @@ const DreamDiaries: React.FC = () => {
           }
           </Grid>
           </>
-          ) : (<></>)
+          ) : (
+          <>
+          <h3>日記がありません！</h3>
+          </>)
           )
         : (<></>) 
       }
