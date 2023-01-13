@@ -161,6 +161,16 @@ const Profile: React.FC = () => {
                     >
                       新規登録
                     </Button>
+                      <Button
+                      variant="outlined"
+                      component={Link}
+                      to={'/signin'}
+                      color="primary"
+                      fullWidth
+                      style={{ marginTop: "1rem"}}
+                    >
+                      ログイン
+                    </Button>
                   </Grid>
                 </Grid>
               </CardContent>

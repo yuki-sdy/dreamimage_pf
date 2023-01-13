@@ -54,47 +54,47 @@ const Home: React.FC = () => {
   // ゲストログイン
   const handleGuestLoginSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-    if (!currentUser?.isGuest) {
+    if (currentUser) {
       navigation("/dreamdiaries/new")
-    }
-
-    const getUniqueStr = (myStrong?: number) : string => {
-      let strong = 1000
-      if(myStrong) strong = myStrong
-      return (
-        new Date().getTime().toString(16) +
-        Math.floor(strong * Math.random()).toString(16)
-      )
-    }
-
-    const data: SignUpData = {
-      name: 'ゲスト',
-      email: `${getUniqueStr()}@example.com`,
-      password: 'guest_password',
-      passwordConfirmation: 'guest_password',
-      isGuest: true
-    }
-
-    try {
-      const res = await signUp(data)
-      console.log(res)
-
-      if (res.status === 200) {
-        // アカウント作成と同時にサインインさせてしまう
-        Cookies.set("_access_token", res.headers["access-token"] || "") 
-        Cookies.set("_client", res.headers["client"] || "") 
-        Cookies.set("_uid", res.headers["uid"] || "") 
-
-        setIsSignedIn(true)
-        setCurrentUser(res.data.data)
-
-        navigation("/dreamdiaries/new")
-
-        console.log("Signed in successfully!")
-      } else {
+    }else{
+      const getUniqueStr = (myStrong?: number) : string => {
+        let strong = 1000
+        if(myStrong) strong = myStrong
+        return (
+          new Date().getTime().toString(16) +
+          Math.floor(strong * Math.random()).toString(16)
+        )
       }
-    } catch (err) {
-      console.log(err)
+  
+      const data: SignUpData = {
+        name: 'ゲスト',
+        email: `${getUniqueStr()}@example.com`,
+        password: 'guest_password',
+        passwordConfirmation: 'guest_password',
+        isGuest: true
+      }
+  
+      try {
+        const res = await signUp(data)
+        console.log(res)
+  
+        if (res.status === 200) {
+          // アカウント作成と同時にサインインさせてしまう
+          Cookies.set("_access_token", res.headers["access-token"] || "") 
+          Cookies.set("_client", res.headers["client"] || "") 
+          Cookies.set("_uid", res.headers["uid"] || "") 
+  
+          setIsSignedIn(true)
+          setCurrentUser(res.data.data)
+  
+          navigation("/dreamdiaries/new")
+  
+          console.log("Signed in successfully!")
+        } else {
+        }
+      } catch (err) {
+        console.log(err)
+      }
     }
   }
 

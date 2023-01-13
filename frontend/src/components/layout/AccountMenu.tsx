@@ -147,7 +147,18 @@ const AccountMenu: React.FC = () => {
           プロフィール
         </MenuItem>
         {
-          currentUser?.isGuest ? null : (
+          currentUser?.isGuest ? (
+            <>
+              <Divider />
+              <MenuItem
+                component={Link}
+                color="inherit"
+                to="/signin"
+              >
+                別のアカウントでログインする
+              </MenuItem>
+            </>
+          ) : (
             <>
               <Divider />
               <MenuItem
