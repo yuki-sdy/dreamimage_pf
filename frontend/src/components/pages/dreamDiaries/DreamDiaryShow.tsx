@@ -1,17 +1,19 @@
 import { Button, IconButton, makeStyles, Theme } from "@material-ui/core"
 import React, { useContext, useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import { useLocation, useNavigate, useParams } from "react-router-dom"
-import { dream_types, impressions } from "../../../data/dreamdiaryEnums"
+import { useNavigate, useParams } from "react-router-dom"
 
-import { DreamDiary } from "../../../interfaces"
+import { DreamDiary, Like } from "../../../interfaces"
 import { DreamDiaryDestroy, getDreamDiary } from "../../../lib/api/dreamdiaries"
 import AlertMessage from "../../utils/AlertMessage"
 import CommonDialog from "../../utils/CommonDialog"
+import FavoriteIcon from "@material-ui/icons/Favorite"
+import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder"
 
 import Delete from "@material-ui/icons/Delete"
 import EditIcon from "@material-ui/icons/Edit"
 import { AuthContext } from "../../../App"
+import { createLike, destroyLike } from "../../../lib/api/likes"
 
 const useStyles = makeStyles((theme: Theme) => ({
   linkBtn: {
@@ -32,12 +34,15 @@ const useStyles = makeStyles((theme: Theme) => ({
 const DreamDiaryShow: React.FC = () => {
   const { currentUser, isSignedIn, alertMessageOpen, setAlertMessageOpen } = useContext(AuthContext)
   const params = useParams()
-  const location = useLocation()
   const classes = useStyles()
   const navigation = useNavigate()
 
   const [loading, setLoading] = useState<boolean>(true)
+  const [currentUserLiked, setCurrentUserLiked] = useState<boolean>(false)
   const [dreamDiary, setDreamDiary] = useState<DreamDiary>()
+  const [likes, setLikes] = useState<Like[]>([])
+  const [likesCount, setLikesCount] = useState<number>(0)
+  const [isLikedDiary, setIsLikedDiary] = useState<Like>()
 
   const [DlgOpen, setDlgOpen] = useState<boolean>(false)
 
@@ -47,28 +52,72 @@ const DreamDiaryShow: React.FC = () => {
       console.log(res)
       
       if (res.status === 200) {
-        setDreamDiary(res.data.dreamDiary)
+        setDreamDiary(res.data)
+        setLikesCount(res.data.likes.length)
+        setLikes(res.data.likes)
 
+        // いいねがあるかどうか判定
+        const likes = res.data.likes
+        if (likes?.find((e: any)=> e.userId === currentUser?.id)) {
+          setCurrentUserLiked(true)
+        }
       } else {
         console.log("No diary")
       }
     } catch (err) {
       console.log(err)
     }
-
     setLoading(false)
   }
 
   useEffect(() => {
     handleDreamDiary()
   }, [])
+  
+  // いいね作成
+  const handleCreateLike = async () => {
+    const data: Like = {
+      userId: currentUser?.id,
+      dreamDiaryId: dreamDiary?.id
+    }
 
-  const diaryImpression = (): string => {
-    return impressions[Number(dreamDiary?.impression)]
-  }
+    try {
+      const res = await createLike(data, dreamDiary?.id)
+      console.log(res)
 
-  const diaryDreamType = (): string => {
-    return dream_types[Number(dreamDiary?.dreamType)]
+      if (res?.status === 200) {
+        setLikes([res.data.like, ...likes])
+
+      } else {
+        console.log("Failed")
+      }
+        const count = likesCount + 1
+        setLikesCount(count)
+        setCurrentUserLiked(true)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    
+    // いいね削除
+    const handleDestroyLike = async () => {
+      setIsLikedDiary(likes?.find(e => e.userId === currentUser?.id))
+      try {
+        const res = await destroyLike(dreamDiary?.id, isLikedDiary?.id)
+        console.log(res)
+        
+        if (res?.status === 200) {
+        setLikes(res.data.likes)
+        
+      } else {
+        console.log("Failed")
+      }
+      const count = likesCount - 1
+      setLikesCount(count)
+      setCurrentUserLiked(false)
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   //夢絵日記削除処理
@@ -118,6 +167,16 @@ const DreamDiaryShow: React.FC = () => {
                 >
                   <Delete />
             </IconButton>
+            <Button
+              onClick={
+                currentUserLiked ? ()=>(handleDestroyLike()) : ()=>(handleCreateLike())}
+              color="secondary"
+              startIcon={
+                currentUserLiked ? (<FavoriteIcon />) : (<FavoriteBorderIcon />)}
+              style={{ marginTop: "1rem", marginBottom: "1rem" }}
+            >
+              {`${likesCount}`}
+            </Button>
           </div>
           ) : (<></>)
         }

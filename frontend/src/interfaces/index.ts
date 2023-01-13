@@ -55,14 +55,27 @@ export interface DreamDiary {
   image: string
   userId: number | undefined
   user: {
-    id: number
+    id: number | undefined
     name: string
     image: {
       url: string
     }
   }
+  likes: {
+    id: number | undefined
+    userId: number | undefined
+    dreamDiaryId: number | undefined
+  }
+  likeCount: number
 }
 
 export interface DreamDiaryFormData extends FormData {
   append(name: keyof DreamDiary, value: String | Blob, fileName?: string): any
+}
+
+// いいね
+export interface Like {
+  id?: number
+  userId: number | undefined
+  dreamDiaryId: number | undefined
 }

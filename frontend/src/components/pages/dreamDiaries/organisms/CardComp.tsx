@@ -3,6 +3,7 @@ import Card from "@material-ui/core/Card"
 import { CardContent, CardMedia, makeStyles, Theme, Typography, Avatar } from "@material-ui/core"
 import { dream_types, impressions } from "../../../../data/dreamdiaryEnums"
 import { Link } from "react-router-dom"
+import FavoriteIcon from "@material-ui/icons/Favorite"
 
 export interface CardInfoProps {
   id: number
@@ -14,6 +15,7 @@ export interface CardInfoProps {
   dreamType: number
   userName: string
   userImage: string
+  likeCount: number
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -55,7 +57,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }))
 
-const CardComp = ({ image, title, content, dreamDate, impression, dreamType, id, userName, userImage}: CardInfoProps) => {
+const CardComp = ({ image, title, content, dreamDate, impression, dreamType, id, userName, userImage, likeCount}: CardInfoProps) => {
   const classes = useStyles()
 
   const diaryImpression = (impression :number): string => {
@@ -69,7 +71,7 @@ const CardComp = ({ image, title, content, dreamDate, impression, dreamType, id,
   return (
     <div className="product-card-top">
       <Link to={`/dreamdiaries/${id}`} className={classes.link}>
-      <Card className={classes.card} style={{minWidth: "230px", width: "180px", height:"290px", margin: "10px", background:"rgba(0, 0, 0, 0)", paddingTop: 0}}>
+      <Card className={classes.card} style={{minWidth: "230px", width: "180px", height:"320px", margin: "10px", background:"rgba(0, 0, 0, 0)", paddingTop: 0}}>
               <CardContent style={{display: "flex", flexDirection: "column"}}>
                 <CardMedia style={{textAlign: "center", paddingBottom: "10px", width: "100%"}}>
                   <img src={image} width={"90%"} style={{borderRadius: "20px"}}/>
@@ -94,7 +96,11 @@ const CardComp = ({ image, title, content, dreamDate, impression, dreamType, id,
                       {content}
                   </Typography>
                   <Typography variant="body2" color="textSecondary" component="div">
-                      {`${diaryImpression(impression)}・${dreamDate}(${diaryDreamType(dreamType)})`}
+                      {`${diaryImpression(impression)}・${dreamDate}(${diaryDreamType(dreamType)}) `}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary" component="div" style={{float: "right"}}>
+                      <FavoriteIcon style={{width: "16px", lineHeight: "16px"}}/>{`${likeCount}　`}
+                      {/* <FavoriteIcon style={{width: "16px", lineHeight: "16px"}}/>{`${likeCount}　`} */}
                   </Typography>
                   </div>
               </CardContent>

@@ -75,22 +75,23 @@ const DreamDiaryEditForm: React.FC = () => {
   const handleDreamDiary = async () => {
     try {
       const res = await getDreamDiary(Number(params.id))
-      if (currentUser?.id !== res.data.dreamDiary.userId) {
+      console.log(res)
+
+      if (currentUser?.id !== res.data.userId) {
         navigation('/dreamdiaries')
       }
-      console.log(res)
 
       if (res.status === 200) {
         // setDreamDiary(res.data.dreamDiary)
-        setTitle(String(res.data.dreamDiary?.title))
-        setBody(String(res.data.dreamDiary?.body))
-        setContent(String(res.data.dreamDiary?.content))
-        setPrompt(String(res.data.dreamDiary?.prompt))
-        setImpression(res.data.dreamDiary.impression)
-        setDreamType(res.data.dreamDiary.dreamType)
-        setState(Boolean(res.data.dreamDiary.state))
-        setDreamDate(res.data.dreamDiary.dreamDate)
-        setImage(res.data.dreamDiary.image)
+        setTitle(String(res.data.title))
+        setBody(String(res.data.body))
+        setContent(String(res.data.content))
+        setPrompt(String(res.data.prompt))
+        setImpression(res.data.impression)
+        setDreamType(res.data.dreamType)
+        setState(Boolean(res.data.state))
+        setDreamDate(res.data.dreamDate)
+        setImage(res.data.image)
 
       } else {
         console.log("No diary")
