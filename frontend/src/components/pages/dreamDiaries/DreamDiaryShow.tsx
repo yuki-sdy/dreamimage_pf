@@ -151,35 +151,38 @@ const DreamDiaryShow: React.FC = () => {
               className={classes.preview}
             />
           </div>
+          <div  className={classes.submitBtn}>
           {
           isSignedIn && currentUser?.id === dreamDiary?.userId ? (
-          <div  className={classes.submitBtn}>
-            <IconButton
-                  color="primary"
-                  to={`/dreamdiaries/${params.id}/edit`}
-                  component={Link}
-                >
-                  <EditIcon />
-            </IconButton>
-            <IconButton
-                  color="secondary"
-                  onClick={() => setDlgOpen(true)}
-                >
-                  <Delete />
-            </IconButton>
-            <Button
-              onClick={
-                currentUserLiked ? ()=>(handleDestroyLike()) : ()=>(handleCreateLike())}
-              color="secondary"
-              startIcon={
-                currentUserLiked ? (<FavoriteIcon />) : (<FavoriteBorderIcon />)}
-              style={{ marginTop: "1rem", marginBottom: "1rem" }}
-            >
-              {`${likesCount}`}
-            </Button>
-          </div>
+            <>
+              <IconButton
+                    color="primary"
+                    to={`/dreamdiaries/${params.id}/edit`}
+                    component={Link}
+                  >
+                    <EditIcon />
+              </IconButton>
+              <IconButton
+                    color="secondary"
+                    onClick={() => setDlgOpen(true)}
+                  >
+                    <Delete />
+              </IconButton>
+            </>
           ) : (<></>)
         }
+          <Button
+            onClick={
+              currentUserLiked ? ()=>(handleDestroyLike()) : ()=>(handleCreateLike())}
+            color="secondary"
+            startIcon={
+              currentUserLiked ? (<FavoriteIcon />) : (<FavoriteBorderIcon />)}
+            disabled={!currentUser?.isGuest ? false : true}
+            style={{ marginTop: "1rem", marginBottom: "1rem" }}
+          >
+            {`${likesCount}`}
+          </Button>
+        </div>
           <Button
             component={Link}
             to="/dreamdiaries"
