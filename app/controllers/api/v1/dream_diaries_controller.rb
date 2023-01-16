@@ -3,12 +3,12 @@ class Api::V1::DreamDiariesController < ApplicationController
   before_action :set_dream_diary, only: %i[show edit update destroy]
 
   def index
-    dream_diaries = DreamDiary.where(state: true)
+    dream_diaries = DreamDiary.where(state: true).order(created_at: :desc)
     render json: dream_diaries, include: [:user], status: 200
   end
   
   def show
-    render json: @dream_diary, include: [:likes], status: 200
+    render json: @dream_diary, include: [:likes, :bookmarks], status: 200
   end
   
   def create
