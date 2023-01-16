@@ -3,17 +3,21 @@ import React, { useContext, useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { useNavigate, useParams } from "react-router-dom"
 
-import { DreamDiary, Like } from "../../../interfaces"
+import { DreamDiary, Like, BookmarkData } from "../../../interfaces"
 import { DreamDiaryDestroy, getDreamDiary } from "../../../lib/api/dreamdiaries"
 import AlertMessage from "../../utils/AlertMessage"
 import CommonDialog from "../../utils/CommonDialog"
 import FavoriteIcon from "@material-ui/icons/Favorite"
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder"
+import BookmarkIcon from '@mui/icons-material/Bookmark'
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder'
+
 
 import Delete from "@material-ui/icons/Delete"
 import EditIcon from "@material-ui/icons/Edit"
 import { AuthContext } from "../../../App"
 import { createLike, destroyLike } from "../../../lib/api/likes"
+import { createBookmark, destroyBookmark } from "../../../lib/api/bookmarks"
 
 const useStyles = makeStyles((theme: Theme) => ({
   linkBtn: {
@@ -38,13 +42,17 @@ const DreamDiaryShow: React.FC = () => {
   const navigation = useNavigate()
 
   const [loading, setLoading] = useState<boolean>(true)
-  const [currentUserLiked, setCurrentUserLiked] = useState<boolean>(false)
   const [dreamDiary, setDreamDiary] = useState<DreamDiary>()
+  const [currentUserLiked, setCurrentUserLiked] = useState<boolean>(false)
   const [likes, setLikes] = useState<Like[]>([])
   const [likesCount, setLikesCount] = useState<number>(0)
-  const [isLikedDiary, setIsLikedDiary] = useState<Like>()
+  const [like, setLike] = useState<Like>()
+  const [bookmarks, setBookmarks] = useState<DreamDiary[]>([])
+  const [bookmark, setBookmark] = useState<DreamDiary>()
+  const [currentUserBookmarked, setCurrentUserBookmarked] = useState<boolean>(false)
 
   const [DlgOpen, setDlgOpen] = useState<boolean>(false)
+  const [alertMsg, setAlertMsg] = useState<string>("日記を作成しました。")
 
   const handleDreamDiary = async () => {
     try {
@@ -55,11 +63,17 @@ const DreamDiaryShow: React.FC = () => {
         setDreamDiary(res.data)
         setLikesCount(res.data.likes.length)
         setLikes(res.data.likes)
+        setBookmarks(res.data.bookmarks)
 
-        // いいねがあるかどうか判定
+        // いいねされているどうか判定
         const likes = res.data.likes
         if (likes?.find((e: any)=> e.userId === currentUser?.id)) {
           setCurrentUserLiked(true)
+        }
+        // お気に入りされているかどうか判定
+        const bookmarks = res.data.bookmarks
+        if (bookmarks?.find((e: any)=> e.userId === currentUser?.id)) {
+          setCurrentUserBookmarked(true)
         }
       } else {
         console.log("No diary")
@@ -87,13 +101,13 @@ const DreamDiaryShow: React.FC = () => {
 
       if (res?.status === 200) {
         setLikes([res.data.like, ...likes])
+        const count = likesCount + 1
+        setLikesCount(count)
+        setCurrentUserLiked(true)
 
       } else {
         console.log("Failed")
       }
-        const count = likesCount + 1
-        setLikesCount(count)
-        setCurrentUserLiked(true)
       } catch (err) {
         console.log(err)
       }
@@ -101,20 +115,66 @@ const DreamDiaryShow: React.FC = () => {
     
     // いいね削除
     const handleDestroyLike = async () => {
-      setIsLikedDiary(likes?.find(e => e.userId === currentUser?.id))
+      setLike(likes?.find(e => e.userId === currentUser?.id))
       try {
-        const res = await destroyLike(dreamDiary?.id, isLikedDiary?.id)
+        const res = await destroyLike(dreamDiary?.id, like?.id)
         console.log(res)
         
         if (res?.status === 200) {
-        setLikes(res.data.likes)
+          setLikes(res.data.likes)
+          
+          const count = likesCount - 1
+          setLikesCount(count)
+          setCurrentUserLiked(false)
+        } else {
+          console.log("Failed")
+        }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  // お気に入り作成
+  const handleCreateBookmark = async () => {
+    const data: BookmarkData = {
+      userId: currentUser?.id,
+      dreamDiaryId: dreamDiary?.id
+    }
+
+    try {
+      const res = await createBookmark(data, dreamDiary?.id)
+      console.log(res)
+
+      if (res?.status === 200) {
+        setLikes([res.data.bookmark, ...bookmarks])
+        setCurrentUserBookmarked(true)
+        setAlertMsg("お気に入りに登録しました。")
+        setAlertMessageOpen(true)
         
       } else {
         console.log("Failed")
       }
-      const count = likesCount - 1
-      setLikesCount(count)
-      setCurrentUserLiked(false)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  
+  // お気に入り削除
+  const handleDestroyBookmark = async () => {
+    setBookmark(bookmarks?.find(e => e.userId === currentUser?.id))
+    try {
+      const res = await destroyBookmark(dreamDiary?.id, bookmark?.id)
+      console.log(res)
+      
+      if (res?.status === 200) {
+        setBookmark(void(null))
+        setCurrentUserBookmarked(false)
+        setAlertMsg("お気に入りから削除しました。")
+        setAlertMessageOpen(true)
+        
+      } else {
+        console.log("Failed")
+      }
     } catch (err) {
       console.log(err)
     }
@@ -177,10 +237,21 @@ const DreamDiaryShow: React.FC = () => {
             color="secondary"
             startIcon={
               currentUserLiked ? (<FavoriteIcon />) : (<FavoriteBorderIcon />)}
-            disabled={!currentUser?.isGuest ? false : true}
+            disabled={!currentUser || !currentUser?.isGuest ? false : true}
             style={{ marginTop: "1rem", marginBottom: "1rem" }}
           >
             {`${likesCount}`}
+          </Button>
+          <Button
+            onClick={
+              currentUserBookmarked ? ()=>(handleDestroyBookmark()) : ()=>(handleCreateBookmark())}
+            color="secondary"
+            startIcon={
+              currentUserBookmarked ? (<BookmarkIcon />) : (<BookmarkBorderIcon />)}
+            disabled={!currentUser || !currentUser?.isGuest ? false : true}
+            style={{ marginTop: "1rem", marginBottom: "1rem" }}
+          >
+            {currentUserBookmarked ? "お気に入り解除" : "お気に入り登録"}
           </Button>
         </div>
           <Button
@@ -199,7 +270,7 @@ const DreamDiaryShow: React.FC = () => {
             open={alertMessageOpen}
             setOpen={setAlertMessageOpen}
             severity="success"
-            message="日記を作成しました。"
+            message={alertMsg}
           />
           </>
           ) : (<></>) 

@@ -15,6 +15,8 @@ class User < ActiveRecord::Base
   has_many :dream_diaries, dependent: :nullify
   has_many :likes, dependent: :nullify
   has_many :likes_dream_diaries, through: :likes, source: :dream_diary
+  has_many :bookmarks, dependent: :nullify
+  has_many :bookmarks_dream_diaries, through: :bookmarks, source: :dream_diary
   # userが削除されたら一緒に消す
   has_many :images, dependent: :destroy
   has_many :image_boxes, dependent: :destroy
@@ -27,8 +29,11 @@ class User < ActiveRecord::Base
     likes_dream_diaries.destroy(dream_diary)
   end
 
-  def like?(dream_diary)
-    likes_dream_diaries.include?(dream_diary)
+  def bookmark(dream_diary)
+    bookmarks_dream_diaries << dream_diary
   end
 
+  def remove_bookmark(dream_diary)
+    bookmarks_dream_diaries.destroy(dream_diary)
+  end
 end
