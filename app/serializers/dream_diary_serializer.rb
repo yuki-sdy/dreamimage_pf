@@ -3,6 +3,7 @@ class DreamDiarySerializer < ActiveModel::Serializer
     
   belongs_to :user
   has_many :likes
+  has_many :bookmarks
 
   def like_count
     object.likes.count
