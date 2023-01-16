@@ -103,7 +103,7 @@ const AccountMenu: React.FC = () => {
   return (
     <>
       <Box className={classes.box}>
-        <Tooltip title="アカウント">
+        <Tooltip title={`${currentUser?.name}`}>
           <IconButton
             onClick={handleClick}
             size="small"

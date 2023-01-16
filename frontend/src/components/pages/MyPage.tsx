@@ -183,8 +183,8 @@ const MyPage: React.FC = () => {
                     dreamDate={dreamDiary.dreamDate}
                     impression={dreamDiary.impression}
                     dreamType={dreamDiary.dreamType}
-                    userName={dreamDiary.user.name}
-                    userImage={dreamDiary.user.image.url}
+                    userName={dreamDiary.user === null ? '退会済みユーザー' : dreamDiary.user.name}
+                    userImage={dreamDiary.user === null ? '' : dreamDiary.user.image.url}
                     likeCount={dreamDiary.likeCount}
                     />
                 </Grid>
