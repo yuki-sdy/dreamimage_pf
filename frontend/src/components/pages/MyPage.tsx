@@ -132,6 +132,7 @@ const MyPage: React.FC = () => {
                       {currentUser?.name}
                   </Typography>
                     {
+                    !currentUser?.isGuest ? (
                       currentUser?.introduction ? (
                         <Typography variant="body2" component="p" color="textSecondary">
                           {currentUser?.introduction}
@@ -141,6 +142,7 @@ const MyPage: React.FC = () => {
                           よろしくお願いいたします。
                         </Typography>
                       )
+                    ):(<></>)
                     }
                   </Grid>
                   <Grid item style={{ marginTop: "1rem", marginLeft: "1.5rem"}}></Grid>
@@ -162,7 +164,8 @@ const MyPage: React.FC = () => {
                 variant="fullWidth"
                 >
                   <Tab value={1} label="自分の日記"  />
-                  <Tab value={2} label="お気に入りの日記" />
+                  <Tab value={2} label="お気に入りの日記"
+                    disabled={currentUser?.isGuest ? true : false} />
                 </Tabs>
               </div>
             </div>

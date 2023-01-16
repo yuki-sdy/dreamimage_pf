@@ -231,13 +231,16 @@ const DreamDiaryShow: React.FC = () => {
             </>
           ) : (<></>)
         }
+        {
+          currentUser ? (
+          <>
           <Button
             onClick={
               currentUserLiked ? ()=>(handleDestroyLike()) : ()=>(handleCreateLike())}
             color="secondary"
             startIcon={
               currentUserLiked ? (<FavoriteIcon />) : (<FavoriteBorderIcon />)}
-            disabled={!currentUser || !currentUser?.isGuest ? false : true}
+            disabled={currentUser?.isGuest ? true : false}
             style={{ marginTop: "1rem", marginBottom: "1rem" }}
           >
             {`${likesCount}`}
@@ -248,11 +251,14 @@ const DreamDiaryShow: React.FC = () => {
             color="secondary"
             startIcon={
               currentUserBookmarked ? (<BookmarkIcon />) : (<BookmarkBorderIcon />)}
-            disabled={!currentUser || !currentUser?.isGuest ? false : true}
+            disabled={currentUser?.isGuest ? true : false}
             style={{ marginTop: "1rem", marginBottom: "1rem" }}
           >
             {currentUserBookmarked ? "お気に入り解除" : "お気に入り登録"}
           </Button>
+          </>
+          ):(<></>)
+        }
         </div>
           <Button
             component={Link}
