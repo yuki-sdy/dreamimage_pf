@@ -79,3 +79,42 @@ export interface Like {
   userId: number | undefined
   dreamDiaryId: number | undefined
 }
+
+// お気に入り
+export interface BookmarkData {
+  id?: number
+  userId: number | undefined
+  dreamDiaryId: number | undefined
+}
+export interface Bookmark {
+  id?: number | undefined
+  userId: number | undefined
+  dreamDiaryId: number | undefined
+  dreamDiary: {
+    id: number
+    title: string
+    body: string
+    content: string
+    prompt: string
+    dreamDate: Date
+    impression: number
+    dreamType: number
+    state: boolean
+    diaryOgp: string
+    image: string
+    userId: number | undefined
+    user: {
+      id: number | undefined
+      name: string
+      image: {
+        url: string
+      }
+    }
+    likes: {
+      id: number | undefined
+      userId: number | undefined
+      dreamDiaryId: number | undefined
+    }
+    likeCount: number
+  }
+}
