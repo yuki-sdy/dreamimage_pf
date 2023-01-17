@@ -17,6 +17,7 @@ class User < ActiveRecord::Base
   has_many :likes_dream_diaries, through: :likes, source: :dream_diary
   has_many :bookmarks, dependent: :nullify
   has_many :bookmarks_dream_diaries, through: :bookmarks, source: :dream_diary
+  has_many :comments, dependent: :nullify
   # userが削除されたら一緒に消す
   has_many :images, dependent: :destroy
   has_many :image_boxes, dependent: :destroy
