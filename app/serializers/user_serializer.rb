@@ -3,6 +3,6 @@ class UserSerializer < ActiveModel::Serializer
 
   has_many :dream_diaries
   has_many :likes
-
   has_many :bookmarks
+  has_many :comments
 end
