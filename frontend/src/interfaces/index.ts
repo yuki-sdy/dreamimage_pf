@@ -67,6 +67,7 @@ export interface DreamDiary {
     dreamDiaryId: number | undefined
   }
   likeCount: number
+  commentCount: number
 }
 
 export interface DreamDiaryFormData extends FormData {
@@ -86,6 +87,7 @@ export interface BookmarkData {
   userId: number | undefined
   dreamDiaryId: number | undefined
 }
+
 export interface Bookmark {
   id?: number | undefined
   userId: number | undefined
@@ -116,5 +118,29 @@ export interface Bookmark {
       dreamDiaryId: number | undefined
     }
     likeCount: number
+    commentCount: number
+  }
+}
+
+// コメント
+export interface CommentData {
+  id?: number
+  userId: number | undefined
+  dreamDiaryId: number | undefined
+  body: string
+}
+
+export interface Comment {
+  id?: number
+  userId: number
+  dreamDiaryId: number
+  body: string
+  createdAt: Date
+  user: {
+    id: number
+    name: string
+    image: {
+      url: string
+    }
   }
 }

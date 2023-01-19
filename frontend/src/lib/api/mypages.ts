@@ -1,6 +1,5 @@
 import { client } from "./client"
 import Cookies from "js-cookie"
-import { DreamDiaryFormData } from "../../interfaces"
 
 // showへのgetリクエスト、ユーザーの日記を取得
 export const getMypage = () => {

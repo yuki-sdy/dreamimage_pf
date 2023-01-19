@@ -71,6 +71,7 @@ const DreamDiaries: React.FC = () => {
                     userName={dreamDiary.user === null ? '退会済みユーザー' : dreamDiary.user.name}
                     userImage={dreamDiary.user === null ? '' : dreamDiary.user.image.url}
                     likeCount={dreamDiary.likeCount}
+                    commentCount={dreamDiary.commentCount}
                     />
                 </Grid>
               )

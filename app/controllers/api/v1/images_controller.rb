@@ -55,14 +55,14 @@ class Api::V1::ImagesController < ApplicationController
   end
 
   def checked_box(current_user)
-    if current_user.image_boxes.created_today.present?
-      current_box = current_user.image_boxes.created_today
+    if current_user.image_boxes.find_by(created_at: Time.zone.now.all_day).present?
+      current_box = current_user.image_boxes.find_by(created_at: Time.zone.now.all_day)
     else
       current_box = current_user.is_guest? ? 
       current_user.image_boxes.create!(user_type: 0)
-       : current_user.image_boxes.create!(user_type: 1)
+      : current_user.image_boxes.create!(user_type: 1)
     end
-
+    
     if current_box.user_type == 0
       current_box.images.count >= 3 ? current_box.update(limit: true)
        : current_box.update(limit: false)

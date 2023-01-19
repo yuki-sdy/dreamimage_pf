@@ -1,9 +1,10 @@
 import React from "react"
 import Card from "@material-ui/core/Card"
-import { CardContent, CardMedia, makeStyles, Theme, Typography, Avatar } from "@material-ui/core"
+import { CardContent, CardMedia, makeStyles, Theme, Typography, Avatar, Box } from "@material-ui/core"
 import { dream_types, impressions } from "../../../../data/dreamdiaryEnums"
 import { Link } from "react-router-dom"
 import FavoriteIcon from "@material-ui/icons/Favorite"
+import ChatBubbleIcon from "@material-ui/icons/ChatBubble"
 
 export interface CardInfoProps {
   id: number
@@ -16,6 +17,7 @@ export interface CardInfoProps {
   userName: string
   userImage: string
   likeCount: number
+  commentCount: number
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -57,7 +59,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }))
 
-const CardComp = ({ image, title, content, dreamDate, impression, dreamType, id, userName, userImage, likeCount}: CardInfoProps) => {
+const CardComp = ({ image, title, content, dreamDate, impression, dreamType, id, userName, userImage, likeCount, commentCount}: CardInfoProps) => {
   const classes = useStyles()
 
   const diaryImpression = (impression :number): string => {
@@ -100,7 +102,7 @@ const CardComp = ({ image, title, content, dreamDate, impression, dreamType, id,
                   </Typography>
                   <Typography variant="body2" color="textSecondary" component="div" style={{float: "right"}}>
                       <FavoriteIcon style={{width: "16px", lineHeight: "16px"}}/>{`${likeCount}　`}
-                      {/* <FavoriteIcon style={{width: "16px", lineHeight: "16px"}}/>{`${likeCount}　`} */}
+                      <ChatBubbleIcon style={{width: "16px", lineHeight: "16px"}}/>{`${commentCount}　`}
                   </Typography>
                   </div>
               </CardContent>

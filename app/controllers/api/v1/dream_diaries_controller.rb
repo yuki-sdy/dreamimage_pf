@@ -8,7 +8,7 @@ class Api::V1::DreamDiariesController < ApplicationController
   end
   
   def show
-    render json: @dream_diary, include: [:likes, :bookmarks], status: 200
+    render json: @dream_diary, include: 'likes,bookmarks,comments.user,user', status: 200
   end
   
   def create

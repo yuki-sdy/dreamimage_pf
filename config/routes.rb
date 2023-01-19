@@ -10,6 +10,7 @@ Rails.application.routes.draw do
         post 'back', on: :collection
         resources :likes, only: %i[create destroy]
         resources :bookmarks, only: %i[create destroy]
+        resources :comments, only: %i[create destroy]
       end
       post 'images/create'
 

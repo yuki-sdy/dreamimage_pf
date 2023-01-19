@@ -68,6 +68,7 @@ const MyPage: React.FC = () => {
 
       if (res.status === 200) {
         setMyDiaries(res.data.dreamDiaries)
+        setDreamDiaries(res.data.dreamDiaries)
         setBookmarkDiaries(res.data.bookmarks)
 
       } else {
@@ -119,6 +120,7 @@ const MyPage: React.FC = () => {
          {
         !loading ? (
           <>
+          <GuestAlert />
           <Grid container>
                   <Grid item>
                     <Avatar
@@ -172,7 +174,6 @@ const MyPage: React.FC = () => {
           {
           dreamDiaries.length > 0 ? (
           <>
-          <GuestAlert />
             <Grid container style={{width: "100%"}}>
             {
             dreamDiaries.map((dreamDiary: DreamDiary, index: number) => {
@@ -189,6 +190,7 @@ const MyPage: React.FC = () => {
                     userName={dreamDiary.user === null ? '退会済みユーザー' : dreamDiary.user.name}
                     userImage={dreamDiary.user === null ? '' : dreamDiary.user.image.url}
                     likeCount={dreamDiary.likeCount}
+                    commentCount={dreamDiary.commentCount}
                     />
                 </Grid>
               )

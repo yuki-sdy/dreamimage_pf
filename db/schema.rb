@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_13_072042) do
+ActiveRecord::Schema.define(version: 2023_01_17_092431) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,16 @@ ActiveRecord::Schema.define(version: 2023_01_13_072042) do
     t.index ["dream_diary_id"], name: "index_bookmarks_on_dream_diary_id"
     t.index ["user_id", "dream_diary_id"], name: "index_bookmarks_on_user_id_and_dream_diary_id", unique: true
     t.index ["user_id"], name: "index_bookmarks_on_user_id"
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.string "body", null: false
+    t.bigint "user_id"
+    t.bigint "dream_diary_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["dream_diary_id"], name: "index_comments_on_dream_diary_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
   create_table "dream_diaries", force: :cascade do |t|
@@ -100,6 +110,8 @@ ActiveRecord::Schema.define(version: 2023_01_13_072042) do
 
   add_foreign_key "bookmarks", "dream_diaries"
   add_foreign_key "bookmarks", "users"
+  add_foreign_key "comments", "dream_diaries"
+  add_foreign_key "comments", "users"
   add_foreign_key "dream_diaries", "users"
   add_foreign_key "image_boxes", "users"
   add_foreign_key "images", "image_boxes"

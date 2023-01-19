@@ -217,7 +217,7 @@ const Profile: React.FC = () => {
                     </Typography>
                     {
                       currentUser.introduction ? (
-                        <Typography variant="body2" component="p" color="textSecondary">
+                        <Typography variant="body2" component="p" color="textSecondary" style={{whiteSpace: "pre-wrap"}}>
                           {currentUser.introduction}
                         </Typography>
                       ): (
