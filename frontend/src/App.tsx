@@ -52,6 +52,7 @@ const App: React.FC = () => {
           setCurrentUser(res?.data.currentUser)
         }
       } else {
+        setIsSignedIn(false)
         console.log("No current user")
       }
     } catch (err) {
