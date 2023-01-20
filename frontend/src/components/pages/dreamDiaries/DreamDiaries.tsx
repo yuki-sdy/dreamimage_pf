@@ -55,11 +55,11 @@ const DreamDiaries: React.FC = () => {
           dreamDiaries.length > 0 ? (
             <>
             <h3 style={{textAlign:"center"}}>みんなの夢絵日記一覧</h3>
-            <Grid container style={{width: "100%"}}>
+            <Grid container style={{minWidth: "1200px"}}>
             {
             dreamDiaries.map((dreamDiary: DreamDiary, index: number) => {
               return (
-                <Grid item container key={index} xs={12} md={4} lg={3} sm={6} style={{margin: "auto"}}justify="center">
+                <Grid item container key={index} xs={2}>
                   <CardComp
                     id={dreamDiary.id}
                     image={dreamDiary.image}

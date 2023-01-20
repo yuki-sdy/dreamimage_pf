@@ -9,15 +9,11 @@ import Typography from "@material-ui/core/Typography"
 import Button from "@material-ui/core/Button"
 import CreateIcon from "@material-ui/icons/Create"
 import AccountMenu from "./AccountMenu"
+import TitleLogo from "../../images/titlelogo.png"
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconButton: {
     marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-    textDecoration: "none",
-    color: "inherit"
   },
   linkBtn: {
     textTransform: "none",
@@ -121,24 +117,24 @@ const Header: React.FC = () => {
   return (
     <>
       <AppBar position="static" style={{ color: "black", backgroundColor: "#fcfbfd" }}>
-        <Toolbar>
-          <Typography
-            component={Link}
-            to="/"
-            variant="h6"
-            className={classes.title}
-          >
-            夢絵日記
-          </Typography>
+        <Toolbar style={{display: "flex", justifyContent: "space-between"}}>
           <Button
               component={Link}
-              to="/dreamdiaries"
-              color="inherit"
-              className={classes.linkBtn}
+              to="/"
             >
-              夢絵日記一覧
-            </Button>
-          <AuthButtons />
+              <img src={TitleLogo} width="150px"/>
+          </Button>
+          <div style={{display: "flex"}}>
+            <Button
+                component={Link}
+                to="/dreamdiaries"
+                color="inherit"
+                className={classes.linkBtn}
+              >
+                夢絵日記一覧
+              </Button>
+            <AuthButtons />
+          </div>
         </Toolbar>
       <div className={classes.headerImage}/>
       </AppBar>
