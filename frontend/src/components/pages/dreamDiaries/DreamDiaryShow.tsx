@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     color: "inherit"
   },
   preview: {
-    width: "80%"
+    width: "65%"
   },
   submitBtn: {
     textAlign: "center",
@@ -259,13 +259,13 @@ const DreamDiaryShow: React.FC = () => {
               color="secondary"
               startIcon={
                 currentUserLiked ? (<FavoriteIcon />) : (<FavoriteBorderIcon />)}
-                disabled={!currentUser ? true : false}
+                disabled={!isSignedIn ? true : false}
                 style={{ marginTop: "1rem", marginBottom: "1rem" }}
                 >
             {`${likesCount}`}
           </Button>
           {
-            currentUser ? (
+            isSignedIn ? (
             <>
           <Button
             onClick={

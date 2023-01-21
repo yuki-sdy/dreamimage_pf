@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     color: "inherit"
   },
   preview: {
-    width: "80%"
+    width: "65%"
   },
   text: {
     textAlign: "center",
