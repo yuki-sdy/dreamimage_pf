@@ -86,16 +86,16 @@ const CardComp = ({ image, title, content, dreamDate, impression, dreamType, id,
                       className={classes.avatar}
                     />
                   <div>
-                  <Typography variant="h1" component="div" style={{fontSize: "17px", overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box",WebkitLineClamp: 2, WebkitBoxOrient: "vertical"}}>
+                  <Typography variant="h1" component="div" style={{fontSize: "17px", overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box",WebkitLineClamp: 2, WebkitBoxOrient: "vertical", width: "150px"}}>
                       {title}
                   </Typography>
-                  <Typography variant="body2" color="textSecondary" style={{overflow: "hidden",textOverflow: "ellipsis", whiteSpace: "nowrap"}}>
+                  <Typography variant="body2" color="textSecondary" style={{overflow: "hidden",textOverflow: "ellipsis", whiteSpace: "nowrap", width: "150px"}}>
                       {userName}
                   </Typography>
                   </div>
                 </div>
                   <div style={{paddingTop: "3px"}}>
-                  <Typography variant="body2" color="textSecondary" style={{overflow: "hidden",textOverflow: "ellipsis", whiteSpace: "nowrap"}}>
+                  <Typography variant="body2" color="textSecondary" style={{overflow: "hidden",textOverflow: "ellipsis", whiteSpace: "nowrap", width: "190px"}}>
                       {content}
                   </Typography>
                   <Typography variant="body2" color="textSecondary" component="div">
