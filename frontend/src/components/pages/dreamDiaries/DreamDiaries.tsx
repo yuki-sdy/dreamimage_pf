@@ -6,26 +6,22 @@ import { getDreamDiaries } from "../../../lib/api/dreamdiaries"
 import { Grid, makeStyles, Theme } from "@material-ui/core"
 import AlertMessage from "../../utils/AlertMessage"
 import CardComp from "./organisms/CardComp"
+import Pagenation from "./organisms/Pagenation"
 
 const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    flexGrow: 1,
-    minWidth: 340,
-    maxWidth: "100%"
-  },
-  link: {
-    textDecoration: "none",
-    color: "inherit"
-  }
 }))
 
 const DreamDiaries: React.FC = () => {
   const location = useLocation()
+  const classes = useStyles()
 
   const [loading, setLoading] = useState<boolean>(true)
   const [dreamDiaries, setDreamDiaries] = useState<DreamDiary[]>([])
-
   const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(location.state)
+
+  const [offset, setOffset] = useState<number>(0)
+  const perPage = 3
+  const currentDreamDiaries = dreamDiaries.slice(offset, offset + perPage)
 
   const handleDreamDiaries = async () => {
     try {
@@ -57,7 +53,7 @@ const DreamDiaries: React.FC = () => {
             <h3 style={{textAlign:"center"}}>みんなの夢絵日記一覧</h3>
             <Grid container style={{minWidth: "1200px"}}>
             {
-            dreamDiaries.map((dreamDiary: DreamDiary, index: number) => {
+            currentDreamDiaries.map((dreamDiary: DreamDiary, index: number) => {
               return (
                 <Grid item container key={index} xs={2}>
                   <CardComp
@@ -78,6 +74,11 @@ const DreamDiaries: React.FC = () => {
             })
           }
           </Grid>
+          <Pagenation
+            dreamDiaries={dreamDiaries}
+            perPage={perPage}
+            setOffset={setOffset}
+           />
           </>
           ) : (
           <>
