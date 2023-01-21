@@ -63,6 +63,7 @@ const AccountMenu: React.FC = () => {
 
         setIsSignedIn(false)
         navigation("/signin")
+        setCurrentUser(void(undefined))
 
         console.log("Succeeded in sign out")
       } else {
