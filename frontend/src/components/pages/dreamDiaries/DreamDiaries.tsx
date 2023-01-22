@@ -3,7 +3,8 @@ import { useLocation } from "react-router-dom"
 
 import { DreamDiary } from "../../../interfaces"
 import { getDreamDiaries } from "../../../lib/api/dreamdiaries"
-import { Grid, makeStyles, Theme } from "@material-ui/core"
+import { Box, Grid, makeStyles, Theme } from "@material-ui/core"
+import CircularProgress from '@material-ui/core/CircularProgress'
 import AlertMessage from "../../utils/AlertMessage"
 import CardComp from "./organisms/CardComp"
 import Pagenation from "./organisms/Pagenation"
@@ -85,7 +86,11 @@ const DreamDiaries: React.FC = () => {
           <h3>日記がありません！</h3>
           </>)
           )
-        : (<></>) 
+        : (
+        <Box style={{margin: "auto", padding: "3rem"}}>
+          <CircularProgress />
+        </Box>
+        ) 
       }
       <AlertMessage // 削除後のフラッシュ
         open={alertMessageOpen}

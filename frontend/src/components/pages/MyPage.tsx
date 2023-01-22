@@ -4,11 +4,12 @@ import { makeStyles, Theme } from "@material-ui/core/styles"
 import { AuthContext } from "../../App"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { Button, Grid, Tabs, Tab, Typography, Box, Avatar, Divider } from "@material-ui/core"
+import CreateIcon from "@material-ui/icons/Create"
+import CircularProgress from '@material-ui/core/CircularProgress'
 import CardComp from "./dreamDiaries/organisms/CardComp"
 import AlertMessage from "../utils/AlertMessage"
 import { DreamDiary, Bookmark } from "../../interfaces"
 import { getMypage } from "../../lib/api/mypages"
-import CreateIcon from "@material-ui/icons/Create"
 import { Alert } from "@material-ui/lab"
 import Pagenation from "./dreamDiaries/organisms/Pagenation"
 
@@ -140,7 +141,7 @@ const MyPage: React.FC = () => {
                     {
                     !currentUser?.isGuest ? (
                       currentUser?.introduction ? (
-                        <Typography variant="body2" component="p" color="textSecondary">
+                        <Typography variant="body2" component="p" color="textSecondary" style={{whiteSpace: "pre-wrap"}}>
                           {currentUser?.introduction}
                         </Typography>
                       ): (
@@ -225,7 +226,11 @@ const MyPage: React.FC = () => {
           }
           </>
           )
-        : (<></>)
+        : (
+        <Box style={{margin: "auto", padding: "3rem"}}>
+          <CircularProgress />
+        </Box>
+        )
       }
       <AlertMessage // 削除後のフラッシュ
         open={alertMessageOpen}
