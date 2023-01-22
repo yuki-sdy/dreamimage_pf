@@ -14,6 +14,8 @@ import MyPage from "./components/pages/MyPage"
 import Profile from "./components/pages/Profile"
 import SignIn from "./components/pages/SignIn"
 import SignUp from "./components/pages/SignUp"
+import PrivacyPolicy from "./components/pages/terms/PrivacyPolicy"
+import TermOfService from "./components/pages/terms/TermOfService"
 import NotFound from "./components/pages/NotFound"
 
 import { User } from "./interfaces"
@@ -93,6 +95,8 @@ const App: React.FC = () => {
 
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
+            <Route path="/privacy_policy" element={<PrivacyPolicy />} />
+            <Route path="/term_of_service" element={<TermOfService />} />
             
             <Route path="/mypage" 
               element={<Private children={<MyPage />} />} />
