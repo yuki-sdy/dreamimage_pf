@@ -1,4 +1,4 @@
-import { makeStyles, Theme } from "@material-ui/core"
+import { makeStyles, Theme, Box } from "@material-ui/core"
 import React from "react"
 import ReactPaginate from 'react-paginate'
 import { DreamDiary } from "../../../../interfaces"
@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   pagenation: {
     marginTop: "3rem",
     display: "flex",
-    margin: "0 auto",
+    justifyContent: "center",
     "& > li" : {
       margin: "0 4px",
       listStyle: "none",
@@ -53,6 +53,7 @@ const Pagenation = ({ dreamDiaries, perPage, setOffset }: PagenationProps) => {
 
   return (
     <>
+    <Box style={{textAlign: "center"}}>
       <ReactPaginate
         pageCount={pageCount}
         onPageChange={handlePageClick}
@@ -65,6 +66,7 @@ const Pagenation = ({ dreamDiaries, perPage, setOffset }: PagenationProps) => {
         activeClassName={classes.active}
         disabledClassName={classes.disable}
       />
+    </Box>
     </>
   )
 }

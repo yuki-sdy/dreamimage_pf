@@ -20,7 +20,7 @@ const DreamDiaries: React.FC = () => {
   const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(location.state)
 
   const [offset, setOffset] = useState<number>(0)
-  const perPage = 3
+  const perPage = 18
   const currentDreamDiaries = dreamDiaries.slice(offset, offset + perPage)
 
   const handleDreamDiaries = async () => {

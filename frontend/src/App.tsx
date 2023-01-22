@@ -14,6 +14,7 @@ import MyPage from "./components/pages/MyPage"
 import Profile from "./components/pages/Profile"
 import SignIn from "./components/pages/SignIn"
 import SignUp from "./components/pages/SignUp"
+import NotFound from "./components/pages/NotFound"
 
 import { User } from "./interfaces"
 import { getCurrentUser } from "./lib/api/auth"
@@ -87,7 +88,7 @@ const App: React.FC = () => {
         <CommonLayout>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/dreamdiaries" element={<DreamDiaries/>} />
+            <Route path="/dreamdiaries" element={<DreamDiaries/>}/>
             <Route path="/dreamdiaries/:id" element={<DreamDiaryShow />} />
 
             <Route path="/signup" element={<SignUp />} />
@@ -106,6 +107,8 @@ const App: React.FC = () => {
               element={<Private children={<DreamDiaryBackForm />} />} />
             <Route path="/dreamdiaries/:id/edit" 
               element={<Private children={<DreamDiaryEditForm />} />} />
+
+            <Route path="/*" element={<NotFound />} />
           </Routes>
         </CommonLayout>
       </AuthContext.Provider>
