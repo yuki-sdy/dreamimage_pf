@@ -5,8 +5,6 @@ import { Link, useNavigate } from "react-router-dom"
 import { AuthContext } from "../../App"
 import Cookies from "js-cookie"
 import { signOut } from "../../lib/api/auth"
-import { deleteAccount } from "../../lib/api/users"
-import CommonDialog from "../utils/CommonDialog"
 
 const useStyles = makeStyles((theme: Theme) => ({
   box: {
@@ -39,7 +37,6 @@ const AccountMenu: React.FC = () => {
   const { setIsSignedIn, currentUser, setCurrentUser } = useContext(AuthContext)
   const navigation = useNavigate();
 
-  const [dlgOpen, setDlgOpen] = useState<boolean>(false)
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
 
@@ -73,33 +70,6 @@ const AccountMenu: React.FC = () => {
       console.log(err)
     }
   }
-
-
-    //退会処理
-    const handleDeleteAccount = async (e: React.MouseEvent<HTMLButtonElement>) => {
-      const res = await deleteAccount(currentUser?.id)
-      console.log(res)
-  
-      if (res.data.status === 200) {
-        // アカウント削除時には各Cookieを削除
-        Cookies.remove("_access_token")
-        Cookies.remove("_client")
-        Cookies.remove("_uid")
-  
-        setIsSignedIn(false)
-        setCurrentUser(undefined)
-        navigation("/")
-  
-        console.log("Succeeded in delete account")
-      } else {
-        console.log("Failed in delete account")
-      }
-  
-      try {
-      } catch (err) {
-        console.log(err)
-      }
-    }
 
   return (
     <>
@@ -156,7 +126,7 @@ const AccountMenu: React.FC = () => {
                 color="inherit"
                 to="/signin"
               >
-                別のアカウントでログインする
+                ログイン
               </MenuItem>
             </>
           ) : (
@@ -169,19 +139,6 @@ const AccountMenu: React.FC = () => {
               >
                 ログアウト
               </MenuItem>
-              <MenuItem
-                component={Button}
-                color="inherit"
-                onClick={() => setDlgOpen(true)}
-              >
-                退会手続き
-              </MenuItem>
-              <CommonDialog // 削除確認ダイアログ
-              message={"本当に退会しますか？"}
-              open={dlgOpen}
-              setOpen={setDlgOpen}
-              doYes={handleDeleteAccount}
-              />
             </>
           )
         }
