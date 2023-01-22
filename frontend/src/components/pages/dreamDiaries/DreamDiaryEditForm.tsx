@@ -97,7 +97,7 @@ const DreamDiaryEditForm: React.FC = () => {
         console.log("No diary")
       }
     } catch (err) {
-      console.log(err)
+      navigation("/notfound")
     }
 
     setLoading(false)
