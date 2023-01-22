@@ -89,14 +89,18 @@ const CommentArea = ({ index, body, createdAt, userId, userName, userImage, drea
       <Typography variant="body2" color="textSecondary" style={{overflow: "hidden",textOverflow: "ellipsis", whiteSpace: "nowrap"}}>
         {createdDateTime(createdAt)}
       </Typography>
-      <Button
-        color="primary"
-        disabled={currentUser?.id === userId ? false : true}
-        onClick={() => handleDeleteComment(index)}
-        className={classes.button}
-        >
-        <DeleteIcon />
-      </Button>
+      {
+        currentUser?.id === userId ? (
+        <Button
+          color="primary"
+          onClick={() => handleDeleteComment(index)}
+          className={classes.button}
+          >
+          <DeleteIcon />
+        </Button>
+        ):(<></>)
+
+      }
         </Grid>
     </>
   )
