@@ -7,8 +7,9 @@ class OgpCreator
   GRAVITY = 'center'
   TEXT_POSITION = '0,0'
   FONT = './public/fonts/timemachine-wa.ttf'
-  INDENTION_COUNT = 20 #
-  BODY_INDENTION_COUNT = 25 #
+  INDENTION_COUNT = 20
+  PROMPT_INDENTION_COUNT = 30
+  BODY_INDENTION_COUNT = 25
   ROW_LIMIT = 8
 
   def self.build(title, body, content, prompt, image, impression, type, date)
@@ -22,9 +23,9 @@ class OgpCreator
       config.geometry '+60+140'#位置調整
     end
 
-    title = prepare_text(title)
-    content = prepare_text(content)
-    prompt = prepare_text(prompt)
+    title = prepare_text(title, INDENTION_COUNT)
+    content = prepare_text(content, INDENTION_COUNT)
+    prompt = prepare_text(prompt, PROMPT_INDENTION_COUNT)
     type = type_enum(type)
     impression = impression_enum(impression)
     date = date.strftime("%Y年%m月%d日")
@@ -40,7 +41,7 @@ class OgpCreator
       config.draw "text 390, -500 '#{date}'"
       config.draw "text 390, -460 '#{type}・#{impression}'"
       config.draw "text 150, 430 '#{content}'"
-      config.draw "text 150, 320 '「#{prompt}」'"
+      config.draw "text 150, 325 '「#{prompt}」'"
       config.pointsize 35
       insert_vertical_word(body, 205, 175, 35, config)
     end
@@ -62,8 +63,8 @@ class OgpCreator
 
 
   # INDENTION_COUNTで改行する処理
-  def self.prepare_text(text)
-    text.to_s.scan(/.{1,#{INDENTION_COUNT}}/)[0...ROW_LIMIT].join("\n")
+  def self.prepare_text(text, indention_count)
+    text.to_s.scan(/.{1,#{indention_count}}/)[0...ROW_LIMIT].join("\n")
   end
   
   # 縦書きにする処理
