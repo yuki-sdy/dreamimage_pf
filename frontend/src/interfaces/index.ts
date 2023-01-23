@@ -13,6 +13,19 @@ export interface SignInData {
   password: string
 }
 
+// パスワードリセット
+export interface PasswordResetData {
+  email: string
+  redirectUrl: string
+}
+
+// パスワード変更
+export interface PasswordUpdateData {
+  password: string
+  passwordConfirmation: string
+  resetPasswordToken: string
+}
+
 // ユーザー
 export interface User {
   id: number

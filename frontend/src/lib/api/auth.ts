@@ -1,7 +1,7 @@
 import { client } from "./client"
 import Cookies from "js-cookie"
 
-import { SignInData, SignUpData } from "../../interfaces"
+import { PasswordResetData, PasswordUpdateData, SignInData, SignUpData } from "../../interfaces"
 
 // サインアップ（新規アカウント作成）
 export const signUp = (data: SignUpData, currentId?: number | undefined) => {
@@ -11,6 +11,20 @@ export const signUp = (data: SignUpData, currentId?: number | undefined) => {
 // サインイン（ログイン）
 export const signIn = (data: SignInData)  => {
   return client.post("auth/sign_in", data)
+}
+
+// パスワードリセットリクエスト
+export const passwordReset = (data: PasswordResetData)  => {
+  return client.post("auth/password", data)
+}
+
+// パスワード変更
+export const passwordUpdate = (data: PasswordUpdateData, params: URLSearchParams)  => {
+  return client.put("auth/password", data, { headers: {
+    "access-token": params.get("access-token"),
+    "client": params.get("client"),
+    "uid": params.get("uid")
+  }})
 }
 
 // サインアウト（ログアウト）
