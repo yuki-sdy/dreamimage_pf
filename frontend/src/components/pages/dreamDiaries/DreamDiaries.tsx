@@ -5,6 +5,7 @@ import { DreamDiary } from "../../../interfaces"
 import { getDreamDiaries } from "../../../lib/api/dreamdiaries"
 import { Box, Grid, makeStyles, Theme } from "@material-ui/core"
 import CircularProgress from '@material-ui/core/CircularProgress'
+import TitleImage from '../../../images/indextitle.png'
 import AlertMessage from "../../utils/AlertMessage"
 import CardComp from "./organisms/CardComp"
 import Pagenation from "./organisms/Pagenation"
@@ -60,7 +61,9 @@ const DreamDiaries: React.FC = () => {
         !loading ? (
           dreamDiaries.length > 0 ? (
             <>
-            <h3 style={{textAlign:"center"}}>みんなの夢絵日記一覧</h3>
+            <div style={{textAlign: "center", margin: "1.5rem"}}>
+            <img src={TitleImage} style={{width: "500px"}}/>
+            </div>
             <Grid container style={{minWidth: "1200px"}}>
             {
             currentDreamDiaries.map((dreamDiary: DreamDiary, index: number) => {
