@@ -10,16 +10,18 @@ import DreamDiaryPreview from "./components/pages/dreamDiaries/DreamDiaryPreview
 import DreamDiaryShow from "./components/pages/dreamDiaries/DreamDiaryShow"
 
 import Home from "./components/pages/Home"
-import MyPage from "./components/pages/MyPage"
-import Profile from "./components/pages/Profile"
-import SignIn from "./components/pages/SignIn"
-import SignUp from "./components/pages/SignUp"
+import MyPage from "./components/pages/users/MyPage"
+import Profile from "./components/pages/users/Profile"
+import SignIn from "./components/pages/auth/SignIn"
+import SignUp from "./components/pages/auth/SignUp"
 import PrivacyPolicy from "./components/pages/terms/PrivacyPolicy"
 import TermOfService from "./components/pages/terms/TermOfService"
 import NotFound from "./components/pages/NotFound"
 
 import { User } from "./interfaces"
 import { getCurrentUser } from "./lib/api/auth"
+import PasswordReset from "./components/pages/auth/PasswordReset"
+import PasswordEdit from "./components/pages/auth/PasswordEdit"
 
 // グローバルで扱う変数・関数
 export const AuthContext = createContext({} as {
@@ -89,6 +91,8 @@ const App: React.FC = () => {
 
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
+            <Route path="/password" element={<PasswordReset />} />
+            <Route path="/password/reset" element={<PasswordEdit />} />
             <Route path="/privacy_policy" element={<PrivacyPolicy />} />
             <Route path="/term_of_service" element={<TermOfService />} />
             
