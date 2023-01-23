@@ -1,6 +1,6 @@
 import { Avatar, Box, Button, Card, CardContent, CardHeader, Divider, Grid, IconButton, makeStyles, TextField, Theme, Typography } from "@material-ui/core"
 import React, { useContext, useEffect, useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import { useNavigate, useParams } from "react-router-dom"
 
 import { DreamDiary, Like, BookmarkData, Comment, CommentData } from "../../../interfaces"
@@ -42,10 +42,11 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 const DreamDiaryShow: React.FC = () => {
-  const { currentUser, isSignedIn, alertMessageOpen, setAlertMessageOpen } = useContext(AuthContext)
+  const { currentUser, isSignedIn } = useContext(AuthContext)
   const params = useParams()
   const classes = useStyles()
   const navigation = useNavigate()
+  const location = useLocation()
 
   const [loading, setLoading] = useState<boolean>(true)
   const [dreamDiary, setDreamDiary] = useState<DreamDiary>()
@@ -60,7 +61,14 @@ const DreamDiaryShow: React.FC = () => {
   const [comments, setComments] = useState<Comment[]>([])
 
   const [DlgOpen, setDlgOpen] = useState<boolean>(false)
-  const [alertMsg, setAlertMsg] = useState<string>("日記を作成しました。")
+  const [successOpen, setSuccessOpen]
+   = useState<boolean>(location.state ? (location.state.successOpen) : (false))
+  const [successMsg, setSuccessMsg]
+   = useState<string>(location.state ? (location.state.successMsg) : (""))
+  const [alertOpen, setAlertOpen]
+   = useState<boolean>(location.state ? (location.state.alertOpen) : (false))
+  const [alertMsg, setAlertMsg]
+   = useState<string>(location.state ? (location.state.alertMsg) : (""))
 
   const handleDreamDiary = async () => {
     try {
@@ -116,10 +124,12 @@ const DreamDiaryShow: React.FC = () => {
         setCurrentUserLiked(true)
 
       } else {
-        console.log("Failed")
+        setAlertMsg("いいねができませんでした。")
+        setAlertOpen(true)
       }
-      } catch (err) {
-        console.log(err)
+    } catch (err) {
+        setAlertMsg("しばらく経ってからもう一度お試しください。")
+        setAlertOpen(true)
       }
     }
     
@@ -138,10 +148,12 @@ const DreamDiaryShow: React.FC = () => {
           setLikesCount(count)
           setCurrentUserLiked(false)
         } else {
-          console.log("Failed")
+          setAlertMsg("いいねが削除できませんでした。")
+          setAlertOpen(true)
         }
     } catch (err) {
-      console.log(err)
+      setAlertMsg("しばらく経ってからもう一度お試しください。")
+      setAlertOpen(true)
     }
   }
 
@@ -160,14 +172,16 @@ const DreamDiaryShow: React.FC = () => {
       if (res?.status === 200) {
         setLikes([res.data.bookmark, ...bookmarks])
         setCurrentUserBookmarked(true)
-        setAlertMsg("お気に入りに登録しました。")
-        setAlertMessageOpen(true)
+        setSuccessMsg("お気に入りに登録しました！")
+        setSuccessOpen(true)
         
       } else {
-        console.log("Failed")
+        setAlertMsg("お気に入り登録ができませんでした。")
+        setAlertOpen(true)
       }
     } catch (err) {
-      console.log(err)
+      setAlertMsg("しばらく経ってからもう一度お試しください。")
+      setAlertOpen(true)
     }
   }
   
@@ -182,34 +196,36 @@ const DreamDiaryShow: React.FC = () => {
       if (res?.status === 200) {
         setBookmark(void(null))
         setCurrentUserBookmarked(false)
-        setAlertMsg("お気に入りから削除しました。")
-        setAlertMessageOpen(true)
+        setSuccessMsg("お気に入りから削除しました。")
+        setSuccessOpen(true)
         
       } else {
-        console.log("Failed")
+        setAlertMsg("お気に入りから削除できませんでした。")
+        setAlertOpen(true)
       }
     } catch (err) {
-      console.log(err)
+      setAlertMsg("しばらく経ってからもう一度お試しください。")
+      setAlertOpen(true)
     }
   }
 
   //夢絵日記削除処理
   const handleDeleteDreamDiary = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
+    setDlgOpen(false)
     if (currentUser?.id !== dreamDiary?.userId) {
-      navigation('/dreamdiaries')
+      setAlertMsg("権限がありません。")
+      setAlertOpen(true)
     }else{
       const res = await DreamDiaryDestroy(dreamDiary?.id)
       
       if (res.data.status === 200) {
-        navigation("/dreamdiaries", { state: true})
-      } else {
-        console.log("Failed in delete")
-      }
-  
+        navigation("/mypage",
+        {state: {successOpen: true, successMsg: "日記を削除しました！"}})
+      }  
       try {
       } catch (err) {
-        console.log(err)
+        setAlertMsg("日記の削除処理ができませんでした。")
+        setAlertOpen(true)
       }
     }
   }
@@ -228,15 +244,17 @@ const DreamDiaryShow: React.FC = () => {
 
       if (res?.status === 200) {
         setComments([res.data, ...comments])
-        setAlertMsg("コメントを投稿しました。")
-        setAlertMessageOpen(true)
+        setSuccessMsg("コメントを投稿しました。")
+        setSuccessOpen(true)
         setCommentBody("")
         
       } else {
-        console.log("Failed")
+        setAlertMsg("コメントがで作成できませんでした。")
+        setAlertOpen(true)
       }
     } catch (err) {
-      console.log(err)
+      setAlertMsg("しばらく経ってからもう一度お試しください。")
+      setAlertOpen(true)
     }
   }
 
@@ -373,6 +391,9 @@ const DreamDiaryShow: React.FC = () => {
                     userImage={comment.user === null ? '' : comment.user.image.url}
                     comments={comments}
                     setComments={setComments}
+                    setSuccessOpen={setSuccessOpen}
+                    setSuccessMsg={setSuccessMsg}
+                    setAlertOpen={setAlertOpen}
                     setAlertMsg={setAlertMsg}
                     />
                 </Grid>
@@ -386,11 +407,17 @@ const DreamDiaryShow: React.FC = () => {
             setOpen={setDlgOpen}
             doYes={handleDeleteDreamDiary}
           />
-          <AlertMessage // 作成や更新後のフラッシュ
-            open={alertMessageOpen}
-            setOpen={setAlertMessageOpen}
-            severity="success"
+          <AlertMessage
+            open={alertOpen}
+            setOpen={setAlertOpen}
+            severity="error"
             message={alertMsg}
+          />
+          <AlertMessage
+            open={successOpen}
+            setOpen={setSuccessOpen}
+            severity="success"
+            message={successMsg}
           />
           </>
           ) : (<></>) 

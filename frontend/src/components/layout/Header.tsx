@@ -1,5 +1,5 @@
 import React, { useContext } from "react"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import { AuthContext } from "../../App"
 import { makeStyles, Theme } from "@material-ui/core/styles"
 
@@ -39,6 +39,19 @@ const useStyles = makeStyles((theme: Theme) => ({
 const Header: React.FC = () => {
   const { loading, isSignedIn, currentUser } = useContext(AuthContext)
   const classes = useStyles();
+  const location = useLocation()
+
+  const HeaderImage = () => {
+    if (location.pathname === "/privacy_policy") {
+      return (<></>)
+    }else if(location.pathname === "/term_of_service"){
+      return (<></>)
+    }else{
+      return(
+        <div className={classes.headerImage}/>
+      )
+    }
+  }
 
   const AuthButtons = () => {
     // 認証完了後はサインアウト用のボタンを表示
@@ -135,7 +148,7 @@ const Header: React.FC = () => {
             <AuthButtons />
           </div>
         </Toolbar>
-      <div className={classes.headerImage}/>
+        <HeaderImage />
       </AppBar>
     </>
   )

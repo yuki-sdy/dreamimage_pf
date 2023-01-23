@@ -5,8 +5,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { AuthContext } from "../../App"
 import Cookies from "js-cookie"
 import { signOut } from "../../lib/api/auth"
-import { deleteAccount } from "../../lib/api/users"
-import CommonDialog from "../utils/CommonDialog"
+import AlertMessage from "../utils/AlertMessage"
 
 const useStyles = makeStyles((theme: Theme) => ({
   box: {
@@ -37,9 +36,11 @@ const useStyles = makeStyles((theme: Theme) => ({
 const AccountMenu: React.FC = () => {
   const classes = useStyles()
   const { setIsSignedIn, currentUser, setCurrentUser } = useContext(AuthContext)
-  const navigation = useNavigate();
+  const navigation = useNavigate()
 
-  const [dlgOpen, setDlgOpen] = useState<boolean>(false)
+  const [alertOpen, setAlertOpen] = useState<boolean>(false)
+  const [alertMsg, setAlertMsg] = useState<string>("")
+
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
 
@@ -62,44 +63,19 @@ const AccountMenu: React.FC = () => {
         Cookies.remove("_uid")
 
         setIsSignedIn(false)
-        navigation("/signin")
+        navigation("/signin",
+        {state: {successOpen: true, successMsg: "ログアウトしました。"}})
+ 
         setCurrentUser(void(undefined))
-
-        console.log("Succeeded in sign out")
+         
       } else {
-        console.log("Failed in sign out")
+        setAlertMsg("ログアウトできません。")
+        setAlertOpen(true)
       }
     } catch (err) {
       console.log(err)
     }
   }
-
-
-    //退会処理
-    const handleDeleteAccount = async (e: React.MouseEvent<HTMLButtonElement>) => {
-      const res = await deleteAccount(currentUser?.id)
-      console.log(res)
-  
-      if (res.data.status === 200) {
-        // アカウント削除時には各Cookieを削除
-        Cookies.remove("_access_token")
-        Cookies.remove("_client")
-        Cookies.remove("_uid")
-  
-        setIsSignedIn(false)
-        setCurrentUser(undefined)
-        navigation("/")
-  
-        console.log("Succeeded in delete account")
-      } else {
-        console.log("Failed in delete account")
-      }
-  
-      try {
-      } catch (err) {
-        console.log(err)
-      }
-    }
 
   return (
     <>
@@ -156,7 +132,7 @@ const AccountMenu: React.FC = () => {
                 color="inherit"
                 to="/signin"
               >
-                別のアカウントでログインする
+                ログイン
               </MenuItem>
             </>
           ) : (
@@ -169,23 +145,16 @@ const AccountMenu: React.FC = () => {
               >
                 ログアウト
               </MenuItem>
-              <MenuItem
-                component={Button}
-                color="inherit"
-                onClick={() => setDlgOpen(true)}
-              >
-                退会手続き
-              </MenuItem>
-              <CommonDialog // 削除確認ダイアログ
-              message={"本当に退会しますか？"}
-              open={dlgOpen}
-              setOpen={setDlgOpen}
-              doYes={handleDeleteAccount}
-              />
             </>
           )
         }
       </Menu>
+      <AlertMessage
+        open={alertOpen}
+        setOpen={setAlertOpen}
+        severity="error"
+        message={alertMsg}
+      />
     </>
   )
 }

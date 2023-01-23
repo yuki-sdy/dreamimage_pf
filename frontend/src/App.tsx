@@ -14,6 +14,8 @@ import MyPage from "./components/pages/MyPage"
 import Profile from "./components/pages/Profile"
 import SignIn from "./components/pages/SignIn"
 import SignUp from "./components/pages/SignUp"
+import PrivacyPolicy from "./components/pages/terms/PrivacyPolicy"
+import TermOfService from "./components/pages/terms/TermOfService"
 import NotFound from "./components/pages/NotFound"
 
 import { User } from "./interfaces"
@@ -27,18 +29,12 @@ export const AuthContext = createContext({} as {
   setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>>
   currentUser: User | undefined
   setCurrentUser: React.Dispatch<React.SetStateAction<User | undefined>>
-  alertMessageOpen: boolean
-  setAlertMessageOpen: React.Dispatch<React.SetStateAction<boolean>>
-  alertMessage: string
-  setAlertMessage: React.Dispatch<React.SetStateAction<string>>
 })
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true)
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false)
   const [currentUser, setCurrentUser] = useState<User | undefined>()
-  const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false)
-  const [alertMessage, setAlertMessage] = useState<string>("")
 
   // 認証済みのユーザーがいるかどうかチェック
   // 確認できた場合はそのユーザーの情報を取得
@@ -84,7 +80,7 @@ const App: React.FC = () => {
 
   return (
     <Router>
-      <AuthContext.Provider value={{ loading, setLoading, isSignedIn, setIsSignedIn, currentUser, setCurrentUser, alertMessage, setAlertMessage, alertMessageOpen, setAlertMessageOpen}}>
+      <AuthContext.Provider value={{ loading, setLoading, isSignedIn, setIsSignedIn, currentUser, setCurrentUser}}>
         <CommonLayout>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -93,6 +89,8 @@ const App: React.FC = () => {
 
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
+            <Route path="/privacy_policy" element={<PrivacyPolicy />} />
+            <Route path="/term_of_service" element={<TermOfService />} />
             
             <Route path="/mypage" 
               element={<Private children={<MyPage />} />} />

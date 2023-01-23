@@ -1,10 +1,10 @@
-import React, { useContext } from "react"
+import React, { useContext, useState } from "react"
 import { AuthContext } from "../../../../App"
 import { makeStyles, Theme, Typography, Avatar, Button, Grid } from "@material-ui/core"
-import { useNavigate } from "react-router-dom"
 import DeleteIcon from "@material-ui/icons/Delete"
 import { destroyComment } from "../../../../lib/api/comments"
 import { Comment } from "../../../../interfaces"
+import CommonDialog from "../../../utils/CommonDialog"
 
 export interface CommentInfoProps {
   index: number
@@ -16,6 +16,9 @@ export interface CommentInfoProps {
   dreamDiaryId: number
   comments: Comment[]
   setComments: Function
+  setSuccessOpen: Function
+  setSuccessMsg: Function
+  setAlertOpen: Function
   setAlertMsg: Function
 }
 
@@ -35,30 +38,35 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }))
 
-const CommentArea = ({ index, body, createdAt, userId, userName, userImage, dreamDiaryId, comments, setComments, setAlertMsg}: CommentInfoProps) => {
+const CommentArea = ({ index, body, createdAt, userId, userName, userImage, dreamDiaryId, comments, setComments, setSuccessOpen, setSuccessMsg, setAlertOpen,setAlertMsg }: CommentInfoProps) => {
   const classes = useStyles()
-  const navigation = useNavigate()
-  const { currentUser, setAlertMessageOpen } = useContext(AuthContext)
+  const { currentUser } = useContext(AuthContext)
+
+  const [DlgOpen, setDlgOpen] = useState<boolean>(false)
 
     //コメント削除
     const handleDeleteComment = async (index :number) => {
+      setDlgOpen(false)
       const comment = comments[index]
       if (currentUser?.id !== comment.userId) {
-        navigation('/dreamdiaries')
+        setAlertMsg("権限がありません。")
+        setAlertOpen(true)
       }else{
         const res = await destroyComment(dreamDiaryId, comment.id)
         
         if (res.data.status === 200) {
           comments.splice(index, 1)
           setComments(comments)
-          setAlertMsg("コメントを削除しました。")
-          setAlertMessageOpen(true)
+          setSuccessMsg("コメントを削除しました。")
+          setSuccessOpen(true)
         } else {
-          console.log("Failed in delete")
+          setAlertMsg("削除できませんでした。")
+          setAlertOpen(true)
         }
         try {
         } catch (err) {
-          console.log(err)
+          setAlertMsg("しばらく経ってからもう一度お試しください。")
+          setAlertOpen(true)
         }
       }
     }
@@ -89,14 +97,23 @@ const CommentArea = ({ index, body, createdAt, userId, userName, userImage, drea
       <Typography variant="body2" color="textSecondary" style={{overflow: "hidden",textOverflow: "ellipsis", whiteSpace: "nowrap"}}>
         {createdDateTime(createdAt)}
       </Typography>
-      <Button
-        color="primary"
-        disabled={currentUser?.id === userId ? false : true}
-        onClick={() => handleDeleteComment(index)}
-        className={classes.button}
-        >
-        <DeleteIcon />
-      </Button>
+      {
+        currentUser?.id === userId ? (
+        <Button
+          color="primary"
+          onClick={() => setDlgOpen(true)}
+          className={classes.button}
+          >
+          <DeleteIcon />
+        </Button>
+        ):(<></>)
+      }
+      <CommonDialog // 削除確認ダイアログ
+        message={"本当に削除しますか？"}
+        open={DlgOpen}
+        setOpen={setDlgOpen}
+        doYes={() => handleDeleteComment(index)}
+      />
         </Grid>
     </>
   )

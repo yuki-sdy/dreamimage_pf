@@ -43,8 +43,9 @@ const SignUp: React.FC = () => {
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
   const [passwordConfirmation, setPasswordConfirmation] = useState<string>("")
-  const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false)
 
+  const [alertOpen, setAlertOpen] = useState<boolean>(false)
+  const [alertMsg, setAlertMsg] = useState<string>("")
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
@@ -70,15 +71,15 @@ const SignUp: React.FC = () => {
         setIsSignedIn(true)
         setCurrentUser(res.data.data)
 
-        navigation("/")
-
-        console.log("Signed in successfully!")
+        navigation("/",
+        {state: {successOpen: true, successMsg: `ようこそ、${res.data.data.name}さん！`}})
       } else {
-        setAlertMessageOpen(true)
+        setAlertMsg("メールアドレスかパスワードを確かめてください。")
+        setAlertOpen(true)
       }
     } catch (err) {
-      console.log(err)
-      setAlertMessageOpen(true)
+      setAlertMsg("しばらく経ってからもう一度お試しください。")
+      setAlertOpen(true)
     }
   }
 
@@ -142,11 +143,11 @@ const SignUp: React.FC = () => {
           </CardContent>
         </Card>
       </form>
-      <AlertMessage // エラーが発生した場合はアラートを表示
-        open={alertMessageOpen}
-        setOpen={setAlertMessageOpen}
+      <AlertMessage
+        open={alertOpen}
+        setOpen={setAlertOpen}
         severity="error"
-        message="メールアドレスかパスワードが間違っています"
+        message={alertMsg}
       />
     </>
   )

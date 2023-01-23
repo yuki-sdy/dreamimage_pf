@@ -3,6 +3,7 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
+import { Typography } from '@material-ui/core';
 
 interface CommonDialogProps {
   open: boolean
@@ -26,7 +27,9 @@ const CommonDialog =({open, setOpen, doYes, message} :CommonDialogProps) => {
             aria-describedby="common-dialog-description"
         >
           <DialogContent>
-            {message}
+            <Typography style={{whiteSpace: "pre-wrap"}}>
+              {message}
+            </Typography>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCloseDialogMessage} color="primary">

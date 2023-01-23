@@ -151,6 +151,7 @@ const DreamDiaryBackForm: React.FC = () => {
               fullWidth
               label="タイトル(40字)"
               placeholder="40文字以内で書いてください。"
+              inputProps={{ maxLength: 40 }}
               value={title}
               margin="dense"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
@@ -163,6 +164,7 @@ const DreamDiaryBackForm: React.FC = () => {
               rows={4}
               label="夢の内容(125字)"
               placeholder="125文字以内で書いてください。"
+              inputProps={{ maxLength: 125 }}
               value={body}
               margin="dense"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBody(e.target.value)}
@@ -230,8 +232,8 @@ const DreamDiaryBackForm: React.FC = () => {
               variant="outlined"
               required
               fullWidth
-              label="キーワード(40字)"
-              placeholder="40文字以内で書いてください。"
+              label="キーワード(約40字)"
+              placeholder="40文字程度で書いてください。"
               type="prompt"
               value={prompt}
               margin="dense"
@@ -284,9 +286,10 @@ const DreamDiaryBackForm: React.FC = () => {
                 variant="outlined"
                 fullWidth
                 multiline
-                rows={4}
+                rows={2}
                 label="この日記に対するコメントをください！(80字)"
                 placeholder="80文字以内で書いてください。"
+                inputProps={{ maxLength: 80 }}
                 value={content}
                 margin="dense"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setContent(e.target.value)}
@@ -312,9 +315,10 @@ const DreamDiaryBackForm: React.FC = () => {
                   variant="outlined"
                   fullWidth
                   multiline
-                  rows={4}
+                  rows={2}
                   label="この日記に対するコメントをください！(80字)"
                   placeholder="80文字以内で書いてください。"
+                  inputProps={{ maxLength: 80 }}
                   value={content}
                   margin="dense"
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setContent(e.target.value)}
