@@ -64,10 +64,10 @@ class Api::V1::ImagesController < ApplicationController
     end
     
     if current_box.user_type == 0
-      current_box.images.count >= 3 ? current_box.update(limit: true)
+      current_box.images.count >= 5 ? current_box.update(limit: true)
        : current_box.update(limit: false)
     else
-      current_box.images.count >= 5 ? current_box.update(limit: true)
+      current_box.images.count >= 10 ? current_box.update(limit: true)
        : current_box.update(limit: false)
     end
     current_box
