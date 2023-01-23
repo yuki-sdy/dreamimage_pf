@@ -6,7 +6,7 @@ import AlertMessage from "../../utils/AlertMessage"
 
 import { DreamDiaryFormData } from "../../../interfaces"
 import { DreamDiaryPreview, ImageCreate } from "../../../lib/api/dreamdiaries"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { dream_types, impressions } from "../../../data/dreamdiaryEnums"
 import DateFnsUtils from "@date-io/date-fns"
 import CancelIcon from "@material-ui/icons/Cancel"
@@ -45,6 +45,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 const DreamDiaryForm: React.FC = () => {
   const classes = useStyles()
   const navigation = useNavigate()
+  const location = useLocation()
   const { currentUser } = useContext(AuthContext)
 
   const [title, setTitle] = useState<string>("")
@@ -61,7 +62,15 @@ const DreamDiaryForm: React.FC = () => {
   const [preview, setPreview] = useState<string>("")
   const [imageLoading, setImageLoading] = useState<boolean>(false)
   const [formLoading, setFormLoading] = useState<boolean>(false)
-  const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false)
+
+  const [successOpen, setSuccessOpen]
+  = useState<boolean>(location.state ? (location.state.successOpen) : (false))
+ const [successMsg, setSuccessMsg]
+  = useState<string>(location.state ? (location.state.successMsg) : (""))
+ const [alertOpen, setAlertOpen]
+  = useState<boolean>(location.state ? (location.state.alertOpen) : (false))
+ const [alertMsg, setAlertMsg]
+  = useState<string>(location.state ? (location.state.alertMsg) : (""))
 
   const createFormData = (): DreamDiaryFormData => {
     const formData = new FormData()
@@ -87,18 +96,14 @@ const DreamDiaryForm: React.FC = () => {
 
     try {
       const res = await ImageCreate(prompt, currentUser?.id)
-      console.log(res)
 
       if (res.status === 200) {
         setPreview(res.data.image)
         setImage(res.data.image)
-
-      } else {
-        setAlertMessageOpen(true)
       }
     } catch (err) {
-      console.log(err)
-      setAlertMessageOpen(true)
+      setAlertMsg("1日の生成回数を超えています。")
+      setAlertOpen(true)
     }
     setImageLoading(false)
   }
@@ -110,19 +115,16 @@ const DreamDiaryForm: React.FC = () => {
     const data = createFormData()
     
     try {
-      console.log(data)
       const res = await DreamDiaryPreview(data)
-      console.log(res)
 
       if (res.status === 200) {
         navigation('/dreamdiaries/preview',
          { state: {dreamDiary: res.data.dreamDiary, diaryOgp: res.data.diaryOgp} })
 
-      } else {
-        setAlertMessageOpen(true)
       }
     } catch (err) {
-      setAlertMessageOpen(true)
+      setAlertMsg("記入内容を確認してください。")
+      setAlertOpen(true)
     }
     setFormLoading(false)
   }
@@ -329,12 +331,18 @@ const DreamDiaryForm: React.FC = () => {
           </CardContent>
         </Card>
       </form>
-      <AlertMessage // エラーが発生した場合はアラートを表示
-        open={alertMessageOpen}
-        setOpen={setAlertMessageOpen}
-        severity="error"
-        message="記入内容を確かめてください。"
-      />
+        <AlertMessage
+          open={alertOpen}
+          setOpen={setAlertOpen}
+          severity="error"
+          message={alertMsg}
+        />
+        <AlertMessage
+          open={successOpen}
+          setOpen={setSuccessOpen}
+          severity="success"
+          message={successMsg}
+        />
     </>
   )
 }

@@ -20,6 +20,15 @@ const DreamDiaries: React.FC = () => {
   const [dreamDiaries, setDreamDiaries] = useState<DreamDiary[]>([])
   const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(location.state)
 
+  const [successOpen, setSuccessOpen]
+   = useState<boolean>(location.state ? (location.state.successOpen) : (false))
+  const [successMsg, setSuccessMsg]
+   = useState<string>(location.state ? (location.state.successMsg) : (""))
+  const [alertOpen, setAlertOpen]
+   = useState<boolean>(location.state ? (location.state.alertOpen) : (false))
+  const [alertMsg, setAlertMsg]
+   = useState<string>(location.state ? (location.state.alertMsg) : (""))
+
   const [offset, setOffset] = useState<number>(0)
   const perPage = 18
   const currentDreamDiaries = dreamDiaries.slice(offset, offset + perPage)
@@ -97,6 +106,18 @@ const DreamDiaries: React.FC = () => {
         setOpen={setAlertMessageOpen}
         severity="success"
         message="日記を削除しました。"
+      />
+      <AlertMessage
+        open={alertOpen}
+        setOpen={setAlertOpen}
+        severity="error"
+        message={alertMsg}
+      />
+      <AlertMessage
+        open={successOpen}
+        setOpen={setSuccessOpen}
+        severity="success"
+        message={successMsg}
       />
     </>
   )

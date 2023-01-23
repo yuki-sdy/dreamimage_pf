@@ -40,7 +40,6 @@ const Header: React.FC = () => {
   const { loading, isSignedIn, currentUser } = useContext(AuthContext)
   const classes = useStyles();
   const location = useLocation()
-  console.log(location.pathname)
 
   const HeaderImage = () => {
     if (location.pathname === "/privacy_policy") {
@@ -53,7 +52,7 @@ const Header: React.FC = () => {
       )
     }
   }
-  
+
   const AuthButtons = () => {
     // 認証完了後はサインアウト用のボタンを表示
     // 未認証時は認証用のボタンを表示

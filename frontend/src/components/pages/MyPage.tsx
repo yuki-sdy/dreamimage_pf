@@ -61,7 +61,14 @@ const MyPage: React.FC = () => {
   const [myDiaries, setMyDiaries] = useState<DreamDiary[]>([])
   const [bookmarkDiaries, setBookmarkDiaries] = useState<Bookmark[]>([])
 
-  const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(location.state)
+  const [successOpen, setSuccessOpen]
+   = useState<boolean>(location.state ? (location.state.successOpen) : (false))
+  const [successMsg, setSuccessMsg]
+   = useState<string>(location.state ? (location.state.successMsg) : (""))
+  const [alertOpen, setAlertOpen]
+   = useState<boolean>(location.state ? (location.state.alertOpen) : (false))
+  const [alertMsg, setAlertMsg]
+   = useState<string>(location.state ? (location.state.alertMsg) : (""))
 
   const [offset, setOffset] = useState<number>(0)
   const perPage = 18
@@ -116,8 +123,6 @@ const MyPage: React.FC = () => {
       const diaries :DreamDiary[] = bookmarkDiaries.map(x => x.dreamDiary)
       setDreamDiaries(diaries)
     }
-    console.log(myDiaries)
-    console.log(bookmarkDiaries)
   }
 
   return(
@@ -232,11 +237,17 @@ const MyPage: React.FC = () => {
         </Box>
         )
       }
-      <AlertMessage // 削除後のフラッシュ
-        open={alertMessageOpen}
-        setOpen={setAlertMessageOpen}
+      <AlertMessage
+        open={alertOpen}
+        setOpen={setAlertOpen}
+        severity="error"
+        message={alertMsg}
+      />
+      <AlertMessage
+        open={successOpen}
+        setOpen={setSuccessOpen}
         severity="success"
-        message="日記を削除しました。"
+        message={successMsg}
       />
     </>
   )

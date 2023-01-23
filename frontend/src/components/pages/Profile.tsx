@@ -58,9 +58,11 @@ const Profile: React.FC = () => {
   const [image, setImage] = useState<string>("")
   const [preview, setPreview] = useState<string>("")
 
-  const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false)
-  const [message, setMessage] = useState<string>("更新しました")
-  const [severity, setSeverity] = useState<"error" | "success" | "info" | "warning">("success")
+  const [successOpen, setSuccessOpen] = useState<boolean>(false)
+  const [successMsg, setSuccessMsg] = useState<string>("")
+  const [alertOpen, setAlertOpen] = useState<boolean>(false)
+  const [alertMsg, setAlertMsg] = useState<string>("")
+
 
     // アップロードした画像の情報を取得
     const uploadImage = useCallback((e :any) => {
@@ -95,13 +97,16 @@ const Profile: React.FC = () => {
       if (res.status === 200) {
         setEditFormOpen(false)
         setCurrentUser(res.data.user)
-        
-      } else {
 
+        setSuccessMsg("プロフィールを更新しました。")
+        setSuccessOpen(true)
+      } else {
+        setAlertMsg("内容を確かめてください。")
+        setAlertOpen(true)
       }
     } catch (err) {
-      console.log(err)
-      console.log("Failed in updating user!")
+      setAlertMsg("しばらく経ってからもう一度お試しください。")
+      setAlertOpen(true)
     }
   }
 
@@ -324,12 +329,18 @@ const Profile: React.FC = () => {
                 </DialogActions>
               </Dialog>
             </form>
-            <AlertMessage // 作成や更新後のフラッシュ
-            open={alertMessageOpen}
-            setOpen={setAlertMessageOpen}
-            severity={severity}
-            message={message}
-          />
+            <AlertMessage
+              open={alertOpen}
+              setOpen={setAlertOpen}
+              severity="error"
+              message={alertMsg}
+            />
+            <AlertMessage
+              open={successOpen}
+              setOpen={setSuccessOpen}
+              severity="success"
+              message={successMsg}
+            />
           </>
           )
         ) : (

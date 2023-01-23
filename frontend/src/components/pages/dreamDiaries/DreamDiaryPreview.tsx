@@ -4,8 +4,8 @@ import { useLocation, useNavigate } from "react-router-dom"
 
 import { DreamDiaryFormData } from "../../../interfaces"
 import { DreamDiaryBack, DreamDiaryCreate, DreamDiaryUpdate } from "../../../lib/api/dreamdiaries"
-import { dream_types, impressions } from "../../../data/dreamdiaryEnums"
 import { AuthContext } from "../../../App"
+import AlertMessage from "../../utils/AlertMessage"
 
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -34,32 +34,18 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const DreamDiaryPreview: React.FC = () => {
   const classes = useStyles()
-  const { currentUser, setAlertMessageOpen } = useContext(AuthContext)
+  const navigation = useNavigate()
   const location = useLocation()
+  const { currentUser } = useContext(AuthContext)
+
   const [dreamDiaryForm, setDreamDiaryForm] = useState<DreamDiaryFormData>(location.state.dreamDiary)
   const [userId, setUserId] = useState<number | undefined>(location.state.dreamDiary.userId)
-  const [title, setTitle] = useState<string>(location.state.dreamDiary.title)
-  const [body, setBody] = useState<string>(location.state.dreamDiary.body)
-  const [content, setContent] = useState<string>(location.state.dreamDiary.content)
-  const [prompt, setPrompt] = useState<string>(location.state.dreamDiary.prompt)
-  const [state, setState] = useState<number>(location.state.dreamDiary.state)
-  const [impression, setImpression] = useState<number>(location.state.dreamDiary.impression)
-  const [dreamType, setDreamType] = useState<number>(location.state.dreamDiary.dreamType)
-  const [dreamDate, setDreamDate] = useState<Date | null>(location.state.dreamDiary.dreamDate)
-  const [image, setImage] = useState<string>(location.state.dreamDiary.image)
 
   const [paramsId, setParamsId] = useState<Number>(location.state.dreamDiaryId)
   const [diaryOgp, setDiaryOgp] = useState<string>(location.state.diaryOgp)
-  
-  const navigation = useNavigate()
 
-  const diaryImpression = (): string => {
-    return impressions[Number(impression)]
-  }
-
-  const diaryDreamType = (): string => {
-    return dream_types[Number(dreamType)]
-  }
+  const [alertOpen, setAlertOpen] = useState<boolean>(false)
+  const [alertMsg, setAlertMsg] = useState<string>("")
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
@@ -67,27 +53,27 @@ const DreamDiaryPreview: React.FC = () => {
     try {
       if (paramsId) {
         if (currentUser?.id !== userId) {
-          navigation('/dreamdiaries')
+          navigation('/dreamdiaries',
+          {state: {alertOpen: true, alertMsg: "権限がありません。"}})
+        }else{
+          const res = await DreamDiaryUpdate(Number(paramsId), dreamDiaryForm, String(diaryOgp))
+          
+          if (res.status === 200) {
+            navigation(`/dreamdiaries/${paramsId}`,
+            {state: {successOpen: true, successMsg: "日記を更新しました！"}})
+          }
         }
-        const res = await DreamDiaryUpdate(Number(paramsId), dreamDiaryForm, String(diaryOgp))
-        
-        if (res.status === 200) {
-          navigation(`/dreamdiaries/${paramsId}`,
-          { state: true })
-        }
-        
       } else {
          const res = await DreamDiaryCreate(dreamDiaryForm, String(diaryOgp))
    
          if (res.status === 200) {
            navigation(`/dreamdiaries/${res.data.id}`,
-           { state: 'success'  })
-           setAlertMessageOpen(true)
-           
+           {state: {successOpen: true, successMsg: "日記を作成しました！"}})
          }
        }
     } catch (err) {
-      console.log(err)
+      setAlertMsg("内容を確かめてください。")
+      setAlertOpen(true)
     }
   }
 
@@ -135,9 +121,15 @@ const DreamDiaryPreview: React.FC = () => {
           onClick={handleSubmit}
           style={{marginLeft: "80px"}}
         >
-        この内容で作成する
+        { paramsId ? ("この内容で更新する"):("この内容で作成する") }
         </Button>
       </div>
+      <AlertMessage
+        open={alertOpen}
+        setOpen={setAlertOpen}
+        severity="error"
+        message={alertMsg}
+      />
     </>
   )
 }

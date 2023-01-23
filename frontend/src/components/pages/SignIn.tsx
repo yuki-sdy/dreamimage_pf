@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react"
-import { useNavigate, Link } from "react-router-dom"
+import { useNavigate, Link, useLocation } from "react-router-dom"
 import Cookies from "js-cookie"
 
 import { makeStyles, Theme } from "@material-ui/core/styles"
@@ -43,12 +43,21 @@ const useStyles = makeStyles((theme: Theme) => ({
 const SignIn: React.FC = () => {
   const classes = useStyles()
   const navigation = useNavigate()
+  const location = useLocation()
 
   const { setIsSignedIn, setCurrentUser } = useContext(AuthContext)
 
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
-  const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false)
+
+  const [successOpen, setSuccessOpen]
+   = useState<boolean>(location.state ? (location.state.successOpen) : (false))
+  const [successMsg, setSuccessMsg]
+   = useState<string>(location.state ? (location.state.successMsg) : (""))
+  const [alertOpen, setAlertOpen]
+   = useState<boolean>(location.state ? (location.state.alertOpen) : (false))
+  const [alertMsg, setAlertMsg]
+   = useState<string>(location.state ? (location.state.alertMsg) : (""))
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
@@ -71,17 +80,15 @@ const SignIn: React.FC = () => {
         setIsSignedIn(true)
         setCurrentUser(res.data.data)
 
-        navigation("/mypage")
-        setAlertMessageOpen(true)
-
-        console.log("Signed in successfully!")
+        navigation("/mypage", 
+        {state: {successOpen: true, successMsg: "ログインしました！"}})
       } else {
-        setAlertMessageOpen(true)
+        setAlertMsg("メールアドレスかパスワードを確かめてください。")
+        setAlertOpen(true)
       }
     } catch (err) {
-      console.log(err)
-      setAlertMessageOpen(true)
-      console.log('呼ばれる')
+      setAlertMsg("しばらく経ってからログインしてください。")
+      setAlertOpen(true)
     }
   }
 
@@ -135,11 +142,17 @@ const SignIn: React.FC = () => {
           </CardContent>
         </Card>
       </form>
-      <AlertMessage // エラーが発生した場合はアラートを表示
-        open={alertMessageOpen}
-        setOpen={setAlertMessageOpen}
+      <AlertMessage
+        open={alertOpen}
+        setOpen={setAlertOpen}
         severity="error"
-        message="メールアドレスかパスワードが間違っています"
+        message={alertMsg}
+      />
+      <AlertMessage
+        open={successOpen}
+        setOpen={setSuccessOpen}
+        severity="success"
+        message={successMsg}
       />
     </>
   )

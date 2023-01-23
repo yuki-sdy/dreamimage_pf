@@ -29,18 +29,12 @@ export const AuthContext = createContext({} as {
   setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>>
   currentUser: User | undefined
   setCurrentUser: React.Dispatch<React.SetStateAction<User | undefined>>
-  alertMessageOpen: boolean
-  setAlertMessageOpen: React.Dispatch<React.SetStateAction<boolean>>
-  alertMessage: string
-  setAlertMessage: React.Dispatch<React.SetStateAction<string>>
 })
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true)
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false)
   const [currentUser, setCurrentUser] = useState<User | undefined>()
-  const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false)
-  const [alertMessage, setAlertMessage] = useState<string>("")
 
   // 認証済みのユーザーがいるかどうかチェック
   // 確認できた場合はそのユーザーの情報を取得
@@ -86,7 +80,7 @@ const App: React.FC = () => {
 
   return (
     <Router>
-      <AuthContext.Provider value={{ loading, setLoading, isSignedIn, setIsSignedIn, currentUser, setCurrentUser, alertMessage, setAlertMessage, alertMessageOpen, setAlertMessageOpen}}>
+      <AuthContext.Provider value={{ loading, setLoading, isSignedIn, setIsSignedIn, currentUser, setCurrentUser}}>
         <CommonLayout>
           <Routes>
             <Route path="/" element={<Home />} />

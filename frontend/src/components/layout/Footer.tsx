@@ -8,7 +8,6 @@ import { AuthContext } from "../../App"
 import { deleteAccount } from "../../lib/api/users"
 import CommonDialog from "../utils/CommonDialog"
 
-
 const useStyles = makeStyles((theme: Theme) => ({
   iconButton: {
     marginRight: theme.spacing(2),
@@ -40,10 +39,13 @@ const Footer: React.FC = () => {
   const navigation = useNavigate()
   const [dlgOpen, setDlgOpen] = useState<boolean>(false)
 
+  const [alertOpen, setAlertOpen] = useState<boolean>(false)
+  const [alertMsg, setAlertMsg] = useState<string>("")
+
     //退会処理
     const handleDeleteAccount = async (e: React.MouseEvent<HTMLButtonElement>) => {
+      setDlgOpen(false)
       const res = await deleteAccount(currentUser?.id)
-      console.log(res)
   
       if (res.data.status === 200) {
         // アカウント削除時には各Cookieを削除
@@ -53,16 +55,16 @@ const Footer: React.FC = () => {
   
         setIsSignedIn(false)
         setCurrentUser(undefined)
-        navigation("/")
-  
-        console.log("Succeeded in delete account")
+        navigation("/",
+        {state: {successOpen: true, successMsg: "アカウントを削除しました。"}})
       } else {
-        console.log("Failed in delete account")
+        setAlertMsg("アカウント削除ができませんでした。")
+        setAlertOpen(true)
       }
-  
       try {
       } catch (err) {
-        console.log(err)
+        setAlertMsg("しばらく経ってからもう一度お試しください。")
+        setAlertOpen(true)
       }
     }
 
@@ -132,7 +134,7 @@ const Footer: React.FC = () => {
       </Typography>
     </div>
     <CommonDialog // 削除確認ダイアログ
-      message={`「はい」を選ぶと当アカウントの削除が実行されます。実行後の復元はできませんが、本当によろしいですか？`}
+      message={`「はい」を選ぶとこのアカウントの削除を実行します。\n実行後のユーザー情報復元はできませんので、ご注意ください。\n※実行後、投稿した日記やいいね等のデータは残ります。\n 削除をご希望される場合は、お問合せフォームよりご連絡ください。\n\n本当によろしいですか？`}
       open={dlgOpen}
       setOpen={setDlgOpen}
       doYes={handleDeleteAccount}

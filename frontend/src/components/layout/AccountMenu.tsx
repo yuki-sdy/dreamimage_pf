@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { AuthContext } from "../../App"
 import Cookies from "js-cookie"
 import { signOut } from "../../lib/api/auth"
+import AlertMessage from "../utils/AlertMessage"
 
 const useStyles = makeStyles((theme: Theme) => ({
   box: {
@@ -35,7 +36,10 @@ const useStyles = makeStyles((theme: Theme) => ({
 const AccountMenu: React.FC = () => {
   const classes = useStyles()
   const { setIsSignedIn, currentUser, setCurrentUser } = useContext(AuthContext)
-  const navigation = useNavigate();
+  const navigation = useNavigate()
+
+  const [alertOpen, setAlertOpen] = useState<boolean>(false)
+  const [alertMsg, setAlertMsg] = useState<string>("")
 
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
@@ -59,12 +63,14 @@ const AccountMenu: React.FC = () => {
         Cookies.remove("_uid")
 
         setIsSignedIn(false)
-        navigation("/signin")
+        navigation("/signin",
+        {state: {successOpen: true, successMsg: "ログアウトしました。"}})
+ 
         setCurrentUser(void(undefined))
-
-        console.log("Succeeded in sign out")
+         
       } else {
-        console.log("Failed in sign out")
+        setAlertMsg("ログアウトできません。")
+        setAlertOpen(true)
       }
     } catch (err) {
       console.log(err)
@@ -143,6 +149,12 @@ const AccountMenu: React.FC = () => {
           )
         }
       </Menu>
+      <AlertMessage
+        open={alertOpen}
+        setOpen={setAlertOpen}
+        severity="error"
+        message={alertMsg}
+      />
     </>
   )
 }
