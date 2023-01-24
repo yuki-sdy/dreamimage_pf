@@ -37,7 +37,6 @@ const DreamDiaries: React.FC = () => {
   const handleDreamDiaries = async () => {
     try {
       const res = await getDreamDiaries()
-      console.log(res.data)
 
       if (res.status === 200) {
         setDreamDiaries(res.data)
