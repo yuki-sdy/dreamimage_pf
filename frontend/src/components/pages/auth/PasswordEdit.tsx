@@ -1,6 +1,5 @@
-import React, { useState, useContext, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
-import Cookies from "js-cookie"
+import React, { useState, useContext } from "react"
+import { useNavigate, Link, useLocation } from "react-router-dom"
 
 import { makeStyles, Theme } from "@material-ui/core/styles"
 import TextField from "@material-ui/core/TextField"
@@ -8,12 +7,10 @@ import Card from "@material-ui/core/Card"
 import CardContent from "@material-ui/core/CardContent"
 import CardHeader from "@material-ui/core/CardHeader"
 import Button from "@material-ui/core/Button"
-
-
-import { AuthContext } from "../../App"
-import AlertMessage from "../utils/AlertMessage"
-import { signUp } from "../../lib/api/auth"
-import { SignUpData } from "../../interfaces"
+import Box from "@material-ui/core/Box"
+import AlertMessage from "../../utils/AlertMessage"
+import { PasswordUpdateData } from "../../../interfaces"
+import { passwordUpdate } from "../../../lib/api/auth"
 
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -29,56 +26,50 @@ const useStyles = makeStyles((theme: Theme) => ({
   card: {
     padding: theme.spacing(2),
     maxWidth: 400
+  },
+  box: {
+    paddingTop: "2rem"
+  },
+  link: {
+    textDecoration: "none"
   }
 }))
 
-// サインアップ用ページ
-const SignUp: React.FC = () => {
+const PasswordEdit: React.FC = () => {
   const classes = useStyles()
+  const location = useLocation()
   const navigation = useNavigate()
 
-  const { setIsSignedIn, setCurrentUser, currentUser } = useContext(AuthContext)
-
-  const [name, setName] = useState<string>("")
-  const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
   const [passwordConfirmation, setPasswordConfirmation] = useState<string>("")
 
+  const [successOpen, setSuccessOpen] = useState<boolean>(false)
+  const [successMsg, setSuccessMsg] = useState<string>("")
   const [alertOpen, setAlertOpen] = useState<boolean>(false)
   const [alertMsg, setAlertMsg] = useState<string>("")
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
 
-    const data: SignUpData = {
-      name: name,
-      email: email,
+    const data: PasswordUpdateData = {
       password: password,
       passwordConfirmation: passwordConfirmation,
-
+      resetPasswordToken: location.search.slice(7)
     }
 
     try {
-      const res = await signUp(data, currentUser?.id)
-      console.log(res)
+      const query = new URLSearchParams(location.search)
+      const res = await passwordUpdate(data, query)
 
       if (res.status === 200) {
-        // アカウント作成と同時にサインインさせてしまう
-        Cookies.set("_access_token", res.headers["access-token"] || "") 
-        Cookies.set("_client", res.headers["client"] || "") 
-        Cookies.set("_uid", res.headers["uid"] || "") 
-
-        setIsSignedIn(true)
-        setCurrentUser(res.data.data)
-
-        navigation("/",
-        {state: {successOpen: true, successMsg: `ようこそ、${res.data.data.name}さん！`}})
+        navigation("/signin", 
+        {state: {successOpen: true, successMsg: "パスワードを変更しました！"}})
       } else {
-        setAlertMsg("メールアドレスかパスワードを確かめてください。")
+        setAlertMsg("記入内容を確認してください。")
         setAlertOpen(true)
       }
     } catch (err) {
-      setAlertMsg("しばらく経ってからもう一度お試しください。")
+      setAlertMsg("記入内容を確認してください。")
       setAlertOpen(true)
     }
   }
@@ -87,27 +78,9 @@ const SignUp: React.FC = () => {
     <>
       <form noValidate autoComplete="off">
         <Card className={classes.card}>
-          <CardHeader className={classes.header} title="新規登録" />
+          <CardHeader className={classes.header} title="パスワードリセット" />
           <CardContent>
-            <TextField
-              variant="outlined"
-              required
-              fullWidth
-              label="名前"
-              value={name}
-              margin="dense"
-              onChange={event => setName(event.target.value)}
-            />
-            <TextField
-              variant="outlined"
-              required
-              fullWidth
-              label="メールアドレス"
-              value={email}
-              margin="dense"
-              onChange={event => setEmail(event.target.value)}
-            />
-            <TextField
+          <TextField
               variant="outlined"
               required
               fullWidth
@@ -129,17 +102,17 @@ const SignUp: React.FC = () => {
               autoComplete="current-password"
               onChange={event => setPasswordConfirmation(event.target.value)}
             />
-            <div className={classes.submitBtn}>
+            <Box className={classes.submitBtn} >
               <Button
                 type="submit"
                 variant="outlined"
                 color="primary"
-                disabled={!name || !email || !password || !passwordConfirmation ? true : false}
+                disabled={!password || !passwordConfirmation ? true : false}
                 onClick={handleSubmit}
               >
                 送信
               </Button>
-            </div>
+            </Box>
           </CardContent>
         </Card>
       </form>
@@ -149,8 +122,14 @@ const SignUp: React.FC = () => {
         severity="error"
         message={alertMsg}
       />
+      <AlertMessage
+        open={successOpen}
+        setOpen={setSuccessOpen}
+        severity="success"
+        message={successMsg}
+      />
     </>
   )
 }
 
-export default SignUp
+export default PasswordEdit

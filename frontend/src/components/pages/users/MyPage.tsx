@@ -1,17 +1,17 @@
 import React, { useContext, useEffect, useState } from "react"
 import { makeStyles, Theme } from "@material-ui/core/styles"
 
-import { AuthContext } from "../../App"
+import { AuthContext } from "../../../App"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { Button, Grid, Tabs, Tab, Typography, Box, Avatar, Divider } from "@material-ui/core"
 import CreateIcon from "@material-ui/icons/Create"
 import CircularProgress from '@material-ui/core/CircularProgress'
-import CardComp from "./dreamDiaries/organisms/CardComp"
-import AlertMessage from "../utils/AlertMessage"
-import { DreamDiary, Bookmark } from "../../interfaces"
-import { getMypage } from "../../lib/api/mypages"
+import CardComp from "../dreamDiaries/organisms/CardComp"
+import AlertMessage from "../../utils/AlertMessage"
+import { DreamDiary, Bookmark } from "../../../interfaces"
+import { getMypage } from "../../../lib/api/mypages"
 import { Alert } from "@material-ui/lab"
-import Pagenation from "./dreamDiaries/organisms/Pagenation"
+import Pagenation from "../dreamDiaries/organisms/Pagenation"
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconButton: {
