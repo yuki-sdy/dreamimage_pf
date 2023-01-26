@@ -1,5 +1,6 @@
-import { Avatar, Box, Button, Card, CardContent, CardHeader, Divider, Grid, IconButton, makeStyles, TextField, Theme, Typography } from "@material-ui/core"
+import { Avatar, Box, Button, Divider, Grid, IconButton, makeStyles, TextField, Theme, Typography } from "@material-ui/core"
 import React, { useContext, useEffect, useState } from "react"
+import { Helmet } from "react-helmet"
 import { Link, useLocation } from "react-router-dom"
 import { useNavigate, useParams } from "react-router-dom"
 
@@ -260,6 +261,17 @@ const DreamDiaryShow: React.FC = () => {
 
   return (
     <>
+      <Helmet>
+        <title>{dreamDiary?.title}</title>
+        <meta
+          name="description"
+          content={dreamDiary?.content}
+        />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta property="og:title" content={dreamDiary?.title} />
+        <meta property="og:description" content={dreamDiary?.content} />
+        <meta property="og:image" content={`http://localhost:3010/api/v1/dream_diaries/${dreamDiary?.id}/images`} />
+      </Helmet>
      {
         !loading ? (
           <>

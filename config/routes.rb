@@ -12,7 +12,9 @@ Rails.application.routes.draw do
         resources :bookmarks, only: %i[create destroy]
         resources :comments, only: %i[create destroy]
       end
+
       post 'images/create'
+      get 'dream_diaries/:dream_diary_id/images', to: 'images#ogp', as: 'images_ogp'
 
       mount_devise_token_auth_for 'User', at: 'auth', controllers: {
         registrations: 'api/v1/auth/registrations',
