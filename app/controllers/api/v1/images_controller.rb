@@ -21,6 +21,16 @@ class Api::V1::ImagesController < ApplicationController
     end
   end
 
+  def ogp
+    dream_diary = DreamDiary.find(params[:dream_diary_id])
+    image = OgpCreator.build(
+      dream_diary.title, dream_diary.body, dream_diary.content, 
+      dream_diary.prompt, dream_diary.image, 
+      dream_diary.impression, dream_diary.dream_type, dream_diary.dream_date
+      ).tempfile.open.read
+    send_data image, :type => 'image/png',:disposition => 'inline'
+  end
+
   private
   
   def image_params
@@ -55,8 +65,10 @@ class Api::V1::ImagesController < ApplicationController
   end
 
   def checked_box(current_user)
-    if current_user.image_boxes.find_by(created_at: Time.zone.now.all_day).present?
-      current_box = current_user.image_boxes.find_by(created_at: Time.zone.now.all_day)
+    current_user.image_boxes.destroy_by('created_at < ?', Time.zone.now.midnight) if current_user.image_boxes.pasts.present?
+
+    if current_user.image_boxes.today_box.present?
+      current_box = current_user.image_boxes.today_box
     else
       current_box = current_user.is_guest? ? 
       current_user.image_boxes.create!(user_type: 0)
