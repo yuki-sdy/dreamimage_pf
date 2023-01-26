@@ -11,6 +11,16 @@ import CardComp from "./organisms/CardComp"
 import Pagenation from "./organisms/Pagenation"
 
 const useStyles = makeStyles((theme: Theme) => ({
+  title: {
+    textAlign: "center",
+    margin: "1.5rem"
+  },
+  titleSize: {
+    width: "500px"
+  },
+  container: {
+    minWidth: "1300px"
+  }
 }))
 
 const DreamDiaries: React.FC = () => {
@@ -60,10 +70,10 @@ const DreamDiaries: React.FC = () => {
         !loading ? (
           dreamDiaries.length > 0 ? (
             <>
-            <div style={{textAlign: "center", margin: "1.5rem"}}>
-            <img src={TitleImage} style={{width: "500px"}}/>
+            <div className={classes.title}>
+              <img src={ TitleImage } className={classes.titleSize}/>
             </div>
-            <Grid container style={{minWidth: "1200px"}}>
+            <Grid container className={classes.container}>
             {
             currentDreamDiaries.map((dreamDiary: DreamDiary, index: number) => {
               return (

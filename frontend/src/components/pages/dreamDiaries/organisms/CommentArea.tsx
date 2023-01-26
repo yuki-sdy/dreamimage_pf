@@ -23,11 +23,6 @@ export interface CommentInfoProps {
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
-  submitBtn: {
-    marginTop: theme.spacing(1),
-    flexGrow: 1,
-    textTransform: "none"
-  },
   avatar: {
     width: theme.spacing(5),
     height: theme.spacing(5),
@@ -35,6 +30,15 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   button: {
     float: "right"
+  },
+  grid: {
+    width:"100%",
+    alignItems: "center"
+  },
+  createdAtTypography: {
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap"
   }
 }))
 
@@ -78,7 +82,7 @@ const CommentArea = ({ index, body, createdAt, userId, userName, userImage, drea
 
   return (
     <>
-      <Grid container style={{width:"100%", alignItems: "center"}}>
+      <Grid container className={classes.grid}>
         <Avatar
           alt="avatar"
           src={userImage}
@@ -94,7 +98,7 @@ const CommentArea = ({ index, body, createdAt, userId, userName, userImage, drea
       </Typography>
       </Grid>
       <Grid item style={{width:"100%", textAlign: "right"}}>
-      <Typography variant="body2" color="textSecondary" style={{overflow: "hidden",textOverflow: "ellipsis", whiteSpace: "nowrap"}}>
+      <Typography variant="body2" color="textSecondary" className={classes.createdAtTypography}>
         {createdDateTime(createdAt)}
       </Typography>
       {

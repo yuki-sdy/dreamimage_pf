@@ -34,20 +34,23 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   card: {
     padding: theme.spacing(2),
-    boxShadow: "none"
+    boxShadow: "none",
+    width: "230px",
+    height:"335px",
+    alignItems:"center",
+    background:"rgba(0, 0, 0, 0)",
   },
-  inputFileButton: {
-    textTransform: "none",
-    color: theme.palette.primary.main
+  content: {
+    display: "flex",
+    flexDirection: "column"
   },
-  imageUploadBtn: {
-    textAlign: "right"
+  media: {
+    textAlign: "center",
+    paddingBottom: "10px",
+    width: "100%"
   },
-  input: {
-    display: "none"
-  },
-  box: {
-    marginBottom: "1.5rem"
+  image: {
+    borderRadius: "20px"
   },
   link: {
     textDecoration: "none",
@@ -58,6 +61,19 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: theme.spacing(5),
     marginRight: "8px"
   },
+  contentTypography: {
+    fontSize: "17px",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    display: "-webkit-box",
+    WebkitLineClamp: 2,
+    WebkitBoxOrient: "vertical",
+    width: "150px"
+  },
+  icon: {
+    width: "16px",
+    lineHeight: "16px"
+  }
 }))
 
 const CardComp = ({ image, title, content, dreamDate, impression, dreamType, id, userName, userImage, likeCount, commentCount}: CardInfoProps) => {
@@ -74,44 +90,44 @@ const CardComp = ({ image, title, content, dreamDate, impression, dreamType, id,
   return (
     <div className="product-card-top">
       <Link to={`/dreamdiaries/${id}`} className={classes.link}>
-      <Card className={classes.card} style={{minWidth: "230px", width: "180px", height:"320px", margin: "10px", background:"rgba(0, 0, 0, 0)", paddingTop: 0}}>
-              <CardContent style={{display: "flex", flexDirection: "column"}}>
-                <CardMedia style={{textAlign: "center", paddingBottom: "10px", width: "100%"}}>
-                  <img src={image} width={"90%"} style={{borderRadius: "20px"}}/>
-                </CardMedia>
-                <div style={{display: "flex"}}>
-                <Avatar
-                      alt="avatar"
-                      src={userImage}
-                      className={classes.avatar}
-                    />
-                  <div>
-                  <Typography variant="h1" component="div" style={{fontSize: "17px", overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box",WebkitLineClamp: 2, WebkitBoxOrient: "vertical", width: "150px"}}>
-                      {title}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" style={{overflow: "hidden",textOverflow: "ellipsis", whiteSpace: "nowrap", width: "150px"}}>
-                      {userName}
-                  </Typography>
-                  </div>
-                </div>
-                  <div style={{paddingTop: "3px"}}>
-                  <Typography variant="body2" color="textSecondary" style={{overflow: "hidden",textOverflow: "ellipsis", whiteSpace: "nowrap", width: "190px"}}>
-                      {content}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" component="div">
-                      {`${diaryImpression(impression)}・${dreamDate}(${diaryDreamType(dreamType)}) `}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" component="div" style={{float: "right"}}>
-                      <FavoriteIcon style={{width: "16px", lineHeight: "16px"}}/>{`${likeCount}　`}
-                      <ChatBubbleIcon style={{width: "16px", lineHeight: "16px"}}/>{`${commentCount}　`}
-                  </Typography>
-                  </div>
-              </CardContent>
+      <Card className={classes.card} style={{padding: 0}}>
+        <CardContent className={classes.content}>
+          <CardMedia className={classes.media}>
+            <img src={image} width={"90%"} className={classes.image}/>
+          </CardMedia>
+          <div style={{display: "flex"}}>
+          <Avatar
+                alt="avatar"
+                src={userImage}
+                className={classes.avatar}
+              />
+            <div>
+            <Typography variant="h1" component="div" style={{fontSize: "17px", overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box",WebkitLineClamp: 2, WebkitBoxOrient: "vertical", width: "150px"}}>
+                {title}
+            </Typography>
+            <Typography variant="body2" color="textSecondary" style={{overflow: "hidden",textOverflow: "ellipsis", whiteSpace: "nowrap", width: "150px"}}>
+                {userName}
+            </Typography>
+            </div>
+          </div>
+            <div style={{paddingTop: "3px"}}>
+            <Typography variant="body2" color="textSecondary" className={classes.contentTypography}>
+              {content}
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="div">
+                {`${diaryImpression(impression)}・${dreamDate}(${diaryDreamType(dreamType)}) `}
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="div" style={{float: "right"}}>
+                <FavoriteIcon className={classes.icon}/>
+                  {`${likeCount}　`}
+                <ChatBubbleIcon className={classes.icon}/>
+                  {`${commentCount}　`}
+            </Typography>
+            </div>
+        </CardContent>
       </Card>
       </Link>
     </div>
   )
-
-
 }
 export default CardComp
