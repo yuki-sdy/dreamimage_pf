@@ -9,5 +9,5 @@ const options = {
 
 export const client = applyCaseMiddleware(axios.create({
   // baseURL: "http://localhost:3010/api/v1"
-  baseURL: "https://dreamdiary.magia.runteq.jp/api/v1"
+  baseURL: process.env.REACT_APP_HOST
 }), options)
