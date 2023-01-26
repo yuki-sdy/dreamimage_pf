@@ -270,7 +270,8 @@ const DreamDiaryShow: React.FC = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta property="og:title" content={dreamDiary?.title} />
         <meta property="og:description" content={dreamDiary?.content} />
-        <meta property="og:image" content={`http://localhost:3010/api/v1/dream_diaries/${dreamDiary?.id}/images`} />
+        {/* <meta property="og:image" content={`http://localhost:3010/api/v1/dream_diaries/${dreamDiary?.id}/images`} /> */}
+        <meta property="og:image" content={`${process.env.REACT_APP_HOST}/dream_diaries/${dreamDiary?.id}/images`} />
       </Helmet>
      {
         !loading ? (
