@@ -10,14 +10,13 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { dream_types, impressions } from "../../../data/dreamdiaryEnums"
 import DateFnsUtils from "@date-io/date-fns"
 import CancelIcon from "@material-ui/icons/Cancel"
+import KiraKira from '../../images/kirakira.png'
 import { AuthContext } from "../../../App"
 
 import FormTitleImage from "../../../images/formtitle.png"
+import { useMediaQueryContext } from "../../provider/MediaQueryPrivider"
 
 const useStyles = makeStyles((theme: Theme) => ({
-  container: {
-    marginTop: theme.spacing(6)
-  },
   submitBtn: {
     marginTop: theme.spacing(1),
     flexGrow: 1,
@@ -25,6 +24,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   header: {
     width: "50%",
+  },
+  mHeader: {
+    width: "90%",
   },
   card: {
     padding: theme.spacing(2),
@@ -47,6 +49,7 @@ const DreamDiaryForm: React.FC = () => {
   const navigation = useNavigate()
   const location = useLocation()
   const { currentUser } = useContext(AuthContext)
+  const { isMobileSite, isPcSite } = useMediaQueryContext()
 
   const [title, setTitle] = useState<string>("")
   const [body, setBody] = useState<string>("")
@@ -133,7 +136,7 @@ const DreamDiaryForm: React.FC = () => {
     <>
       <form noValidate autoComplete="off">
         <div style={{textAlign: "center"}}>
-          <img src={ FormTitleImage } className={classes.header} />
+          <img src={ FormTitleImage } className={isPcSite ? (classes.header) : (classes.mHeader)} />
         </div>
         <Card className={classes.card}>
           <CardContent>
@@ -280,7 +283,7 @@ const DreamDiaryForm: React.FC = () => {
                     fullWidth
                     multiline
                     rows={2}
-                    label="この日記に対するコメントをください！(80字)"
+                    label="この日記に対するコメント(80字)"
                     placeholder="80文字以内で書いてください。"
                     inputProps={{ maxLength: 80 }}
                     value={content}

@@ -6,29 +6,36 @@ import { DreamDiaryFormData } from "../../../interfaces"
 import { DreamDiaryBack, DreamDiaryCreate, DreamDiaryUpdate } from "../../../lib/api/dreamdiaries"
 import { AuthContext } from "../../../App"
 import AlertMessage from "../../utils/AlertMessage"
+import { useMediaQueryContext } from "../../provider/MediaQueryPrivider"
 
 
 const useStyles = makeStyles((theme: Theme) => ({
-  linkBtn: {
-    textTransform: "none"
-  },
-  link: {
-    textDecoration: "none",
-    color: "inherit"
-  },
   preview: {
     width: "65%"
+  },
+  mPreview: {
+    width: "90%"
   },
   text: {
     textAlign: "center",
     paddingTop: "20px",
     fontSize: "20px"
   },
+  mText: {
+    textAlign: "center",
+    fontSize: "16px"
+  },
   submitBtn: {
     paddingTop: theme.spacing(2),
     textAlign: "center",
     flexGrow: 1,
     textTransform: "none"
+  },
+  mSubmitBtn: {
+    paddingTop: theme.spacing(2),
+    display: "flex",
+    justifyContent: "center",
+    gap: "8px"
   },
 }))
 
@@ -37,6 +44,7 @@ const DreamDiaryPreview: React.FC = () => {
   const navigation = useNavigate()
   const location = useLocation()
   const { currentUser } = useContext(AuthContext)
+  const { isMobileSite, isPcSite } = useMediaQueryContext()
 
   const [dreamDiaryForm, setDreamDiaryForm] = useState<DreamDiaryFormData>(location.state.dreamDiary)
   const [userId, setUserId] = useState<number | undefined>(location.state.dreamDiary.userId)
@@ -95,41 +103,83 @@ const DreamDiaryPreview: React.FC = () => {
 
   return (
     <>
-      <div className={classes.text}>
-        この内容でよろしいですか？
-      </div>
-      <div style={{textAlign: "center"}}>
-          <img
-            src={diaryOgp}
-            alt="preview img"
-            className={classes.preview}
-          />
-      </div>
-      <div className={classes.submitBtn}>
-        <Button
-          type="submit"
-          variant="outlined"
-          color="primary"
-          onClick={handleBack}
-        >
-        編集画面へ戻る
-        </Button>
-        <Button
-          type="submit"
-          variant="outlined"
-          color="secondary"
-          onClick={handleSubmit}
-          style={{marginLeft: "80px"}}
-        >
-        { paramsId ? ("この内容で更新する"):("この内容で作成する") }
-        </Button>
-      </div>
-      <AlertMessage
-        open={alertOpen}
-        setOpen={setAlertOpen}
-        severity="error"
-        message={alertMsg}
-      />
+    {
+      isPcSite && (
+        <>
+          <div className={classes.text}>
+            この内容でよろしいですか？
+          </div>
+          <div style={{textAlign: "center"}}>
+              <img
+                src={diaryOgp}
+                alt="preview img"
+                className={classes.preview}
+              />
+          </div>
+          <div className={classes.submitBtn}>
+            <Button
+              type="submit"
+              variant="outlined"
+              color="primary"
+              onClick={handleBack}
+            >
+            編集画面へ戻る
+            </Button>
+            <Button
+              type="submit"
+              variant="outlined"
+              color="secondary"
+              onClick={handleSubmit}
+              style={{marginLeft: "80px"}}
+            >
+            { paramsId ? ("この内容で更新する"):("この内容で作成する") }
+            </Button>
+          </div>
+        </>
+      )
+    }
+    {
+      isMobileSite && (
+        <>
+        <div style={{height: "500px"}}>
+          <div className={classes.mText}>
+            この内容でよろしいですか？
+          </div>
+          <div style={{textAlign: "center"}}>
+              <img
+                src={diaryOgp}
+                alt="preview img"
+                className={classes.mPreview}
+              />
+          </div>
+          <div className={classes.mSubmitBtn}>
+            <Button
+              type="submit"
+              variant="outlined"
+              color="primary"
+              onClick={handleBack}
+            >
+            編集画面へ戻る
+            </Button>
+            <Button
+              type="submit"
+              variant="outlined"
+              color="secondary"
+              onClick={handleSubmit}
+            >
+            { paramsId ? ("この内容で更新する"):("この内容で作成する") }
+            </Button>
+          </div>
+        </div>
+        </>
+      )
+    }
+    <AlertMessage
+      open={alertOpen}
+      setOpen={setAlertOpen}
+      severity="error"
+      message={alertMsg}
+    />
     </>
   )
 }

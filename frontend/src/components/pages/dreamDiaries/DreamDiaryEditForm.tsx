@@ -13,9 +13,6 @@ import CancelIcon from "@material-ui/icons/Cancel"
 import { AuthContext } from "../../../App"
 
 const useStyles = makeStyles((theme: Theme) => ({
-  container: {
-    marginTop: theme.spacing(6)
-  },
   submitBtn: {
     marginTop: theme.spacing(1),
     flexGrow: 1,
@@ -27,13 +24,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   card: {
     padding: theme.spacing(2),
     maxWidth: 800
-  },
-  inputFileButton: {
-    textTransform: "none",
-    color: theme.palette.primary.main
-  },
-  imageUploadBtn: {
-    textAlign: "right"
   },
   input: {
     display: "none"
@@ -322,7 +312,7 @@ const DreamDiaryEditForm: React.FC = () => {
                   fullWidth
                   multiline
                   rows={2}
-                  label="この日記に対するコメントをください！(80字)"
+                  label="この日記に対するコメント(80字)"
                   placeholder="80文字以内で書いてください。"
                   inputProps={{ maxLength: 80 }}
                   value={content}
@@ -351,7 +341,7 @@ const DreamDiaryEditForm: React.FC = () => {
                     fullWidth
                     multiline
                     rows={2}
-                    label="この日記に対するコメントをください！(80字)"
+                    label="この日記に対するコメント(80字)"
                     placeholder="80文字以内で書いてください。"
                     inputProps={{ maxLength: 80 }}
                     value={content}
