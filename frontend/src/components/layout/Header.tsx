@@ -10,6 +10,8 @@ import CreateIcon from "@material-ui/icons/Create"
 import AccountMenu from "./AccountMenu"
 import TitleLogo from "../../images/titlelogo.png"
 
+import { useMediaQueryContext } from "../provider/MediaQueryPrivider"
+
 const useStyles = makeStyles((theme: Theme) => ({
   iconButton: {
     marginRight: theme.spacing(2),
@@ -17,6 +19,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   linkBtn: {
     textTransform: "none",
     marginLeft: "15px"
+  },
+  mLinkBtn: {
+    textTransform: "none",
+    marginLeft: "3px",
+    fontSize: "12px"
   },
   writeBtn: {
     textTransform: "none",
@@ -33,11 +40,20 @@ const useStyles = makeStyles((theme: Theme) => ({
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center center",
     backgroundSize: "cover"
+  },
+  mHeaderImage: {
+    position: "relative",
+    height: "21vh",
+    backgroundImage: "url(/header.png)",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center center",
+    backgroundSize: "cover"
   }
 }))
 
 const Header: React.FC = () => {
   const { loading, isSignedIn, currentUser } = useContext(AuthContext)
+  const { isMobileSite, isPcSite } = useMediaQueryContext()
   const classes = useStyles();
   const location = useLocation()
 
@@ -49,6 +65,18 @@ const Header: React.FC = () => {
     }else{
       return(
         <div className={classes.headerImage}/>
+      )
+    }
+  }
+
+  const MHeaderImage = () => {
+    if (location.pathname === "/privacy_policy") {
+      return (<></>)
+    }else if(location.pathname === "/term_of_service"){
+      return (<></>)
+    }else{
+      return(
+        <div className={classes.mHeaderImage}/>
       )
     }
   }
@@ -126,30 +154,107 @@ const Header: React.FC = () => {
     }
   }
 
+  const MAuthButtons = () => {
+    // 認証完了後はサインアウト用のボタンを表示
+    // 未認証時は認証用のボタンを表示
+    if (!loading) {
+      if (isSignedIn) {
+        if (currentUser?.isGuest) {
+        return (
+          <>
+            <Button
+              component={Link}
+              to="/signup"
+              color="inherit"
+              className={classes.mLinkBtn}
+              >
+              新規登録
+            </Button>
+            <AccountMenu/>
+          </>
+        )
+      } else {
+          return (
+          <>
+            <AccountMenu/>
+          </>
+          )
+        }
+      } else {
+        return (
+          <>
+            <Button
+              component={Link}
+              to="/signin"
+              color="inherit"
+              className={classes.mLinkBtn}
+            >
+              ログイン
+            </Button>
+            <Button
+            component={Link}
+            to="/signup"
+            color="secondary"
+            className={classes.mLinkBtn}
+          >
+            新規登録
+          </Button>
+        </>
+        )
+      }
+    } else {
+      return <></>
+    }
+  }
+
   return (
     <>
-      <AppBar position="static" style={{ color: "black", backgroundColor: "#fcfbfd" }}>
-        <Toolbar style={{display: "flex", justifyContent: "space-between"}}>
-          <Button
-              component={Link}
-              to="/"
-            >
-              <img src={TitleLogo} width="150px"/>
-          </Button>
-          <div style={{display: "flex"}}>
+    { isPcSite && (
+      <>
+        <AppBar position="static" style={{ color: "black", backgroundColor: "#fcfbfd" }}>
+          <Toolbar style={{display: "flex", justifyContent: "space-between"}}>
             <Button
                 component={Link}
-                to="/dreamdiaries"
-                color="inherit"
-                className={classes.linkBtn}
+                to="/"
               >
-                夢絵日記一覧
-              </Button>
-            <AuthButtons />
-          </div>
-        </Toolbar>
-        <HeaderImage />
-      </AppBar>
+                <img src={TitleLogo} width="150px"/>
+            </Button>
+            <div style={{display: "flex"}}>
+              <Button
+                  component={Link}
+                  to="/dreamdiaries"
+                  color="inherit"
+                  className={classes.linkBtn}
+                >
+                  夢絵日記一覧
+                </Button>
+              <AuthButtons />
+            </div>
+          </Toolbar>
+          <HeaderImage />
+        </AppBar>
+      </>
+    )
+    }
+    { isMobileSite && (
+      <>
+        <AppBar position="static" style={{ color: "black", backgroundColor: "#fcfbfd" }}>
+          <Toolbar style={{display: "flex", justifyContent: "space-between", minHeight: "30px"}}>
+          <Button
+                component={Link}
+                to="/"
+              >
+                <img src={TitleLogo} width="80px"/>
+            </Button>
+            <div style={{display: "flex"}}>
+              <MAuthButtons />
+            </div>
+          </Toolbar>
+          <MHeaderImage />
+        </AppBar>
+      </>
+    )
+    }
     </>
   )
 }

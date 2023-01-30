@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react"
 import { makeStyles, Theme } from "@material-ui/core/styles"
 
 import { AuthContext } from "../../../App"
-import { Link, useLocation, useNavigate } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import { Button, Grid, Tabs, Tab, Typography, Box, Avatar, Divider } from "@material-ui/core"
 import CreateIcon from "@material-ui/icons/Create"
 import CircularProgress from '@material-ui/core/CircularProgress'
@@ -12,24 +12,17 @@ import { DreamDiary, Bookmark } from "../../../interfaces"
 import { getMypage } from "../../../lib/api/mypages"
 import { Alert } from "@material-ui/lab"
 import Pagenation from "../dreamDiaries/organisms/Pagenation"
+import { useMediaQueryContext } from "../../provider/MediaQueryPrivider"
+import { Diversity1Rounded, Diversity1Sharp } from "@mui/icons-material"
 
 const useStyles = makeStyles((theme: Theme) => ({
-  iconButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-    textDecoration: "none",
-    color: "inherit"
-  },
-  linkBtn: {
-    textTransform: "none"
-  },
   box: {
-    paddingTop: "2rem"
+    textAlign: "center",
+    paddingTop: "20px"
   },
-  link: {
-    textDecoration: "none"
+  nameTypography: {
+    fontWeight: "bold",
+    fontSize: "18px"
   },
   writeBtn: {
     textTransform: "none",
@@ -47,13 +40,33 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: theme.spacing(8),
     height: theme.spacing(8)
   },
+  mAvatar: {
+    width: theme.spacing(7),
+    height: theme.spacing(7)
+  },
+  grid: {
+    marginTop: "1rem",
+    marginLeft: "1.5rem"
+  },
+  mGrid: {
+    marginTop: "0.5rem",
+    marginLeft: "0.5rem"
+  },
+  button: {
+    fontSize: "12px",
+    marginTop: "1rem"
+  },
+  mButton: {
+    marginLeft: "auto",
+    fontSize: "6px"
+  },
 }))
 
 
 const MyPage: React.FC = () => {
   const { currentUser } = useContext(AuthContext)
+  const { isMobileSite, isPcSite } = useMediaQueryContext()
   const classes = useStyles()
-  const navigation = useNavigate()
   const location = useLocation()
 
   const [loading, setLoading] = useState<boolean>(true)
@@ -72,7 +85,8 @@ const MyPage: React.FC = () => {
 
   const [offset, setOffset] = useState<number>(0)
   const perPage = 18
-  const currentDreamDiaries = dreamDiaries.slice(offset, offset + perPage)
+  const mPerPage = 10
+  const currentDreamDiaries = isPcSite ? (dreamDiaries.slice(offset, offset + perPage)) : (dreamDiaries.slice(offset, offset + mPerPage))
 
   const handleDreamDiaries = async () => {
     try {
@@ -127,116 +141,239 @@ const MyPage: React.FC = () => {
 
   return(
     <>
-         {
-        !loading ? (
-          <>
-          <GuestAlert />
-          <Grid container>
-                  <Grid item>
-                    <Avatar
-                      alt="avatar"
-                      src={currentUser?.image.url}
-                      className={classes.avatar}
-                    />
-                  </Grid>
-                  <Grid item style={{ marginTop: "1rem", marginLeft: "1.5rem"}}>
-                  <Typography variant="body1" component="p" gutterBottom style={{fontWeight: "bold", fontSize: "18px"}}>
-                      {currentUser?.name}
-                  </Typography>
-                    {
-                    !currentUser?.isGuest ? (
-                      currentUser?.introduction ? (
-                        <Typography variant="body2" component="p" color="textSecondary" style={{whiteSpace: "pre-wrap"}}>
-                          {currentUser?.introduction}
-                        </Typography>
-                      ): (
-                        <Typography variant="body2" component="p" color="textSecondary">
-                          よろしくお願いいたします。
-                        </Typography>
-                      )
-                    ):(<></>)
-                    }
-                  </Grid>
-                  <Grid item style={{ marginTop: "1rem", marginLeft: "1.5rem"}}></Grid>
-                    <Button
-                      component={Link}
-                      to="/profile"
-                      variant="contained"
-                    >
-                      プロフィール確認
-                    </Button>
-                </Grid>
-                  <Divider style={{ marginTop: "2rem"}}/>
-            <div className={classes.root}>
-              <div>
-                <Tabs
-                value={valueTabs}
-                onChange={handleChangeTabs}
-                aria-label="ant example"
-                variant="fullWidth"
-                >
-                  <Tab value={1} label="自分の日記"  />
-                  <Tab value={2} label="お気に入りの日記"
-                    disabled={currentUser?.isGuest ? true : false} />
-                </Tabs>
-              </div>
-            </div>
+    {
+      isPcSite && (
+        <>
           {
-          dreamDiaries.length > 0 ? (
-          <>
-            <Grid container style={{minWidth: "1200px"}}>
+          !loading ? (
+            <>
+            <GuestAlert />
+            <Box style={{margin: "auto", display: "flex"}}>
+                    <div>
+                      <Avatar
+                        alt="avatar"
+                        src={currentUser?.image.url}
+                        className={classes.avatar}
+                      />
+                    </div>
+                    <div className={classes.grid}>
+                    <Typography variant="body1" component="p" gutterBottom className={classes.nameTypography}>
+                        {currentUser?.name}
+                    </Typography>
+                      {
+                      !currentUser?.isGuest ? (
+                        currentUser?.introduction ? (
+                          <Typography variant="body2" component="p" color="textSecondary" style={{whiteSpace: "pre-wrap"}}>
+                            {currentUser?.introduction}
+                          </Typography>
+                        ): (
+                          <Typography variant="body2" component="p" color="textSecondary">
+                            よろしくお願いいたします。
+                          </Typography>
+                        )
+                      ):(<></>)
+                      }
+                      <Button
+                        component={Link}
+                        to="/profile"
+                        variant="contained"
+                        className={classes.button}
+                      >
+                        プロフィール確認
+                      </Button>
+                    </div>
+                  </Box>
+                    <Divider style={{ marginTop: "2rem"}}/>
+              <div className={classes.root}>
+                <div>
+                  <Tabs
+                  value={valueTabs}
+                  onChange={handleChangeTabs}
+                  aria-label="ant example"
+                  variant="fullWidth"
+                  >
+                    <Tab value={1} label="自分の日記"  />
+                    <Tab value={2} label="お気に入りの日記"
+                      disabled={currentUser?.isGuest ? true : false} />
+                  </Tabs>
+                </div>
+              </div>
             {
-            currentDreamDiaries.map((dreamDiary: DreamDiary, index: number) => {
-              return (
-                <Grid item container key={index} xs={2} style={{margin: "auto"}}justify="center">
-                  <CardComp
-                    id={dreamDiary.id}
-                    image={dreamDiary.image}
-                    title={dreamDiary.title}
-                    content={dreamDiary.content}
-                    dreamDate={dreamDiary.dreamDate}
-                    impression={dreamDiary.impression}
-                    dreamType={dreamDiary.dreamType}
-                    userName={dreamDiary.user === null ? '退会済みユーザー' : dreamDiary.user.name}
-                    userImage={dreamDiary.user === null ? '' : dreamDiary.user.image.url}
-                    likeCount={dreamDiary.likeCount}
-                    commentCount={dreamDiary.commentCount}
-                    />
-                </Grid>
-              )
-            })
-          }
-          </Grid>
-          <Pagenation
-            dreamDiaries={dreamDiaries}
-            perPage={perPage}
-            setOffset={setOffset}
-           />
-          </>
-          ) : (
-          <>
-          <Box style={{textAlign: "center", paddingTop: "20px"}}>
-          <h3>日記がありません！</h3>
-            <Button
-              component={Link}
-              to="/dreamdiaries/new"
-              variant="contained"
-              startIcon={<CreateIcon />}
-              className={classes.writeBtn}
-            >
-              日記を作成する
-            </Button>
+            dreamDiaries.length > 0 ? (
+            <>
+              <Grid container style={{minWidth: "1200px"}}>
+              {
+              currentDreamDiaries.map((dreamDiary: DreamDiary, index: number) => {
+                return (
+                  <Grid item container key={index} xs={2} style={{margin: "auto"}}justify="center">
+                    <CardComp
+                      id={dreamDiary.id}
+                      image={dreamDiary.image}
+                      title={dreamDiary.title}
+                      content={dreamDiary.content}
+                      dreamDate={dreamDiary.dreamDate}
+                      impression={dreamDiary.impression}
+                      dreamType={dreamDiary.dreamType}
+                      userName={dreamDiary.user === null ? '退会済みユーザー' : dreamDiary.user.name}
+                      userImage={dreamDiary.user === null ? '' : dreamDiary.user.image.url}
+                      likeCount={dreamDiary.likeCount}
+                      commentCount={dreamDiary.commentCount}
+                      />
+                  </Grid>
+                )
+              })
+            }
+            </Grid>
+            <Pagenation
+              dreamDiaries={dreamDiaries}
+              perPage={perPage}
+              setOffset={setOffset}
+            />
+            </>
+            ) : (
+            <>
+            <Box className={classes.box}>
+            <h3>日記がありません！</h3>
+              <Button
+                component={Link}
+                to="/dreamdiaries/new"
+                variant="contained"
+                startIcon={<CreateIcon />}
+                className={classes.writeBtn}
+              >
+                日記を作成する
+              </Button>
+            </Box>
+            </>)
+            }
+            </>
+            )
+          : (
+          <Box className={classes.box}>
+            <CircularProgress />
           </Box>
-          </>)
-          }
-          </>
           )
-        : (
-        <Box style={{margin: "auto", padding: "3rem"}}>
-          <CircularProgress />
-        </Box>
-        )
-      }
+        }
+      </>
+      )
+    }
+    {
+      isMobileSite && (
+        <>
+          {
+          !loading ? (
+            <>
+            <GuestAlert />
+            <Grid container>
+                    <Grid item xs={3}>
+                      <Avatar
+                        alt="avatar"
+                        src={currentUser?.image.url}
+                        className={classes.mAvatar}
+                      />
+                    </Grid>
+                    <Grid item className={classes.mGrid} xs={8}>
+                    <Typography variant="body1" component="p" gutterBottom className={classes.nameTypography}>
+                        {currentUser?.name}
+                    </Typography>
+                      {
+                      !currentUser?.isGuest ? (
+                        currentUser?.introduction ? (
+                          <Typography variant="body2" component="p" color="textSecondary" style={{whiteSpace: "pre-wrap", overflow: "hidden", textOverflow: "ellipsis",
+                          display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical"}}>
+                            {currentUser?.introduction}
+                          </Typography>
+                        ): (
+                          <Typography variant="body2" component="p" color="textSecondary">
+                            よろしくお願いいたします。
+                          </Typography>
+                        )
+                      ):(<></>)
+                      }
+                    </Grid>
+                      <Button
+                        component={Link}
+                        to="/profile"
+                        variant="contained"
+                        className={classes.mButton}
+                      >
+                        プロフィール確認
+                      </Button>
+                  </Grid>
+                    <Divider style={{ marginTop: "1rem"}}/>
+              <div className={classes.root}>
+                <div>
+                  <Tabs
+                  value={valueTabs}
+                  onChange={handleChangeTabs}
+                  aria-label="ant example"
+                  variant="fullWidth"
+                  >
+                    <Tab value={1} label="自分の日記"  />
+                    <Tab value={2} label="お気に入りの日記"
+                      disabled={currentUser?.isGuest ? true : false} />
+                  </Tabs>
+                </div>
+              </div>
+            {
+            dreamDiaries.length > 0 ? (
+            <>
+              <Grid container style={{minWidth: "50%"}}>
+              {
+              currentDreamDiaries.map((dreamDiary: DreamDiary, index: number) => {
+                return (
+                  <Grid item container key={index} xs={6}>
+                    <CardComp
+                      id={dreamDiary.id}
+                      image={dreamDiary.image}
+                      title={dreamDiary.title}
+                      content={dreamDiary.content}
+                      dreamDate={dreamDiary.dreamDate}
+                      impression={dreamDiary.impression}
+                      dreamType={dreamDiary.dreamType}
+                      userName={dreamDiary.user === null ? '退会済みユーザー' : dreamDiary.user.name}
+                      userImage={dreamDiary.user === null ? '' : dreamDiary.user.image.url}
+                      likeCount={dreamDiary.likeCount}
+                      commentCount={dreamDiary.commentCount}
+                      />
+                  </Grid>
+                )
+              })
+            }
+            </Grid>
+            <Pagenation
+              dreamDiaries={dreamDiaries}
+              perPage={mPerPage}
+              setOffset={setOffset}
+            />
+            </>
+            ) : (
+            <>
+            <Box className={classes.box}>
+            <h3>日記がありません！</h3>
+              <Button
+                component={Link}
+                to="/dreamdiaries/new"
+                variant="contained"
+                startIcon={<CreateIcon />}
+                className={classes.writeBtn}
+              >
+                日記を作成する
+              </Button>
+            </Box>
+            </>)
+            }
+            </>
+            )
+          : (
+          <Box className={classes.box}>
+            <CircularProgress />
+          </Box>
+          )
+        }
+      </>
+      )
+    }
       <AlertMessage
         open={alertOpen}
         setOpen={setAlertOpen}

@@ -1,6 +1,5 @@
 import { Avatar, Box, Button, Divider, Grid, IconButton, makeStyles, TextField, Theme, Typography } from "@material-ui/core"
 import React, { useContext, useEffect, useState } from "react"
-import { Helmet } from "react-helmet"
 import { Link, useLocation } from "react-router-dom"
 import { useNavigate, useParams } from "react-router-dom"
 
@@ -20,6 +19,7 @@ import { createLike, destroyLike } from "../../../lib/api/likes"
 import { createBookmark, destroyBookmark } from "../../../lib/api/bookmarks"
 import { createComment, destroyComment } from "../../../lib/api/comments"
 import CommentArea from "./organisms/CommentArea"
+import { useMediaQueryContext } from "../../provider/MediaQueryPrivider"
 
 const useStyles = makeStyles((theme: Theme) => ({
   linkBtn: {
@@ -32,6 +32,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   preview: {
     width: "65%"
   },
+  mPreview: {
+    width: "95%"
+  },
   submitBtn: {
     textAlign: "center",
   },
@@ -40,10 +43,16 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: theme.spacing(6),
     marginRight: "1rem"
   },
+  mAvatar: {
+    width: theme.spacing(3),
+    height: theme.spacing(3),
+    marginRight: "0.5rem"
+  },
 }))
 
 const DreamDiaryShow: React.FC = () => {
   const { currentUser, isSignedIn } = useContext(AuthContext)
+  const { isMobileSite, isPcSite } = useMediaQueryContext()
   const params = useParams()
   const classes = useStyles()
   const navigation = useNavigate()
@@ -261,18 +270,9 @@ const DreamDiaryShow: React.FC = () => {
 
   return (
     <>
-      <Helmet>
-        <title>{dreamDiary?.title}</title>
-        <meta
-          name="description"
-          content={dreamDiary?.content}
-        />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta property="og:title" content={dreamDiary?.title} />
-        <meta property="og:description" content={dreamDiary?.content} />
-        {/* <meta property="og:image" content={`http://localhost:3010/api/v1/dream_diaries/${dreamDiary?.id}/images`} /> */}
-        <meta property="og:image" content={`${process.env.REACT_APP_HOST}/dream_diaries/${dreamDiary?.id}/images`} />
-      </Helmet>
+    {
+      isPcSite && (
+        <>
      {
         !loading ? (
           <>
@@ -414,27 +414,180 @@ const DreamDiaryShow: React.FC = () => {
             })
           }
           </Grid>
-          <CommonDialog // 削除確認ダイアログ
-            message={"本当に削除しますか？"}
-            open={DlgOpen}
-            setOpen={setDlgOpen}
-            doYes={handleDeleteDreamDiary}
-          />
-          <AlertMessage
-            open={alertOpen}
-            setOpen={setAlertOpen}
-            severity="error"
-            message={alertMsg}
-          />
-          <AlertMessage
-            open={successOpen}
-            setOpen={setSuccessOpen}
-            severity="success"
-            message={successMsg}
-          />
           </>
           ) : (<></>) 
-      }
+        }
+        </>
+      )
+    }
+    {
+      isMobileSite && (
+        <>
+     {
+        !loading ? (
+          <>
+          <div style={{textAlign: "center"}}>
+              <img
+              src={dreamDiary?.diaryOgp}
+              alt="diaryOgp img"
+              className={classes.mPreview}
+            />
+          </div>
+          <div  className={classes.submitBtn}>
+          <Button
+            onClick={
+              currentUserLiked ? handleDestroyLike : handleCreateLike}
+              color="secondary"
+              startIcon={
+                currentUserLiked ? (<FavoriteIcon />) : (<FavoriteBorderIcon />)}
+                disabled={!isSignedIn ? true : false}
+                style={{ marginTop: "0.3rem", marginBottom: "0.3rem" }}
+                >
+            {`${likesCount}`}
+          </Button>
+          {
+            isSignedIn ? (
+            <>
+          <Button
+            onClick={
+              currentUserBookmarked ? handleDestroyBookmark : handleCreateBookmark}
+            color="secondary"
+            startIcon={
+              currentUserBookmarked ? (<BookmarkIcon />) : (<BookmarkBorderIcon />)}
+            disabled={currentUser?.isGuest ? true : false}
+            style={{ marginTop: "0.3rem", marginBottom: "0.3rem" }}
+          >
+            {currentUserBookmarked ? "お気に入り解除" : "お気に入り登録"}
+          </Button>
+          </>
+          ):(<></>)
+        }
+        {
+          isSignedIn && currentUser?.id === dreamDiary?.userId ? (
+            <>
+              <IconButton
+                    color="primary"
+                    to={`/dreamdiaries/${params.id}/edit`}
+                    component={Link}
+                  >
+                    <EditIcon />
+              </IconButton>
+              <IconButton
+                    color="secondary"
+                    onClick={() => setDlgOpen(true)}
+                  >
+                    <Delete />
+              </IconButton>
+            </>
+          ) : (<></>)
+        }
+          <Grid container justify="center" style={{alignItems: "center", marginBottom:"0.5rem", marginTop: "0.3rem"}}>
+            作者：　
+          <Avatar
+            alt="avatar"
+            src={dreamDiary?.user === null ? '' : dreamDiary?.user.image.url}
+            className={classes.mAvatar}
+          />
+          <Typography variant="body1" component="p">
+            {dreamDiary?.user === null ? '退会済みユーザー' : dreamDiary?.user.name}
+          </Typography>
+          </Grid>
+        </div>
+        <Box style={{width: "100%", textAlign: "center", margin: "auto"}}>
+          <Button
+            component={Link}
+            to="/dreamdiaries"
+          >
+            ▶︎一覧画面に戻る
+          </Button>
+          <Button
+            component={Link}
+            to="/mypage"
+          >
+            ▶︎マイページに戻る
+          </Button>
+        </Box>
+        <Divider style={{ marginTop: "0.5rem"}}/>
+        {
+          isSignedIn && !currentUser?.isGuest ? (
+            <>
+        <form noValidate autoComplete="off">
+          <Box style={{width: "100%", margin: "auto"}}>
+          <h3 style={{marginBlockStart: "0.5rem", marginBlockEnd: "0"}}>コメント</h3>
+          <TextField
+            placeholder="コメントする"
+            variant="outlined"
+            multiline
+            fullWidth
+            rows="2"
+            value={commentBody}
+            margin="dense"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setCommentBody(e.target.value)
+            }}
+          />
+          <Button
+            onClick={handleCommentSubmit}
+            color="primary"
+            disabled={!commentBody ? true : false}
+            style={{float: "right"}}
+          >
+            送信
+          </Button>
+          </Box>
+          </form>
+          </>
+          ) : (<></>)
+        }
+          <Grid container style={{width: "90%", margin: "2.5rem auto"}}>
+          {
+          comments.map((comment: Comment, index: number) => {
+              return (
+                <Grid item container key={index} justify="center">
+                  <CommentArea
+                    index={index}
+                    body={comment.body}
+                    createdAt={comment.createdAt}
+                    dreamDiaryId={comment.dreamDiaryId}
+                    userId={comment.user === null ? 0 : comment.user.id}
+                    userName={comment.user === null ? '退会済みユーザー' : comment.user.name}
+                    userImage={comment.user === null ? '' : comment.user.image.url}
+                    comments={comments}
+                    setComments={setComments}
+                    setSuccessOpen={setSuccessOpen}
+                    setSuccessMsg={setSuccessMsg}
+                    setAlertOpen={setAlertOpen}
+                    setAlertMsg={setAlertMsg}
+                    />
+                </Grid>
+              )
+            })
+          }
+          </Grid>
+          </>
+          ) : (<></>) 
+        }
+        </>
+      )
+    }
+    <CommonDialog // 削除確認ダイアログ
+      message={"本当に削除しますか？"}
+      open={DlgOpen}
+      setOpen={setDlgOpen}
+      doYes={handleDeleteDreamDiary}
+    />
+    <AlertMessage
+      open={alertOpen}
+      setOpen={setAlertOpen}
+      severity="error"
+      message={alertMsg}
+    />
+    <AlertMessage
+      open={successOpen}
+      setOpen={setSuccessOpen}
+      severity="success"
+      message={successMsg}
+    />
     </>
   )
 }

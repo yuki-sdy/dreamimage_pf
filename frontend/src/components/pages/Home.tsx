@@ -5,9 +5,8 @@ import Cookies from "js-cookie"
 
 import { Link, useLocation, useNavigate } from "react-router-dom"
 
-import CreateIcon from "@material-ui/icons/Create"
 import Box from "@material-ui/core/Box"
-import { Button, Card, CardContent, Divider, Grid, Typography } from "@material-ui/core"
+import { Button } from "@material-ui/core"
 
 import GoButtonImage from '../../images/gobutton.png'
 import TopImage from '../../images/topimage.png'
@@ -16,12 +15,40 @@ import KiraKira from '../../images/kirakira.png'
 import { SignUpData } from "../../interfaces"
 import { signUp } from "../../lib/api/auth"
 import AlertMessage from "../utils/AlertMessage"
+import { useMediaQueryContext } from "../provider/MediaQueryPrivider"
 
 const useStyles = makeStyles((theme: Theme) => ({
+  topImage: {
+    width: "1200px",
+    position: "absolute",
+    left:"-600px",
+    zIndex: 1
+  },
+  mTopImage: {
+    width: "380px",
+    position: "absolute",
+    left:"-190px",
+    top: "-30px",
+    zIndex: 1
+  },
+  containerBox: {
+    position: "relative",
+    height: "1750px"
+  },
+  mContainerBox: {
+    position: "relative",
+    height: "510px",
+    marginTop: 0
+  },
+  imageBox: {
+    position: "absolute",
+    zIndex: 2,
+  }
 }))
 
 const Home: React.FC = () => {
   const { setCurrentUser, currentUser, setIsSignedIn } = useContext(AuthContext)
+  const { isMobileSite, isPcSite } = useMediaQueryContext()
   const classes = useStyles()
   const navigation = useNavigate()
   const location = useLocation()
@@ -84,39 +111,70 @@ const Home: React.FC = () => {
 
   return (
     <>
-      <Box style={{position: "relative", height: "1750px"}}>
-        <img src={TopImage} style={{width: "1200px", position: "absolute", zIndex:'1', left:"-600px"}} />
-        <Button 
-          style={{maxWidth: "1200px", position: "absolute",zIndex: '2', top: "1426px", left: "-180px"}}
-          onClick={handleGuestLoginSubmit}
-          >
-          <img src={TopButton1} style={{width: "350px"}} />
-        </Button>
-        <Box textAlign="center" style={{position: "absolute", zIndex: '2', top: "1570px", left: "330px"}}>
-          <Typography variant="body1" style={{fontWeight: "bold"}}>
-            まずは…<br />
-            みんなの夢絵日記を見に行く？
-          </Typography>
-            <Link to="/dreamdiaries">
-              <img src={GoButtonImage} style={{width: "400px"}} />
-            </Link>
-        </Box>
-        <Box textAlign="center" style={{position: "absolute", zIndex: '1', top: "1650px", left: "280px"}}>
-          <img src={KiraKira} style={{width: "500px"}} />
-        </Box>
-      </Box>
-      <AlertMessage
-        open={alertOpen}
-        setOpen={setAlertOpen}
-        severity="error"
-        message={alertMsg}
-      />
-      <AlertMessage
-        open={successOpen}
-        setOpen={setSuccessOpen}
-        severity="success"
-        message={successMsg}
-      />
+      {isPcSite && (
+        <>
+          <Box className={classes.containerBox}>
+            <img src={TopImage} className={classes.topImage} />
+            <Button 
+              className={classes.imageBox} 
+              style={{maxWidth: "1200px", top: "1370px", left: "-174px"}}
+              onClick={handleGuestLoginSubmit}
+              >
+              <img src={TopButton1} style={{width: "350px"}} />
+            </Button>
+            <Box textAlign="center" className={classes.imageBox} style={{top: "1450px", left: "380px"}}>
+                <Link to="/dreamdiaries">
+                  <img src={GoButtonImage} style={{width: "250px"}} />
+                </Link>
+            </Box>
+          </Box>
+          <AlertMessage
+            open={alertOpen}
+            setOpen={setAlertOpen}
+            severity="error"
+            message={alertMsg}
+          />
+          <AlertMessage
+            open={successOpen}
+            setOpen={setSuccessOpen}
+            severity="success"
+            message={successMsg}
+          />
+        </>
+        )
+      }
+      {isMobileSite && (
+        <>
+          <Box className={classes.mContainerBox}>
+            <img src={TopImage} className={classes.mTopImage} />
+            <Button 
+              className={classes.imageBox} 
+              style={{maxWidth: "50px", top: "395px", left: "-29px"}}
+              onClick={handleGuestLoginSubmit}
+              >
+              <img src={TopButton1} style={{width: "135px"}} />
+            </Button>
+            <Box textAlign="center" className={classes.imageBox} style={{top: "430px", left: "112px"}}>
+                <Link to="/dreamdiaries">
+                  <img src={GoButtonImage} style={{width: "77px"}} />
+                </Link>
+            </Box>
+          </Box>
+          <AlertMessage
+            open={alertOpen}
+            setOpen={setAlertOpen}
+            severity="error"
+            message={alertMsg}
+          />
+          <AlertMessage
+            open={successOpen}
+            setOpen={setSuccessOpen}
+            severity="success"
+            message={successMsg}
+          />
+        </>
+        )
+      }
     </>
   )
 }

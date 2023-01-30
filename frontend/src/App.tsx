@@ -1,5 +1,6 @@
 import React, { useState, useEffect, createContext } from "react"
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom"
+import { MediaQueryProvider } from "./components/provider/MediaQueryPrivider"
 
 import CommonLayout from "./components/layout/CommonLayout"
 import DreamDiaries from "./components/pages/dreamDiaries/DreamDiaries"
@@ -83,36 +84,38 @@ const App: React.FC = () => {
   return (
     <Router>
       <AuthContext.Provider value={{ loading, setLoading, isSignedIn, setIsSignedIn, currentUser, setCurrentUser}}>
-        <CommonLayout>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/dreamdiaries" element={<DreamDiaries/>}/>
-            <Route path="/dreamdiaries/:id" element={<DreamDiaryShow />} />
+        <MediaQueryProvider>
+          <CommonLayout>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/dreamdiaries" element={<DreamDiaries/>}/>
+              <Route path="/dreamdiaries/:id" element={<DreamDiaryShow />} />
 
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/password" element={<PasswordReset />} />
-            <Route path="/password/reset" element={<PasswordEdit />} />
-            <Route path="/privacy_policy" element={<PrivacyPolicy />} />
-            <Route path="/term_of_service" element={<TermOfService />} />
-            
-            <Route path="/mypage" 
-              element={<Private children={<MyPage />} />} />
-            <Route path="/profile" 
-              element={<Private children={<Profile />} />} />
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/signin" element={<SignIn />} />
+              <Route path="/password" element={<PasswordReset />} />
+              <Route path="/password/reset" element={<PasswordEdit />} />
+              <Route path="/privacy_policy" element={<PrivacyPolicy />} />
+              <Route path="/term_of_service" element={<TermOfService />} />
+              
+              <Route path="/mypage" 
+                element={<Private children={<MyPage />} />} />
+              <Route path="/profile" 
+                element={<Private children={<Profile />} />} />
 
-            <Route path="/dreamdiaries/new" 
-              element={<Private children={<DreamDiaryForm />} />} />
-            <Route path="/dreamdiaries/preview"
-              element={<Private children={<DreamDiaryPreview />} />} />
-            <Route path="/dreamdiaries/back"
-              element={<Private children={<DreamDiaryBackForm />} />} />
-            <Route path="/dreamdiaries/:id/edit" 
-              element={<Private children={<DreamDiaryEditForm />} />} />
+              <Route path="/dreamdiaries/new" 
+                element={<Private children={<DreamDiaryForm />} />} />
+              <Route path="/dreamdiaries/preview"
+                element={<Private children={<DreamDiaryPreview />} />} />
+              <Route path="/dreamdiaries/back"
+                element={<Private children={<DreamDiaryBackForm />} />} />
+              <Route path="/dreamdiaries/:id/edit" 
+                element={<Private children={<DreamDiaryEditForm />} />} />
 
-            <Route path="/*" element={<NotFound />} />
-          </Routes>
-        </CommonLayout>
+              <Route path="/*" element={<NotFound />} />
+            </Routes>
+          </CommonLayout>
+        </MediaQueryProvider>
       </AuthContext.Provider>
     </Router>
   )
