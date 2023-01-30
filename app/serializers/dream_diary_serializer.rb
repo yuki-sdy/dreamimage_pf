@@ -5,11 +5,4 @@ class DreamDiarySerializer < ActiveModel::Serializer
   has_many :likes
   has_many :bookmarks
   has_many :comments
-
-  def like_count
-    object.likes.count
-  end
-  def comment_count
-    object.comments.count
-  end
 end
