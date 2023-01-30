@@ -7,6 +7,7 @@ import Cookies from "js-cookie"
 import { AuthContext } from "../../App"
 import { deleteAccount } from "../../lib/api/users"
 import CommonDialog from "../utils/CommonDialog"
+import { useMediaQueryContext } from "../provider/MediaQueryPrivider"
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconButton: {
@@ -22,6 +23,16 @@ const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: "center",
     alignItems: "center"
   },
+  mFooter: {
+    height: "150px",
+    backgroundImage: "url(/footer.png)",
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "contain",
+    backgroundPosition: "bottom",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  },
   linkBtn: {
     textTransform: "none"
   },
@@ -30,11 +41,18 @@ const useStyles = makeStyles((theme: Theme) => ({
       backgroundColor: "white",
       textDecoration: "underline"
     }
+  },
+  mButton: {
+    "&:hover": {
+      backgroundColor: "white",
+      textDecoration: "underline",
+    }
   }
 }))
 
 const Footer: React.FC = () => {
   const { isSignedIn, setIsSignedIn, currentUser, setCurrentUser } = useContext(AuthContext)
+  const { isMobileSite, isPcSite } = useMediaQueryContext()
   const classes = useStyles();
   const navigation = useNavigate()
   const [dlgOpen, setDlgOpen] = useState<boolean>(false)
@@ -74,65 +92,138 @@ const Footer: React.FC = () => {
 
   return (
     <>
-    <div className={classes.footer}>
-      <Typography variant="body2" color="textSecondary" align="center">
-        <Box style={{display: "flex", alignItems: "center", backgroundColor: "white",width: "fit-content", borderRadius: "15px", padding: "8px 20px"}}>
-          <Button
-            component={Link}
-            to="/"
-            color="inherit"
-            className={classes.button}
-            >
-            遊び方
-          </Button>
-          <Divider orientation="vertical" flexItem/>
-          <Button
-            color="inherit"
-            onClick={handleLinkOpen}
-            className={classes.button}
-            >
-            お問合せ
-          </Button>
-          <Divider orientation="vertical" flexItem/>
-          <Button
-            component={Link}
-            to="/term_of_service"
-            color="inherit"
-            className={classes.button}
-            >
-            利用規約
-          </Button>
-          <Divider orientation="vertical" flexItem/>
-          <Button
-            component={Link}
-            to="/privacy_policy"
-            color="inherit"
-            className={classes.button}
-            >
-            個人情報保護方針
-          </Button>
-          {
-            isSignedIn ? (
-            <>
+    {
+      isPcSite && (
+        <>
+        <div className={classes.footer}>
+          <Typography variant="body2" color="textSecondary" align="center">
+            <Box style={{display: "flex", alignItems: "center", backgroundColor: "white",width: "fit-content", borderRadius: "15px", padding: "8px 20px"}}>
+              <Button
+                component={Link}
+                to="/"
+                color="inherit"
+                size="small"
+                className={classes.button}
+                >
+                遊び方
+              </Button>
               <Divider orientation="vertical" flexItem/>
               <Button
                 color="inherit"
-                onClick={() => setDlgOpen(true)}
+                onClick={handleLinkOpen}
                 className={classes.button}
                 >
-                アカウントの削除
+                お問合せ
               </Button>
-            </>
-            ) : (<></>)
-          }
-        </Box>
-        <div style={{marginTop: ".5rem"}}>
-          {'Copyright © '}
-          {new Date().getFullYear()}
-          {' 夢絵日記'}
+              <Divider orientation="vertical" flexItem/>
+              <Button
+                component={Link}
+                to="/term_of_service"
+                color="inherit"
+                className={classes.button}
+                >
+                利用規約
+              </Button>
+              <Divider orientation="vertical" flexItem/>
+              <Button
+                component={Link}
+                to="/privacy_policy"
+                color="inherit"
+                className={classes.button}
+                >
+                個人情報保護方針
+              </Button>
+              {
+                isSignedIn ? (
+                <>
+                  <Divider orientation="vertical" flexItem/>
+                  <Button
+                    color="inherit"
+                    onClick={() => setDlgOpen(true)}
+                    className={classes.button}
+                    >
+                    アカウントの削除
+                  </Button>
+                </>
+                ) : (<></>)
+              }
+            </Box>
+            <div style={{marginTop: ".5rem"}}>
+              {'Copyright © '}
+              {new Date().getFullYear()}
+              {' 夢絵日記'}
+            </div>
+          </Typography>
         </div>
-      </Typography>
-    </div>
+      </>
+      )
+    }
+    {
+      isMobileSite && (
+        <>
+        <div className={classes.mFooter}>
+          <Typography color="textSecondary" align="center">
+            <Box style={{backgroundColor: "white", margin: "auto", borderRadius: "15px",display: "flex", width: "fit-content", alignItems: "center"}}>
+              <Button
+                component={Link}
+                to="/"
+                color="inherit"
+                className={classes.mButton}
+                >
+                遊び方
+              </Button>
+              <Divider orientation="vertical" flexItem/>
+              <Button
+                onClick={handleLinkOpen}
+                className={classes.mButton}
+                color="inherit"
+                >
+                お問合せ
+              </Button>
+              <Divider orientation="vertical" flexItem/>
+              <Button
+                component={Link}
+                to="/term_of_service"
+                color="inherit"
+                className={classes.mButton}
+                >
+                利用規約
+              </Button>
+              </Box>
+              <Box style={{backgroundColor: "white", margin: "3px auto", borderRadius: "15px",display: "flex", width: "fit-content", alignItems: "center"}}>
+              <Button
+                component={Link}
+                to="/privacy_policy"
+                color="inherit"
+                className={classes.mButton}
+                >
+                個人情報保護方針
+              </Button>
+              {
+                isSignedIn ? (
+                <>
+                  <Divider orientation="vertical" flexItem/>
+                  <Button
+                    onClick={() => setDlgOpen(true)}
+                    className={classes.mButton}
+                    color="inherit"
+                    >
+                    アカウントの削除
+                  </Button>
+                </>
+                ) : (<></>)
+              }
+            </Box>
+            <div style={{marginTop: ".5rem", fontSize: "10px"}}>
+              {'Copyright © '}
+              {new Date().getFullYear()}
+              {' 夢絵日記'}
+            </div>
+          </Typography>
+        </div>
+      </>
+      )
+    }
     <CommonDialog // 削除確認ダイアログ
       message={`「はい」を選ぶとこのアカウントの削除を実行します。\n実行後のユーザー情報復元はできませんので、ご注意ください。\n※実行後、投稿した日記やいいね等のデータは残ります。\n 削除をご希望される場合は、お問合せフォームよりご連絡ください。\n\n本当によろしいですか？`}
       open={dlgOpen}

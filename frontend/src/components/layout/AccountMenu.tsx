@@ -6,6 +6,7 @@ import { AuthContext } from "../../App"
 import Cookies from "js-cookie"
 import { signOut } from "../../lib/api/auth"
 import AlertMessage from "../utils/AlertMessage"
+import { useMediaQueryContext } from "../provider/MediaQueryPrivider"
 
 const useStyles = makeStyles((theme: Theme) => ({
   box: {
@@ -13,6 +14,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
     textAlign: 'center',
     margin: "0 20px 0 12px"
+  },
+  mBox: {
+    display: 'flex',
+    alignItems: 'center',
+    textAlign: 'center',
+    margin: "0 5px 0 3px"
   },
   menu: {
     overflow: 'visible',
@@ -30,12 +37,17 @@ const useStyles = makeStyles((theme: Theme) => ({
       transform: 'translateY(-50%) rotate(45deg)',
       zIndex: 0,
     }
-  }
+  },
+  mAvatar: {
+    width: theme.spacing(4),
+    height: theme.spacing(4)
+  },
 }))
 
 const AccountMenu: React.FC = () => {
   const classes = useStyles()
   const { setIsSignedIn, currentUser, setCurrentUser } = useContext(AuthContext)
+  const { isMobileSite, isPcSite } = useMediaQueryContext()
   const navigation = useNavigate()
 
   const [alertOpen, setAlertOpen] = useState<boolean>(false)
@@ -79,76 +91,174 @@ const AccountMenu: React.FC = () => {
 
   return (
     <>
-      <Box className={classes.box}>
-        <Tooltip title={`${currentUser?.name}`}>
-          <IconButton
-            onClick={handleClick}
-            size="small"
-            aria-controls={open ? 'account-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
+    {
+      isPcSite && (
+      <>
+        <Box className={classes.box}>
+          <Tooltip title={`${currentUser?.name}`}>
+            <IconButton
+              onClick={handleClick}
+              size="small"
+              aria-controls={open ? 'account-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? 'true' : undefined}
+            >
+              <Avatar
+                alt="avatar"
+                src={currentUser?.image.url}
+                />
+            </IconButton>
+          </Tooltip>
+        </Box>
+      <Menu
+          anchorEl={anchorEl}
+          id="account-menu"
+          open={open}
+          onClose={handleClose}
+          onClick={handleClose}
+          getContentAnchorEl={null}
+          PaperProps={{
+            elevation: 0
+          }}
+          className={classes.menu}
+          transformOrigin={{ horizontal: 'left', vertical: 'top' }}
+          anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+        >
+          <MenuItem
+            component={Link}
+            to="/mypage"
+            color="inherit"
           >
-            <Avatar
-              alt="avatar"
-              src={currentUser?.image.url}
-              />
-          </IconButton>
-        </Tooltip>
-      </Box>
-    <Menu
-        anchorEl={anchorEl}
-        id="account-menu"
-        open={open}
-        onClose={handleClose}
-        onClick={handleClose}
-        getContentAnchorEl={null}
-        PaperProps={{
-          elevation: 0
-        }}
-        className={classes.menu}
-        transformOrigin={{ horizontal: 'left', vertical: 'top' }}
-        anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
-      >
-        <MenuItem
-          component={Link}
-          to="/mypage"
-          color="inherit"
+            マイページ
+          </MenuItem>
+          <MenuItem
+            component={Link}
+            to="/profile"
+            color="inherit"
+          >
+            プロフィール
+          </MenuItem>
+          {
+            currentUser?.isGuest ? (
+              <>
+                <Divider />
+                <MenuItem
+                  component={Link}
+                  color="inherit"
+                  to="/signin"
+                >
+                  ログイン
+                </MenuItem>
+              </>
+            ) : (
+              <>
+                <Divider />
+                <MenuItem
+                  component={Button}
+                  color="inherit"
+                  onClick={handleSignOut}
+                >
+                  ログアウト
+                </MenuItem>
+              </>
+            )
+          }
+        </Menu>
+      </>
+      )
+    }
+    {
+      isMobileSite && (
+      <>
+        <Box className={classes.mBox}>
+          <Tooltip title={`${currentUser?.name}`}>
+            <IconButton
+              onClick={handleClick}
+              size="small"
+              aria-controls={open ? 'account-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? 'true' : undefined}
+            >
+              <Avatar
+                alt="avatar"
+                className={classes.mAvatar}
+                src={currentUser?.image.url}
+                />
+            </IconButton>
+          </Tooltip>
+        </Box>
+      <Menu
+          anchorEl={anchorEl}
+          id="account-menu"
+          open={open}
+          onClose={handleClose}
+          onClick={handleClose}
+          getContentAnchorEl={null}
+          PaperProps={{
+            elevation: 0
+          }}
+          className={classes.menu}
+          transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         >
-          マイページ
-        </MenuItem>
-        <MenuItem
-          component={Link}
-          to="/profile"
-          color="inherit"
-        >
-          プロフィール
-        </MenuItem>
-        {
-          currentUser?.isGuest ? (
-            <>
-              <Divider />
-              <MenuItem
-                component={Link}
-                color="inherit"
-                to="/signin"
-              >
-                ログイン
-              </MenuItem>
-            </>
-          ) : (
-            <>
-              <Divider />
-              <MenuItem
-                component={Button}
-                color="inherit"
-                onClick={handleSignOut}
-              >
-                ログアウト
-              </MenuItem>
-            </>
-          )
-        }
-      </Menu>
+          <MenuItem
+            component={Link}
+            to="/new"
+            color="inherit"
+          >
+            日記新規作成
+          </MenuItem>
+          <MenuItem
+            component={Link}
+            to="/dreamdiaries"
+            color="inherit"
+          >
+            みんなの日記
+          </MenuItem>
+          <Divider />
+          <MenuItem
+            component={Link}
+            to="/mypage"
+            color="inherit"
+          >
+            マイページ
+          </MenuItem>
+          <MenuItem
+            component={Link}
+            to="/profile"
+            color="inherit"
+          >
+            プロフィール
+          </MenuItem>
+          {
+            currentUser?.isGuest ? (
+              <>
+                <Divider />
+                <MenuItem
+                  component={Link}
+                  color="inherit"
+                  to="/signin"
+                >
+                  ログイン
+                </MenuItem>
+              </>
+            ) : (
+              <>
+                <Divider />
+                <MenuItem
+                  component={Button}
+                  color="inherit"
+                  onClick={handleSignOut}
+                >
+                  ログアウト
+                </MenuItem>
+              </>
+            )
+          }
+        </Menu>
+      </>
+      )
+    }
       <AlertMessage
         open={alertOpen}
         setOpen={setAlertOpen}
