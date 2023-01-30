@@ -6,8 +6,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     textAlign: "center"
   },
   card: {
-    padding: theme.spacing(2),
-    width: 800
+    width: "100%"
   },
   box: {
     paddingTop: "2rem"
