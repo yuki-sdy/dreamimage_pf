@@ -67,6 +67,8 @@ export interface DreamDiary {
   diaryOgp: string
   image: string
   userId: number | undefined
+  likeCount: number
+  commentCount: number
   user: {
     id: number | undefined
     name: string
@@ -79,8 +81,6 @@ export interface DreamDiary {
     userId: number | undefined
     dreamDiaryId: number | undefined
   }
-  likeCount: number
-  commentCount: number
 }
 
 export interface DreamDiaryFormData extends FormData {
@@ -118,6 +118,8 @@ export interface Bookmark {
     diaryOgp: string
     image: string
     userId: number | undefined
+    likeCount: number
+    commentCount: number
     user: {
       id: number | undefined
       name: string
@@ -130,8 +132,6 @@ export interface Bookmark {
       userId: number | undefined
       dreamDiaryId: number | undefined
     }
-    likeCount: number
-    commentCount: number
   }
 }
 
