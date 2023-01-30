@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginTop: "3rem",
     display: "flex",
     justifyContent: "center",
+    paddingInlineStart: 0,
     "& > li" : {
       margin: "0 4px",
       listStyle: "none",
@@ -52,7 +53,6 @@ const Pagenation = ({ dreamDiaries, perPage, setOffset }: PagenationProps) => {
   }
 
   return (
-    <>
     <Box style={{textAlign: "center"}}>
       <ReactPaginate
         pageCount={pageCount}
@@ -67,7 +67,6 @@ const Pagenation = ({ dreamDiaries, perPage, setOffset }: PagenationProps) => {
         disabledClassName={classes.disable}
       />
     </Box>
-    </>
   )
 }
 

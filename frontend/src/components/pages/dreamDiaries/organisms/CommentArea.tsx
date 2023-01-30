@@ -5,6 +5,7 @@ import DeleteIcon from "@material-ui/icons/Delete"
 import { destroyComment } from "../../../../lib/api/comments"
 import { Comment } from "../../../../interfaces"
 import CommonDialog from "../../../utils/CommonDialog"
+import { useMediaQueryContext } from "../../../provider/MediaQueryPrivider"
 
 export interface CommentInfoProps {
   index: number
@@ -28,6 +29,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: theme.spacing(5),
     margin: "0 1.5rem"
   },
+  mAvatar: {
+    width: theme.spacing(4),
+    height: theme.spacing(4),
+    margin: "0 1rem"
+  },
   button: {
     float: "right"
   },
@@ -45,6 +51,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 const CommentArea = ({ index, body, createdAt, userId, userName, userImage, dreamDiaryId, comments, setComments, setSuccessOpen, setSuccessMsg, setAlertOpen,setAlertMsg }: CommentInfoProps) => {
   const classes = useStyles()
   const { currentUser } = useContext(AuthContext)
+  const { isMobileSite, isPcSite } = useMediaQueryContext()
 
   const [DlgOpen, setDlgOpen] = useState<boolean>(false)
 
@@ -82,6 +89,10 @@ const CommentArea = ({ index, body, createdAt, userId, userName, userImage, drea
 
   return (
     <>
+    {
+      isPcSite && (
+        <>
+        
       <Grid container className={classes.grid}>
         <Avatar
           alt="avatar"
@@ -112,13 +123,53 @@ const CommentArea = ({ index, body, createdAt, userId, userName, userImage, drea
         </Button>
         ):(<></>)
       }
+      </Grid>
+      </>
+      )
+    }
+    {
+      isMobileSite && (
+      <>  
+      <Grid container className={classes.grid}>
+        <Avatar
+          alt="avatar"
+          src={userImage}
+          className={classes.mAvatar}
+        />
+        <Typography variant="body1" style={{fontWeight: "bold"}}>
+          {userName}
+        </Typography>
+      </Grid>
+      <Grid item style={{width:"50%"}}>
+      <Typography variant="body1" color="textSecondary" style={{whiteSpace: "pre-wrap"}}>
+        {body}
+      </Typography>
+      </Grid>
+      <Grid item style={{width:"100%", textAlign: "right"}}>
+      <Typography variant="body2" color="textSecondary" className={classes.createdAtTypography}>
+        {createdDateTime(createdAt)}
+      </Typography>
+      {
+        currentUser?.id === userId ? (
+        <Button
+          color="primary"
+          onClick={() => setDlgOpen(true)}
+          className={classes.button}
+          >
+          <DeleteIcon />
+        </Button>
+        ):(<></>)
+      }
+      </Grid>
+      </>
+      )
+    }
       <CommonDialog // 削除確認ダイアログ
         message={"本当に削除しますか？"}
         open={DlgOpen}
         setOpen={setDlgOpen}
         doYes={() => handleDeleteComment(index)}
       />
-        </Grid>
     </>
   )
 }
