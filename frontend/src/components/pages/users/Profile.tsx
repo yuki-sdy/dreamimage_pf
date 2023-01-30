@@ -7,7 +7,7 @@ import CardContent from "@material-ui/core/CardContent"
 import { AuthContext } from "../../../App"
 import Cookies from "js-cookie"
 import { useLocation, useNavigate } from "react-router-dom"
-import { deleteAccount, updateUser } from "../../../lib/api/users"
+import { updateUser } from "../../../lib/api/users"
 import { Button, Avatar, Grid, IconButton, TextField, Typography, Divider, DialogContent, Dialog, Box, DialogActions, DialogTitle } from "@material-ui/core"
 import AlertMessage from "../../utils/AlertMessage"
 import { UpdateUserFormData } from "../../../interfaces"
@@ -18,6 +18,7 @@ import EditIcon from "@material-ui/icons/Edit"
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import CancelIcon from "@material-ui/icons/Cancel"
 import { Link } from "react-router-dom"
+import { useMediaQueryContext } from "../../provider/MediaQueryPrivider"
 
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -48,6 +49,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const Profile: React.FC = () => {
   const { isSignedIn, currentUser, setCurrentUser, setIsSignedIn } = useContext(AuthContext)
+  const { isMobileSite } = useMediaQueryContext()
   const classes = useStyles()
   const navigation = useNavigate()
   const location = useLocation()
@@ -138,8 +140,10 @@ const Profile: React.FC = () => {
       <>
       {
         isSignedIn && currentUser ? (
+        <>
+          {
           currentUser?.isGuest ? (
-            <>
+            <div style={isMobileSite ? ({height: "500px"}) :({})}>
             <Card className={classes.card}>
               <CardContent>
                 <Grid container justify="center">
@@ -180,9 +184,9 @@ const Profile: React.FC = () => {
                 </Grid>
               </CardContent>
             </Card>
-            </>
+            </div>
           ) : (
-          <>
+          <div style={isMobileSite ? ({height: "500px"}) :({})}>
             <Card className={classes.card}>
               <CardContent>
                 <Grid container justify="flex-end">
@@ -245,6 +249,9 @@ const Profile: React.FC = () => {
                 </Grid>
               </CardContent>
             </Card>
+            </div>
+            )
+            }
             <form noValidate autoComplete="off">
               <Dialog
                 open={editFormOpen}
@@ -342,7 +349,6 @@ const Profile: React.FC = () => {
               message={successMsg}
             />
           </>
-          )
         ) : (
           <></>
         )
