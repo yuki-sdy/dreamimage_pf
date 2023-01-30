@@ -1,14 +1,18 @@
 class Api::V1::CommentsController < ApplicationController
-  before_action :set_comment_attributes, only: %i[create]
+  before_action :set_comment_attributes, only: %i[create destroy]
 
   def create
+    @dream_diary[:comment_count] = @dream_diary.comments.count + 1
+    @dream_diary.save
     comment = @current_user.comments.new(comment_params)
     if comment.save
       render json: comment, include: [:user], status: 200
     end
   end
-
+  
   def destroy
+    @dream_diary[:comment_count] = @dream_diary.comments.count - 1
+    @dream_diary.save
     comment = current_api_v1_user.comments.find(params[:id])
     comment.destroy
     render json: { status: 200 }
