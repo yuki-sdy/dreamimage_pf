@@ -5,12 +5,14 @@ Rails.application.routes.draw do
       root "top#index"
       resources :users, only: %i[update destroy]
       resources :mypages, only: %i[index]
+
       resources :dream_diaries do
         post 'preview', on: :collection
         post 'back', on: :collection
         resources :likes, only: %i[create destroy]
         resources :bookmarks, only: %i[create destroy]
         resources :comments, only: %i[create destroy]
+        get 'share', to: 'dream_diaries#share'
       end
 
       post 'images/create'

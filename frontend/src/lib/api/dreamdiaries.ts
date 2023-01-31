@@ -51,6 +51,11 @@ export const DreamDiaryDestroy = (id: number | undefined) => {
   }})  
 }
 
+// shareへのgetリクエスト
+export const TwitterShare = (id: number | undefined) => {
+  return client.get(`dream_diaries/${id}/share`)
+}
+
 // image#createへのpostリクエスト
 export const ImageCreate = (prompts: string, id: number | undefined) => {
   return client.post("images/create", { prompts: prompts, user_id: id })
