@@ -14,6 +14,7 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder'
 
 import Delete from "@material-ui/icons/Delete"
 import EditIcon from "@material-ui/icons/Edit"
+import TwitterIcon from '@mui/icons-material/Twitter'
 import { AuthContext } from "../../../App"
 import { createLike, destroyLike } from "../../../lib/api/likes"
 import { createBookmark, destroyBookmark } from "../../../lib/api/bookmarks"
@@ -317,14 +318,6 @@ const DreamDiaryShow: React.FC = () => {
                 >
             {`${likesCount}`}
           </Button>
-          <Button
-            onClick={handleTwitterSubmit}
-              color="secondary"
-                disabled={!isSignedIn ? true : false}
-                style={{ marginTop: "1rem", marginBottom: "1rem" }}
-                >
-            twitter
-          </Button>
           {
             isSignedIn ? (
             <>
@@ -342,6 +335,15 @@ const DreamDiaryShow: React.FC = () => {
           </>
           ):(<></>)
         }
+          <Button
+            onClick={handleTwitterSubmit}
+              color="primary"
+                disabled={!isSignedIn ? true : false}
+                startIcon={<TwitterIcon/>}
+                style={{ marginTop: "1rem", marginBottom: "1rem", marginLeft: "2rem" }}
+                >
+            シェアする
+          </Button>
         {
           isSignedIn && currentUser?.id === dreamDiary?.userId ? (
             <>
@@ -482,12 +484,10 @@ const DreamDiaryShow: React.FC = () => {
             onClick={
               currentUserBookmarked ? handleDestroyBookmark : handleCreateBookmark}
             color="secondary"
-            startIcon={
-              currentUserBookmarked ? (<BookmarkIcon />) : (<BookmarkBorderIcon />)}
             disabled={currentUser?.isGuest ? true : false}
             style={{ marginTop: "0.3rem", marginBottom: "0.3rem" }}
           >
-            {currentUserBookmarked ? "お気に入り解除" : "お気に入り登録"}
+            {currentUserBookmarked ? <BookmarkIcon /> : <BookmarkBorderIcon />}
           </Button>
           </>
           ):(<></>)
@@ -511,6 +511,14 @@ const DreamDiaryShow: React.FC = () => {
             </>
           ) : (<></>)
         }
+        <Button
+        onClick={handleTwitterSubmit}
+          color="primary"
+          disabled={!isSignedIn ? true : false}
+          style={{ marginTop: "1rem", marginBottom: "1rem" }}
+          >
+          <TwitterIcon/>
+        </Button>
           <Grid container justify="center" style={{alignItems: "center", marginBottom:"0.5rem", marginTop: "0.3rem"}}>
             作者：　
           <Avatar
