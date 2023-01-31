@@ -1,5 +1,6 @@
-import { Box, Card, CardContent, CardHeader, makeStyles, Theme, Typography } from "@material-ui/core"
+import { Box, Card, CardContent, CardHeader, makeStyles, Theme, Typography, Button } from "@material-ui/core"
 import React from "react"
+import { Link,  } from "react-router-dom"
 
 const useStyles = makeStyles((theme: Theme) => ({
   header: {
@@ -15,10 +16,26 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontWeight: "bold",
     marginTop: "1.5rem"
   },
+  button: {
+    padding: "0",
+    "&:hover": {
+      backgroundColor: "white",
+      textDecoration: "underline"
+    }
+  }
 }))
 
 const TermOfService: React.FC = () => {
   const classes = useStyles()
+
+  const handleLink1 = () => {
+    window.open("https://rinna.co.jp/tsukuru-terms-of-use/", '_blank')    
+  }
+
+  const handleLink2 = () => {
+    window.open("https://huggingface.co/CompVis/stable-diffusion", '_blank')    
+  }
+
   return (
     <>
       <Card className={classes.card}>
@@ -37,7 +54,31 @@ const TermOfService: React.FC = () => {
             　3. 本規約の規定が前条の個別規定の規定と矛盾する場合には、個別規定において特段の定めなき限り、個別規定の規定が優先されるものとします。<br/>
             </Typography>
             <Typography variant="body2" className={classes.title}>
-              第2条（禁止事項）
+              第2条（本サービスの内容）
+            </Typography>
+            <Typography variant="body2">
+              本アプリは、アプリ上でテキストデータを送信して生成されたイメージ画像を利用した日記の作成と共有ができるサービスです。<br/>
+              一日の利用可能回数には本アプリの定める上限があり、上限回数は予告なく変更されることがあります。<br/>
+              <br/>
+              本アプリでは、Japanese Stable Diffusionを利用して画像生成を行なっています。
+              <br/>
+              生成された画像データの著作権に関しては、
+              <Button
+                onClick={handleLink1}
+                className={classes.button}>
+                Japanese Stable Diffusion
+              </Button>
+              および、
+              <Button
+                onClick={handleLink2}
+                className={classes.button}>
+                Stable Diffusion
+              </Button>
+              の規約に従います。<br/>
+              本アプリによって利用者が送信するテキストデータから画像への変換については、管理者の意思に基づき利用、加工、複製、翻案等を行うものではなく、本アプリのAI機能によって専ら機械的に行われるに過ぎません。したがって、当該テキストまたは画像の著作権、商標権、肖像権その他の知的財産権その他の権利の保護について、当社は、いかなる関与又は保証を行うものではありません。このため、利用者は、自己責任に基づき、本アプリを利用するものとし、本アプリの利用の結果、第三者の権利侵害が発生した場合においても、利用者自らの責任と費用によって解決するものとし、管理者はいかなる責任も負わないものとします。
+            </Typography>
+            <Typography variant="body2" className={classes.title}>
+              第3条（禁止事項）
             </Typography>
             <Typography variant="body2">
               ユーザーは、本サービスの利用にあたり、以下の行為をしてはなりません。<br/>
@@ -58,7 +99,7 @@ const TermOfService: React.FC = () => {
               　15.その他、管理者が不適切と判断する行為<br/>
             </Typography>
             <Typography variant="body2" className={classes.title}>
-              第3条（本サービスの提供の停止等）
+              第4条（本サービスの提供の停止等）
             </Typography>
             <Typography variant="body2">
               1. 管理者は、以下のいずれかの事由があると判断した場合、ユーザーに事前に通知することなく本サービスの全部または一部の提供を停止または中断することができるものとします。<br/>
@@ -69,7 +110,7 @@ const TermOfService: React.FC = () => {
               2. 管理者は、本サービスの提供の停止または中断により、ユーザーまたは第三者が被ったいかなる不利益または損害についても、一切の責任を負わないものとします。<br/>
             </Typography>
             <Typography variant="body2" className={classes.title}>
-              第4条（保証の否認および免責事項）
+              第5条（保証の否認および免責事項）
             </Typography>
             <Typography variant="body2">
               　1. 管理者は、本サービスに事実上または法律上の瑕疵（安全性、信頼性、正確性、完全性、有効性、特定の目的への適合性、セキュリティなどに関する欠陥、エラーやバグ、権利侵害などを含みます。）がないことを明示的にも黙示的にも保証しておりません。<br/>
@@ -78,13 +119,13 @@ const TermOfService: React.FC = () => {
               　4. 管理者は、本サービスに関して、ユーザーと他のユーザーまたは第三者との間において生じた取引、連絡または紛争等について一切責任を負いません。<br/>
             </Typography>
             <Typography variant="body2" className={classes.title}>
-              第5条（サービス内容の変更等）
+              第6条（サービス内容の変更等）
             </Typography>
             <Typography variant="body2">
               管理者は、ユーザーへの事前の告知をもって、本サービスの内容を変更、追加または廃止することがあり、ユーザーはこれを承諾するものとします。<br/>
             </Typography>
             <Typography variant="body2" className={classes.title}>
-              第6条（利用規約の変更）
+              第7条（利用規約の変更）
             </Typography>
             <Typography variant="body2">
               管理者は以下の場合には、ユーザーの個別の同意を要せず、本規約を変更することができるものとします。<br/>
@@ -93,19 +134,19 @@ const TermOfService: React.FC = () => {
               管理者はユーザーに対し、前項による本規約の変更にあたり、事前に、本規約を変更する旨及び変更後の本規約の内容並びにその効力発生時期を通知します。<br/>
             </Typography>
             <Typography variant="body2" className={classes.title}>
-              第7条（個人情報の取扱い）
+              第8条（個人情報の取扱い）
             </Typography>
             <Typography variant="body2">
               管理者は、本サービスの利用によって取得する個人情報については、本サービス「プライバシーポリシー」に従い適切に取り扱うものとします。<br/>
             </Typography>
             <Typography variant="body2" className={classes.title}>
-              第8条（権利義務の譲渡の禁止）
+              第9条（権利義務の譲渡の禁止）
             </Typography>
             <Typography variant="body2">
               ユーザーは、管理者の書面による事前の承諾なく、利用契約上の地位または本規約に基づく権利もしくは義務を第三者に譲渡し、または担保に供することはできません。<br/>
             </Typography>
             <Typography variant="body2" className={classes.title}>
-              第9条（準拠法・裁判管轄）
+              第10条（準拠法・裁判管轄）
             </Typography>
             <Typography variant="body2">
               　1. 本規約の解釈にあたっては、日本法を準拠法とします。<br/>
