@@ -11,7 +11,7 @@ class TwitterShare
     end
 
     img = open(img_url)
-    res = @client.update_with_media("#{Time.now}", img)
+    res = @client.update_with_media("", img)
     display_url = res.media[0].display_url.to_s
 
     return display_url

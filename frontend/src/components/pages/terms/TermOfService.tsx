@@ -31,9 +31,11 @@ const TermOfService: React.FC = () => {
   const handleLink1 = () => {
     window.open("https://rinna.co.jp/tsukuru-terms-of-use/", '_blank')    
   }
-
   const handleLink2 = () => {
     window.open("https://huggingface.co/CompVis/stable-diffusion", '_blank')    
+  }
+  const handleLink3 = () => {
+    window.open("https://twitter.com/DreamdiaryApp", '_blank')    
   }
 
   return (
@@ -58,6 +60,13 @@ const TermOfService: React.FC = () => {
             </Typography>
             <Typography variant="body2">
               本アプリは、アプリ上でテキストデータを送信して生成されたイメージ画像を利用した日記の作成と共有ができるサービスです。<br/>
+              また、Twitterシェアが押されると日記画像のみ
+              <Button
+                onClick={handleLink3}
+                className={classes.button}>
+                公式アカウント
+              </Button>
+              にてツイートが行われます。
               一日の利用可能回数には本アプリの定める上限があり、上限回数は予告なく変更されることがあります。<br/>
               <br/>
               本アプリでは、Japanese Stable Diffusionを利用して画像生成を行なっています。
