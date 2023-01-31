@@ -1,5 +1,6 @@
 class Api::V1::DreamDiariesController < ApplicationController
   require 'base64'
+  require 'open-uri'
   before_action :set_dream_diary, only: %i[show edit update destroy]
 
   def index
@@ -61,7 +62,8 @@ class Api::V1::DreamDiariesController < ApplicationController
   end
   
   def share
-    display_url = TwitterShare.send(`https://dreamdiary.magia.runteq.jp/api/v1/dream_diaries/#{params[:dream_diary_id]}/images`)
+    img = open(`https://dreamdiary.magia.runteq.jp/api/v1/dream_diaries/#{params[:dream_diary_id]}/images`)
+    display_url = TwitterShare.send(img)
 
     render json: { status: 200, display_url: display_url}
   end
