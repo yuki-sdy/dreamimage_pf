@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom"
 import { useNavigate, useParams } from "react-router-dom"
 
 import { DreamDiary, Like, BookmarkData, Comment, CommentData } from "../../../interfaces"
-import { DreamDiaryDestroy, getDreamDiary } from "../../../lib/api/dreamdiaries"
+import { DreamDiaryDestroy, getDreamDiary, TwitterShare } from "../../../lib/api/dreamdiaries"
 import AlertMessage from "../../utils/AlertMessage"
 import CommonDialog from "../../utils/CommonDialog"
 import FavoriteIcon from "@material-ui/icons/Favorite"
@@ -268,6 +268,27 @@ const DreamDiaryShow: React.FC = () => {
     }
   }
 
+  // twitterシェア
+  const handleTwitterSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    try {
+      const res = await TwitterShare(dreamDiary?.id)
+      console.log(res)
+
+      if (res?.status === 200) {
+        const tweet = `https://twitter.com/intent/share?text=${res.data.displayUrl}/&url=${process.env.REACT_APP_FRONT}/&hashtags=夢絵日記`
+        window.open(tweet, '_blank')
+        
+      } else {
+        setAlertMsg("しばらく経ってからもう一度お試しください。")
+        setAlertOpen(true)
+      }
+    } catch (err) {
+      setAlertMsg("しばらく経ってからもう一度お試しください。")
+      setAlertOpen(true)
+    }
+  }
+
   return (
     <>
     {
@@ -294,6 +315,14 @@ const DreamDiaryShow: React.FC = () => {
                 style={{ marginTop: "1rem", marginBottom: "1rem" }}
                 >
             {`${likesCount}`}
+          </Button>
+          <Button
+            onClick={handleTwitterSubmit}
+              color="secondary"
+                disabled={!isSignedIn ? true : false}
+                style={{ marginTop: "1rem", marginBottom: "1rem" }}
+                >
+            twitter
           </Button>
           {
             isSignedIn ? (
