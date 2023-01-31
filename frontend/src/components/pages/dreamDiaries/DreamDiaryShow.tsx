@@ -271,12 +271,13 @@ const DreamDiaryShow: React.FC = () => {
   // twitterシェア
   const handleTwitterSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
+    const url = `https://dreamdiary.magia.runteq.jp/api/v1/dream_diaries/${dreamDiary?.id}/images`
     try {
-      const res = await TwitterShare(dreamDiary?.id)
+      const res = await TwitterShare(dreamDiary?.id, url)
       console.log(res)
 
       if (res?.status === 200) {
-        const tweet = `https://twitter.com/intent/share?text=${res.data.displayUrl}/&url=${process.env.REACT_APP_FRONT}/&hashtags=夢絵日記`
+        const tweet = `https://twitter.com/intent/tweet?text=画像生成で夢を絵日記に！%20%23夢絵日記%20%0a${res.data.displayUrl}&url=${process.env.REACT_APP_FRONT}`
         window.open(tweet, '_blank')
         
       } else {

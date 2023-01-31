@@ -12,7 +12,7 @@ Rails.application.routes.draw do
         resources :likes, only: %i[create destroy]
         resources :bookmarks, only: %i[create destroy]
         resources :comments, only: %i[create destroy]
-        get 'share', to: 'dream_diaries#share'
+        post 'share', to: 'dream_diaries#share'
       end
 
       post 'images/create'
