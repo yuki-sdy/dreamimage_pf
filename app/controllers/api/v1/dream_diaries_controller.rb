@@ -59,6 +59,12 @@ class Api::V1::DreamDiariesController < ApplicationController
     dream_diary = DreamDiary.new(dream_diary_params)
     render json: { status: 200, dream_diary: dream_diary }
   end
+  
+  def share
+    display_url = TwitterShare.send(`https://dreamdiary.magia.runteq.jp/api/v1/dream_diaries/#{params[:dream_diary_id]}/images`)
+
+    render json: { status: 200, display_url: display_url}
+  end
 
   private
 

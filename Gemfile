@@ -24,6 +24,7 @@ gem 'bootsnap', '>= 1.4.4', require: false
 
 gem 'devise'
 gem 'devise_token_auth'
+gem 'twitter'
 # 実装保留
 # gem 'omniauth'
 # gem 'omniauth-twitter'
