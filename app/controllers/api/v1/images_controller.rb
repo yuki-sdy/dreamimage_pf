@@ -68,7 +68,7 @@ class Api::V1::ImagesController < ApplicationController
     current_user.image_boxes.destroy_by('created_at < ?', Time.zone.now.midnight) if current_user.image_boxes.pasts.present?
 
     guests = User.where(is_guest: true)
-    guest.map{ |u| u.destroy if !u.dream_diaries.present? && u[:created_at] < Time.zone.now.midnight }
+    guests.map{ |u| u.destroy if !u.dream_diaries.present? && u[:created_at] < Time.zone.now.midnight }
 
     if current_user.image_boxes.today_box.present?
       current_box = current_user.image_boxes.today_box
