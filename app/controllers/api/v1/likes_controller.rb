@@ -1,5 +1,5 @@
 class Api::V1::LikesController < ApplicationController
-  before_action :set_like_attributes, only: %i[create destroy]
+  before_action :set_like_attributes, only: %i[create]
 
   def create
     @dream_diary[:like_count] = @dream_diary.likes.count + 1
@@ -9,6 +9,7 @@ class Api::V1::LikesController < ApplicationController
   end
   
   def destroy
+    @dream_diary = DreamDiary.find(like_params[:dream_diary_id])
     @dream_diary[:like_count] = @dream_diary.likes.count - 1
     @dream_diary.save
     current_api_v1_user.unlike(@dream_diary)
