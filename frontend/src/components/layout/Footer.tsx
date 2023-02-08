@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const Footer: React.FC = () => {
   const { isSignedIn, setIsSignedIn, currentUser, setCurrentUser } = useContext(AuthContext)
-  const { isMobileSite, isPcSite } = useMediaQueryContext()
+  const { isMobileSite, isTabletSite, isPcSite } = useMediaQueryContext()
   const classes = useStyles();
   const navigation = useNavigate()
   const [dlgOpen, setDlgOpen] = useState<boolean>(false)
@@ -149,6 +149,72 @@ const Footer: React.FC = () => {
               }
             </Box>
             <div style={{marginTop: ".5rem"}}>
+              {'Copyright © '}
+              {new Date().getFullYear()}
+              {' 夢絵日記'}
+            </div>
+          </Typography>
+        </div>
+      </>
+      )
+    }
+    {
+      isTabletSite && (
+        <>
+        <div className={classes.mFooter}>
+          <Typography color="textSecondary" align="center">
+            <Box style={{backgroundColor: "white", margin: "auto", borderRadius: "15px",display: "flex", width: "fit-content", alignItems: "center"}}>
+              <Button
+                component={Link}
+                to="/"
+                color="inherit"
+                className={classes.mButton}
+                >
+                遊び方
+              </Button>
+              <Divider orientation="vertical" flexItem/>
+              <Button
+                onClick={handleLinkOpen}
+                className={classes.mButton}
+                color="inherit"
+                >
+                お問合せ
+              </Button>
+              <Divider orientation="vertical" flexItem/>
+              <Button
+                component={Link}
+                to="/term_of_service"
+                color="inherit"
+                className={classes.mButton}
+                >
+                利用規約
+              </Button>
+              </Box>
+              <Box style={{backgroundColor: "white", margin: "3px auto", borderRadius: "15px",display: "flex", width: "fit-content", alignItems: "center"}}>
+              <Button
+                component={Link}
+                to="/privacy_policy"
+                color="inherit"
+                className={classes.mButton}
+                >
+                個人情報保護方針
+              </Button>
+              {
+                isSignedIn ? (
+                <>
+                  <Divider orientation="vertical" flexItem/>
+                  <Button
+                    onClick={() => setDlgOpen(true)}
+                    className={classes.mButton}
+                    color="inherit"
+                    >
+                    アカウントの削除
+                  </Button>
+                </>
+                ) : (<></>)
+              }
+            </Box>
+            <div style={{marginTop: ".5rem", fontSize: "10px"}}>
               {'Copyright © '}
               {new Date().getFullYear()}
               {' 夢絵日記'}

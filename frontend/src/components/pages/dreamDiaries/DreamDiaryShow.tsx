@@ -36,6 +36,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   mPreview: {
     width: "95%"
   },
+  tPreview: {
+    width: "70%"
+  },
   submitBtn: {
     textAlign: "center",
   },
@@ -53,7 +56,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const DreamDiaryShow: React.FC = () => {
   const { currentUser, isSignedIn } = useContext(AuthContext)
-  const { isMobileSite, isPcSite } = useMediaQueryContext()
+  const { isMobileSite, isTabletSite, isPcSite } = useMediaQueryContext()
   const params = useParams()
   const classes = useStyles()
   const navigation = useNavigate()
@@ -304,6 +307,165 @@ const DreamDiaryShow: React.FC = () => {
               src={dreamDiary?.diaryOgp}
               alt="diaryOgp img"
               className={classes.preview}
+            />
+          </div>
+          <div  className={classes.submitBtn}>
+          <Button
+            onClick={
+              currentUserLiked ? handleDestroyLike : handleCreateLike}
+              color="secondary"
+              startIcon={
+                currentUserLiked ? (<FavoriteIcon />) : (<FavoriteBorderIcon />)}
+                disabled={!isSignedIn ? true : false}
+                style={{ marginTop: "1rem", marginBottom: "1rem" }}
+                >
+            {`${likesCount}`}
+          </Button>
+          {
+            isSignedIn ? (
+            <>
+          <Button
+            onClick={
+              currentUserBookmarked ? handleDestroyBookmark : handleCreateBookmark}
+            color="secondary"
+            startIcon={
+              currentUserBookmarked ? (<BookmarkIcon />) : (<BookmarkBorderIcon />)}
+            disabled={currentUser?.isGuest ? true : false}
+            style={{ marginTop: "1rem", marginBottom: "1rem" }}
+          >
+            {currentUserBookmarked ? "お気に入り解除" : "お気に入り登録"}
+          </Button>
+          </>
+          ):(<></>)
+        }
+          <Button
+            onClick={handleTwitterSubmit}
+              color="primary"
+                disabled={!isSignedIn ? true : false}
+                startIcon={<TwitterIcon/>}
+                style={{ marginTop: "1rem", marginBottom: "1rem", marginLeft: "2rem" }}
+                >
+            シェアする
+          </Button>
+        {
+          isSignedIn && currentUser?.id === dreamDiary?.userId ? (
+            <>
+              <IconButton
+                    color="primary"
+                    to={`/dreamdiaries/${params.id}/edit`}
+                    component={Link}
+                  >
+                    <EditIcon />
+              </IconButton>
+              <IconButton
+                    color="secondary"
+                    onClick={() => setDlgOpen(true)}
+                  >
+                    <Delete />
+              </IconButton>
+            </>
+          ) : (<></>)
+        }
+          <Grid container justify="center" style={{alignItems: "center", marginBottom:"2rem", marginTop: "1rem"}}>
+            作者：　
+          <Avatar
+            alt="avatar"
+            src={dreamDiary?.user === null ? '' : dreamDiary?.user.image.url}
+            className={classes.avatar}
+          />
+          <Typography variant="body1" component="p">
+            {dreamDiary?.user === null ? '退会済みユーザー' : dreamDiary?.user.name}
+          </Typography>
+          </Grid>
+        </div>
+        <Box style={{width: "800px", textAlign: "center", margin: "auto"}}>
+          <Button
+            component={Link}
+            to="/dreamdiaries"
+          >
+            ▶︎一覧画面に戻る
+          </Button>
+          <Button
+            component={Link}
+            to="/mypage"
+          >
+            ▶︎マイページに戻る
+          </Button>
+        </Box>
+        <Divider style={{ marginTop: "0.5rem"}}/>
+        {
+          isSignedIn && !currentUser?.isGuest ? (
+            <>
+        <form noValidate autoComplete="off">
+          <Box style={{width: "600px", margin: "auto"}}>
+          <h3>コメント</h3>
+          <TextField
+            placeholder="コメントする"
+            variant="outlined"
+            multiline
+            fullWidth
+            rows="2"
+            value={commentBody}
+            margin="dense"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setCommentBody(e.target.value)
+            }}
+          />
+          <Button
+            onClick={handleCommentSubmit}
+            color="primary"
+            disabled={!commentBody ? true : false}
+            style={{float: "right"}}
+          >
+            送信
+          </Button>
+          </Box>
+          </form>
+          </>
+          ) : (<></>)
+        }
+          <Grid container style={{width: "500px", margin: "2.5rem auto"}}>
+          {
+          comments.map((comment: Comment, index: number) => {
+              return (
+                <Grid item container key={index} justify="center">
+                  <CommentArea
+                    index={index}
+                    body={comment.body}
+                    createdAt={comment.createdAt}
+                    dreamDiaryId={comment.dreamDiaryId}
+                    userId={comment.user === null ? 0 : comment.user.id}
+                    userName={comment.user === null ? '退会済みユーザー' : comment.user.name}
+                    userImage={comment.user === null ? '' : comment.user.image.url}
+                    comments={comments}
+                    setComments={setComments}
+                    setSuccessOpen={setSuccessOpen}
+                    setSuccessMsg={setSuccessMsg}
+                    setAlertOpen={setAlertOpen}
+                    setAlertMsg={setAlertMsg}
+                    />
+                </Grid>
+              )
+            })
+          }
+          </Grid>
+          </>
+          ) : (<></>) 
+        }
+        </>
+      )
+    }
+    {
+      isTabletSite && (
+        <>
+     {
+        !loading ? (
+          <>
+          <div style={{textAlign: "center"}}>
+              <img
+              src={dreamDiary?.diaryOgp}
+              alt="diaryOgp img"
+              className={classes.tPreview}
             />
           </div>
           <div  className={classes.submitBtn}>

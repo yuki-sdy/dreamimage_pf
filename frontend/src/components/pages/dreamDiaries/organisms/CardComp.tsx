@@ -93,7 +93,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const CardComp = ({ image, title, content, dreamDate, impression, dreamType, id, userName, userImage, likeCount, commentCount}: CardInfoProps) => {
   const classes = useStyles()
-  const { isMobileSite, isPcSite } = useMediaQueryContext()
+  const { isMobileSite, isTabletSite, isPcSite } = useMediaQueryContext()
 
   const diaryImpression = (impression :number): string => {
     return impressions[Number(impression)]
@@ -107,6 +107,50 @@ const CardComp = ({ image, title, content, dreamDate, impression, dreamType, id,
     <>
     {
       isPcSite && (
+      <div className="product-card-top">
+        <Link to={`/dreamdiaries/${id}`} className={classes.link}>
+        <Card className={classes.card} style={{padding: 0}}>
+          <CardContent className={classes.content}>
+            <CardMedia className={classes.media}>
+              <img src={image} width={"90%"} className={classes.image}/>
+            </CardMedia>
+            <div style={{display: "flex"}}>
+            <Avatar
+                  alt="avatar"
+                  src={userImage}
+                  className={classes.avatar}
+                />
+              <div>
+              <Typography variant="h1" component="div" className={classes.typography} style={{fontSize: "17px", width: "150px"}}>
+                  {title}
+              </Typography>
+              <Typography variant="body2" color="textSecondary" className={classes.typography} style={{fontSize: "14px", width: "150px"}}>
+                  {userName}
+              </Typography>
+              </div>
+            </div>
+              <div style={{paddingTop: "3px"}}>
+              <Typography variant="body2" color="textSecondary" className={classes.typography} style={{fontSize: "12px", width: "170px"}}>
+                {content}
+              </Typography>
+              <Typography variant="body2" color="textSecondary" component="div">
+                  {`${diaryImpression(impression)}・${dreamDate}(${diaryDreamType(dreamType)}) `}
+              </Typography>
+              <Typography variant="body2" color="textSecondary" component="div" style={{float: "right"}}>
+                  <FavoriteIcon className={classes.icon}/>
+                    {`${likeCount}　`}
+                  <ChatBubbleIcon className={classes.icon}/>
+                    {`${commentCount}`}
+              </Typography>
+              </div>
+          </CardContent>
+        </Card>
+        </Link>
+      </div>
+      )
+    }
+    {
+      isTabletSite && (
       <div className="product-card-top">
         <Link to={`/dreamdiaries/${id}`} className={classes.link}>
         <Card className={classes.card} style={{padding: 0}}>

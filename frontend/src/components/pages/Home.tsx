@@ -10,8 +10,8 @@ import { Button } from "@material-ui/core"
 
 import GoButtonImage from '../../images/gobutton.png'
 import TopImage from '../../images/topimage.png'
+import mTopImage from '../../images/mTopimage.png'
 import TopButton1 from '../../images/topbutton1.png'
-import KiraKira from '../../images/kirakira.png'
 import { SignUpData } from "../../interfaces"
 import { signUp } from "../../lib/api/auth"
 import AlertMessage from "../utils/AlertMessage"
@@ -25,9 +25,16 @@ const useStyles = makeStyles((theme: Theme) => ({
     zIndex: 1
   },
   mTopImage: {
-    width: "380px",
+    width: "440px",
     position: "absolute",
-    left:"-190px",
+    left:"-220px",
+    top: "-30px",
+    zIndex: 1
+  },
+  tTopImage: {
+    width: "900px",
+    position: "absolute",
+    left:"-450px",
     top: "-30px",
     zIndex: 1
   },
@@ -37,7 +44,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   mContainerBox: {
     position: "relative",
-    height: "510px",
+    height: "1520px",
+    marginTop: 0
+  },
+  tContainerBox: {
+    position: "relative",
+    height: "1300px",
     marginTop: 0
   },
   imageBox: {
@@ -48,7 +60,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const Home: React.FC = () => {
   const { setCurrentUser, currentUser, setIsSignedIn } = useContext(AuthContext)
-  const { isMobileSite, isPcSite } = useMediaQueryContext()
+  const { isMobileSite, isTabletSite, isPcSite } = useMediaQueryContext()
   const classes = useStyles()
   const navigation = useNavigate()
   const location = useLocation()
@@ -117,7 +129,7 @@ const Home: React.FC = () => {
             <img src={TopImage} className={classes.topImage} />
             <Button 
               className={classes.imageBox} 
-              style={{maxWidth: "1200px", top: "1370px", left: "-174px"}}
+              style={{maxWidth: "1000px", top: "1370px", left: "-174px"}}
               onClick={handleGuestLoginSubmit}
               >
               <img src={TopButton1} style={{width: "350px"}} />
@@ -143,20 +155,52 @@ const Home: React.FC = () => {
         </>
         )
       }
+      {isTabletSite && (
+        <>
+          <Box className={classes.tContainerBox}>
+            <img src={TopImage} className={classes.tTopImage} />
+            <Button 
+              className={classes.imageBox} 
+              style={{maxWidth: "800px", top: "995px", left: "-132px"}}
+              onClick={handleGuestLoginSubmit}
+              >
+              <img src={TopButton1} style={{width: "260px"}} />
+            </Button>
+            <Box textAlign="center" className={classes.imageBox} style={{top: "1080px", left: "280px"}}>
+                <Link to="/dreamdiaries">
+                  <img src={GoButtonImage} style={{width: "170px"}} />
+                </Link>
+            </Box>
+          </Box>
+          <AlertMessage
+            open={alertOpen}
+            setOpen={setAlertOpen}
+            severity="error"
+            message={alertMsg}
+          />
+          <AlertMessage
+            open={successOpen}
+            setOpen={setSuccessOpen}
+            severity="success"
+            message={successMsg}
+          />
+        </>
+        )
+      }
       {isMobileSite && (
         <>
           <Box className={classes.mContainerBox}>
-            <img src={TopImage} className={classes.mTopImage} />
+            <img src={mTopImage} className={classes.mTopImage} />
             <Button 
               className={classes.imageBox} 
-              style={{maxWidth: "50px", top: "395px", left: "-29px"}}
+              style={{maxWidth: "50px", top: "1250px", left: "-29px"}}
               onClick={handleGuestLoginSubmit}
               >
-              <img src={TopButton1} style={{width: "135px"}} />
+              <img src={TopButton1} style={{width: "220px"}} />
             </Button>
-            <Box textAlign="center" className={classes.imageBox} style={{top: "430px", left: "112px"}}>
+            <Box textAlign="center" className={classes.imageBox} style={{top: "1380px", left: "-60px"}}>
                 <Link to="/dreamdiaries">
-                  <img src={GoButtonImage} style={{width: "77px"}} />
+                  <img src={GoButtonImage} style={{width: "140px"}} />
                 </Link>
             </Box>
           </Box>

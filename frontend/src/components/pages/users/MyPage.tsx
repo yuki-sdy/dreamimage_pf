@@ -13,7 +13,6 @@ import { getMypage } from "../../../lib/api/mypages"
 import { Alert } from "@material-ui/lab"
 import Pagenation from "../dreamDiaries/organisms/Pagenation"
 import { useMediaQueryContext } from "../../provider/MediaQueryPrivider"
-import { Diversity1Rounded, Diversity1Sharp } from "@mui/icons-material"
 
 const useStyles = makeStyles((theme: Theme) => ({
   box: {
@@ -29,6 +28,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     backgroundColor: "#884898",
     color: "white",
     margin: "auto",
+    marginBottom: "8rem",
     "&:hover" : {
       backgroundColor: "#b660cc"
     }
@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const MyPage: React.FC = () => {
   const { currentUser } = useContext(AuthContext)
-  const { isMobileSite, isPcSite } = useMediaQueryContext()
+  const { isMobileSite, isTabletSite, isPcSite } = useMediaQueryContext()
   const classes = useStyles()
   const location = useLocation()
 
@@ -84,9 +84,9 @@ const MyPage: React.FC = () => {
    = useState<string>(location.state ? (location.state.alertMsg) : (""))
 
   const [offset, setOffset] = useState<number>(0)
-  const perPage = 18
+  const perPage = 12
   const mPerPage = 10
-  const currentDreamDiaries = isPcSite ? (dreamDiaries.slice(offset, offset + perPage)) : (dreamDiaries.slice(offset, offset + mPerPage))
+  const currentDreamDiaries = isMobileSite ? (dreamDiaries.slice(offset, offset + mPerPage)) : (dreamDiaries.slice(offset, offset + perPage))
 
   const handleDreamDiaries = async () => {
     try {
@@ -205,7 +205,123 @@ const MyPage: React.FC = () => {
               {
               currentDreamDiaries.map((dreamDiary: DreamDiary, index: number) => {
                 return (
-                  <Grid item container key={index} xs={2} style={{margin: "auto"}}justify="center">
+                  <Grid item container key={index} xs={2}>
+                    <CardComp
+                      id={dreamDiary.id}
+                      image={dreamDiary.image}
+                      title={dreamDiary.title}
+                      content={dreamDiary.content}
+                      dreamDate={dreamDiary.dreamDate}
+                      impression={dreamDiary.impression}
+                      dreamType={dreamDiary.dreamType}
+                      userName={dreamDiary.user === null ? '退会済みユーザー' : dreamDiary.user.name}
+                      userImage={dreamDiary.user === null ? '' : dreamDiary.user.image.url}
+                      likeCount={dreamDiary.likeCount}
+                      commentCount={dreamDiary.commentCount}
+                      />
+                  </Grid>
+                )
+              })
+            }
+            </Grid>
+            <Pagenation
+              dreamDiaries={dreamDiaries}
+              perPage={perPage}
+              setOffset={setOffset}
+            />
+            </>
+            ) : (
+            <>
+            <Box className={classes.box}>
+            <h3>日記がありません！</h3>
+              <Button
+                component={Link}
+                to="/dreamdiaries/new"
+                variant="contained"
+                startIcon={<CreateIcon />}
+                className={classes.writeBtn}
+              >
+                日記を作成する
+              </Button>
+            </Box>
+            </>)
+            }
+            </>
+            )
+          : (
+          <Box className={classes.box}>
+            <CircularProgress />
+          </Box>
+          )
+        }
+      </>
+      )
+    }
+    {
+      isTabletSite && (
+        <>
+          {
+          !loading ? (
+            <>
+            <GuestAlert />
+            <Box style={{margin: "auto", display: "flex"}}>
+                    <div>
+                      <Avatar
+                        alt="avatar"
+                        src={currentUser?.image.url}
+                        className={classes.avatar}
+                      />
+                    </div>
+                    <div className={classes.grid}>
+                    <Typography variant="body1" component="p" gutterBottom className={classes.nameTypography}>
+                        {currentUser?.name}
+                    </Typography>
+                      {
+                      !currentUser?.isGuest ? (
+                        currentUser?.introduction ? (
+                          <Typography variant="body2" component="p" color="textSecondary" style={{whiteSpace: "pre-wrap"}}>
+                            {currentUser?.introduction}
+                          </Typography>
+                        ): (
+                          <Typography variant="body2" component="p" color="textSecondary">
+                            よろしくお願いいたします。
+                          </Typography>
+                        )
+                      ):(<></>)
+                      }
+                      <Button
+                        component={Link}
+                        to="/profile"
+                        variant="contained"
+                        className={classes.button}
+                      >
+                        プロフィール確認
+                      </Button>
+                    </div>
+                  </Box>
+                    <Divider style={{ marginTop: "2rem"}}/>
+              <div className={classes.root}>
+                <div>
+                  <Tabs
+                  value={valueTabs}
+                  onChange={handleChangeTabs}
+                  aria-label="ant example"
+                  variant="fullWidth"
+                  >
+                    <Tab value={1} label="自分の日記"  />
+                    <Tab value={2} label="お気に入りの日記"
+                      disabled={currentUser?.isGuest ? true : false} />
+                  </Tabs>
+                </div>
+              </div>
+            {
+            dreamDiaries.length > 0 ? (
+            <>
+              <Grid container style={{minWidth: "800px"}}>
+              {
+              currentDreamDiaries.map((dreamDiary: DreamDiary, index: number) => {
+                return (
+                  <Grid item container key={index} xs={3}>
                     <CardComp
                       id={dreamDiary.id}
                       image={dreamDiary.image}
