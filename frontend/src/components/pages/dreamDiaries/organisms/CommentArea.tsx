@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 const CommentArea = ({ index, body, createdAt, userId, userName, userImage, dreamDiaryId, comments, setComments, setSuccessOpen, setSuccessMsg, setAlertOpen,setAlertMsg }: CommentInfoProps) => {
   const classes = useStyles()
   const { currentUser } = useContext(AuthContext)
-  const { isMobileSite, isPcSite } = useMediaQueryContext()
+  const { isMobileSite, isTabletSite, isPcSite } = useMediaQueryContext()
 
   const [DlgOpen, setDlgOpen] = useState<boolean>(false)
 
@@ -91,6 +91,44 @@ const CommentArea = ({ index, body, createdAt, userId, userName, userImage, drea
     <>
     {
       isPcSite && (
+        <>
+        
+      <Grid container className={classes.grid}>
+        <Avatar
+          alt="avatar"
+          src={userImage}
+          className={classes.avatar}
+        />
+        <Typography variant="body1" style={{fontWeight: "bold"}}>
+          {userName}
+        </Typography>
+      </Grid>
+      <Grid item style={{width:"50%"}}>
+      <Typography variant="body1" color="textSecondary" style={{whiteSpace: "pre-wrap"}}>
+        {body}
+      </Typography>
+      </Grid>
+      <Grid item style={{width:"100%", textAlign: "right"}}>
+      <Typography variant="body2" color="textSecondary" className={classes.createdAtTypography}>
+        {createdDateTime(createdAt)}
+      </Typography>
+      {
+        currentUser?.id === userId ? (
+        <Button
+          color="primary"
+          onClick={() => setDlgOpen(true)}
+          className={classes.button}
+          >
+          <DeleteIcon />
+        </Button>
+        ):(<></>)
+      }
+      </Grid>
+      </>
+      )
+    }
+    {
+      isTabletSite && (
         <>
         
       <Grid container className={classes.grid}>

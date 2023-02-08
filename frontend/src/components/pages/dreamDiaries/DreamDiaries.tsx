@@ -28,6 +28,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   container: {
     minWidth: "1300px"
   },
+  tContainer: {
+    minWidth: "800px"
+  },
   mContainer: {
     minWidth: "50%"
   },
@@ -40,7 +43,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 const DreamDiaries: React.FC = () => {
   const location = useLocation()
   const classes = useStyles()
-  const { isMobileSite, isPcSite } = useMediaQueryContext()
+  const { isMobileSite, isTabletSite, isPcSite } = useMediaQueryContext()
 
   const [loading, setLoading] = useState<boolean>(true)
   const [dreamDiaries, setDreamDiaries] = useState<DreamDiary[]>([])
@@ -56,9 +59,9 @@ const DreamDiaries: React.FC = () => {
    = useState<string>(location.state ? (location.state.alertMsg) : (""))
 
   const [offset, setOffset] = useState<number>(0)
-  const perPage = 18
+  const perPage = 12
   const mPerPage = 10
-  const currentDreamDiaries = isPcSite ? (dreamDiaries.slice(offset, offset + perPage)) : (dreamDiaries.slice(offset, offset + mPerPage))
+  const currentDreamDiaries = isMobileSite ? (dreamDiaries.slice(offset, offset + mPerPage)) : (dreamDiaries.slice(offset, offset + perPage))
 
   const handleDreamDiaries = async () => {
     try {
@@ -97,6 +100,59 @@ const DreamDiaries: React.FC = () => {
               currentDreamDiaries.map((dreamDiary: DreamDiary, index: number) => {
                 return (
                   <Grid item container key={index} xs={2}>
+                    <CardComp
+                      id={dreamDiary.id}
+                      image={dreamDiary.image}
+                      title={dreamDiary.title}
+                      content={dreamDiary.content}
+                      dreamDate={dreamDiary.dreamDate}
+                      impression={dreamDiary.impression}
+                      dreamType={dreamDiary.dreamType}
+                      userName={dreamDiary.user === null ? '退会済みユーザー' : dreamDiary.user.name}
+                      userImage={dreamDiary.user === null ? '' : dreamDiary.user.image.url}
+                      likeCount={dreamDiary.likeCount}
+                      commentCount={dreamDiary.commentCount}
+                      />
+                  </Grid>
+                )
+              })
+            }
+            </Grid>
+            <Pagenation
+              dreamDiaries={dreamDiaries}
+              perPage={perPage}
+              setOffset={setOffset}
+             />
+            </>
+            ) : (
+            <>
+            <h3>日記がありません！</h3>
+            </>)
+            )
+          : (
+          <Box className={classes.box}>
+            <CircularProgress />
+          </Box>
+          ) 
+        }           
+      </>
+    )
+  }
+      {
+        isTabletSite && (
+          <>
+           {
+             !loading ? (
+            dreamDiaries.length > 0 ? (
+              <>
+              <div className={classes.title}>
+                <img src={ TitleImage } className={classes.titleSize}/>
+              </div>
+              <Grid container className={classes.tContainer}>
+              {
+              currentDreamDiaries.map((dreamDiary: DreamDiary, index: number) => {
+                return (
+                  <Grid item container key={index} xs={3}>
                     <CardComp
                       id={dreamDiary.id}
                       image={dreamDiary.image}

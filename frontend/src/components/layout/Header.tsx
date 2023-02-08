@@ -41,6 +41,14 @@ const useStyles = makeStyles((theme: Theme) => ({
     backgroundPosition: "center center",
     backgroundSize: "cover"
   },
+  tHeaderImage: {
+    position: "relative",
+    height: "48vh",
+    backgroundImage: "url(/header.png)",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center center",
+    backgroundSize: "cover"
+  },
   mHeaderImage: {
     position: "relative",
     height: "21vh",
@@ -53,7 +61,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const Header: React.FC = () => {
   const { loading, isSignedIn, currentUser } = useContext(AuthContext)
-  const { isMobileSite, isPcSite } = useMediaQueryContext()
+  const { isMobileSite, isTabletSite, isPcSite } = useMediaQueryContext()
   const classes = useStyles();
   const location = useLocation()
 
@@ -77,6 +85,18 @@ const Header: React.FC = () => {
     }else{
       return(
         <div className={classes.mHeaderImage}/>
+      )
+    }
+  }
+
+  const THeaderImage = () => {
+    if (location.pathname === "/privacy_policy") {
+      return (<></>)
+    }else if(location.pathname === "/term_of_service"){
+      return (<></>)
+    }else{
+      return(
+        <div className={classes.tHeaderImage}/>
       )
     }
   }
@@ -232,6 +252,33 @@ const Header: React.FC = () => {
             </div>
           </Toolbar>
           <HeaderImage />
+        </AppBar>
+      </>
+    )
+    }
+    { isTabletSite && (
+      <>
+        <AppBar position="static" style={{ color: "black", backgroundColor: "#fcfbfd" }}>
+          <Toolbar style={{display: "flex", justifyContent: "space-between"}}>
+            <Button
+                component={Link}
+                to="/"
+              >
+                <img src={TitleLogo} width="150px"/>
+            </Button>
+            <div style={{display: "flex"}}>
+              <Button
+                  component={Link}
+                  to="/dreamdiaries"
+                  color="inherit"
+                  className={classes.linkBtn}
+                >
+                  夢絵日記一覧
+                </Button>
+              <AuthButtons />
+            </div>
+          </Toolbar>
+          <THeaderImage />
         </AppBar>
       </>
     )

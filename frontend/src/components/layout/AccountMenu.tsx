@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 const AccountMenu: React.FC = () => {
   const classes = useStyles()
   const { setIsSignedIn, currentUser, setCurrentUser } = useContext(AuthContext)
-  const { isMobileSite, isPcSite } = useMediaQueryContext()
+  const { isMobileSite, isTabletSite, isPcSite } = useMediaQueryContext()
   const navigation = useNavigate()
 
   const [alertOpen, setAlertOpen] = useState<boolean>(false)
@@ -93,6 +93,82 @@ const AccountMenu: React.FC = () => {
     <>
     {
       isPcSite && (
+      <>
+        <Box className={classes.box}>
+          <Tooltip title={`${currentUser?.name}`}>
+            <IconButton
+              onClick={handleClick}
+              size="small"
+              aria-controls={open ? 'account-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? 'true' : undefined}
+            >
+              <Avatar
+                alt="avatar"
+                src={currentUser?.image.url}
+                />
+            </IconButton>
+          </Tooltip>
+        </Box>
+      <Menu
+          anchorEl={anchorEl}
+          id="account-menu"
+          open={open}
+          onClose={handleClose}
+          onClick={handleClose}
+          getContentAnchorEl={null}
+          PaperProps={{
+            elevation: 0
+          }}
+          className={classes.menu}
+          transformOrigin={{ horizontal: 'left', vertical: 'top' }}
+          anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+        >
+          <MenuItem
+            component={Link}
+            to="/mypage"
+            color="inherit"
+          >
+            マイページ
+          </MenuItem>
+          <MenuItem
+            component={Link}
+            to="/profile"
+            color="inherit"
+          >
+            プロフィール
+          </MenuItem>
+          {
+            currentUser?.isGuest ? (
+              <>
+                <Divider />
+                <MenuItem
+                  component={Link}
+                  color="inherit"
+                  to="/signin"
+                >
+                  ログイン
+                </MenuItem>
+              </>
+            ) : (
+              <>
+                <Divider />
+                <MenuItem
+                  component={Button}
+                  color="inherit"
+                  onClick={handleSignOut}
+                >
+                  ログアウト
+                </MenuItem>
+              </>
+            )
+          }
+        </Menu>
+      </>
+      )
+    }
+    {
+      isTabletSite && (
       <>
         <Box className={classes.box}>
           <Tooltip title={`${currentUser?.name}`}>
