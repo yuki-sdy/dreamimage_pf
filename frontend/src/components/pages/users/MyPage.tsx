@@ -13,7 +13,6 @@ import { getMypage } from "../../../lib/api/mypages"
 import { Alert } from "@material-ui/lab"
 import Pagenation from "../dreamDiaries/organisms/Pagenation"
 import { useMediaQueryContext } from "../../provider/MediaQueryPrivider"
-import { Diversity1Rounded, Diversity1Sharp } from "@mui/icons-material"
 
 const useStyles = makeStyles((theme: Theme) => ({
   box: {
