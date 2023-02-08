@@ -15,6 +15,7 @@ import { AuthContext } from "../../../App"
 
 import FormTitleImage from "../../../images/formtitle.png"
 import { useMediaQueryContext } from "../../provider/MediaQueryPrivider"
+import { Alert } from "@material-ui/lab"
 
 const useStyles = makeStyles((theme: Theme) => ({
   submitBtn: {
@@ -140,6 +141,11 @@ const DreamDiaryForm: React.FC = () => {
         </div>
         <Card className={classes.card}>
           <CardContent>
+            <Alert severity="warning">
+            1日当たりの絵の生成回数には制限があります。<br/>
+            　・新規登録済みのユーザー：10回<br/>　・ゲストログインユーザー：5回<br/>
+            　　※「画像生成回数」 = 「キーワードを入力して"絵を生成してみる"をクリックした回数」です。
+            </Alert>
             <TextField
               variant="outlined"
               required
