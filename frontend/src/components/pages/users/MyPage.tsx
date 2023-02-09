@@ -84,9 +84,8 @@ const MyPage: React.FC = () => {
    = useState<string>(location.state ? (location.state.alertMsg) : (""))
 
   const [offset, setOffset] = useState<number>(0)
-  const perPage = 12
-  const mPerPage = 10
-  const currentDreamDiaries = isMobileSite ? (dreamDiaries.slice(offset, offset + mPerPage)) : (dreamDiaries.slice(offset, offset + perPage))
+  const perPage = isMobileSite ? 10: 12
+  const currentDreamDiaries = dreamDiaries.slice(offset, offset + perPage)
 
   const handleDreamDiaries = async () => {
     try {
@@ -459,7 +458,7 @@ const MyPage: React.FC = () => {
             </Grid>
             <Pagenation
               dreamDiaries={dreamDiaries}
-              perPage={mPerPage}
+              perPage={perPage}
               setOffset={setOffset}
             />
             </>
