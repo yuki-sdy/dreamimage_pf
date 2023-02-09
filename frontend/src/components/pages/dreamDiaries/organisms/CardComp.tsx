@@ -34,14 +34,14 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: theme.spacing(2),
     boxShadow: "none",
     width: "230px",
-    height:"350px",
+    height:"370px",
     alignItems:"center",
     background:"rgba(0, 0, 0, 0)",
   },
   mCard: {
     padding: theme.spacing(2),
     boxShadow: "none",
-    height:"320px",
+    height:"390px",
     alignItems:"center",
     background:"rgba(0, 0, 0, 0)",
   },
@@ -124,7 +124,7 @@ const CardComp = ({ image, title, content, dreamDate, impression, dreamType, id,
               <Typography variant="h1" component="div" className={classes.typography} style={{fontSize: "17px", width: "150px"}}>
                   {title}
               </Typography>
-              <Typography variant="body2" color="textSecondary" className={classes.typography} style={{fontSize: "14px", width: "150px"}}>
+              <Typography variant="body2" color="textSecondary" className={classes.typography} style={{fontSize: "14px", width: "150px", WebkitLineClamp: 1}}>
                   {userName}
               </Typography>
               </div>
@@ -197,7 +197,7 @@ const CardComp = ({ image, title, content, dreamDate, impression, dreamType, id,
       isMobileSite && (
       <div className="product-card-top" style={{width: "100%"}}>
         <Link to={`/dreamdiaries/${id}`} className={classes.link}>
-        <Card className={classes.card} style={{padding: 0, width: "100%"}}>
+        <Card className={classes.mCard} style={{padding: 0, width: "100%"}}>
           <CardContent className={classes.mContent}>
             <CardMedia className={classes.mMedia}>
               <img src={image} width={"90%"} className={classes.image}/>
@@ -209,16 +209,16 @@ const CardComp = ({ image, title, content, dreamDate, impression, dreamType, id,
                   className={classes.avatar}
                 />
               <div>
-              <Typography variant="h1" component="div" className={classes.typography} style={{fontSize: "14px", width: "100px", fontWeight: "bold"}}>
+              <Typography variant="h1" component="div" className={classes.typography} style={{fontSize: "14px", width: "130px", fontWeight: "bold"}}>
                   {title}
               </Typography>
-              <Typography variant="body2" color="textSecondary" className={classes.typography} style={{fontSize: "13px", width: "100px"}}>
+              <Typography variant="body2" color="textSecondary" className={classes.typography} style={{fontSize: "13px", width: "100px", WebkitLineClamp: 1}}>
                   {userName}
               </Typography>
               </div>
             </div>
               <div style={{paddingTop: "3px"}}>
-              <Typography variant="body2" color="textSecondary" className={classes.typography} style={{fontSize: "12px", width: "120px"}}>
+              <Typography variant="body2" color="textSecondary" className={classes.typography} style={{fontSize: "12px", width: "180px"}}>
                 {content}
               </Typography>
               <Box style={{textAlign: "right"}}>

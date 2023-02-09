@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
+import useSWR from "swr"
 
 import { DreamDiary } from "../../../interfaces"
 import { getDreamDiaries } from "../../../lib/api/dreamdiaries"
@@ -45,8 +46,6 @@ const DreamDiaries: React.FC = () => {
   const classes = useStyles()
   const { isMobileSite, isTabletSite, isPcSite } = useMediaQueryContext()
 
-  const [loading, setLoading] = useState<boolean>(true)
-  const [dreamDiaries, setDreamDiaries] = useState<DreamDiary[]>([])
   const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(location.state)
 
   const [successOpen, setSuccessOpen]
@@ -59,29 +58,32 @@ const DreamDiaries: React.FC = () => {
    = useState<string>(location.state ? (location.state.alertMsg) : (""))
 
   const [offset, setOffset] = useState<number>(0)
-  const perPage = 12
-  const mPerPage = 10
-  const currentDreamDiaries = isMobileSite ? (dreamDiaries.slice(offset, offset + mPerPage)) : (dreamDiaries.slice(offset, offset + perPage))
+  const perPage = isMobileSite ? 10 : 12
+  
+  // const [page, setPage] = useState<number>(1)
+  // const useDiaryItemsState = (page :number, perPage :number) => {
+    // const res = useSWR(['DiaryItems', page, perPage], (_ :any, page :number, perPage :number) => getDreamDiaries(page, perPage))
 
-  const handleDreamDiaries = async () => {
-    try {
-      const res = await getDreamDiaries()
-
-      if (res.status === 200) {
-        setDreamDiaries(res.data)
-      } else {
-        console.log("No diary")
-      }
-    } catch (err) {
-      console.log(err)
+  const useDiaryItemsState = () => {
+    const res = useSWR('DiaryItems', getDreamDiaries,
+    {revalidateOnMount: false,
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false
+    })
+    return {
+      ...res,
+      isLoading: res.isValidating || !res.data,
     }
-
-    setLoading(false)
   }
+  
+  const {data: diaryItems, isLoading, mutate} = useDiaryItemsState()
 
   useEffect(() => {
-    handleDreamDiaries()
-  }, [])
+   if(!diaryItems) {
+    mutate()
+   }
+  }, [diaryItems?.data, mutate])
 
   return (
     <>
@@ -89,15 +91,15 @@ const DreamDiaries: React.FC = () => {
         isPcSite && (
           <>
            {
-             !loading ? (
-            dreamDiaries.length > 0 ? (
+             !isLoading ? (
+              diaryItems?.data.length > 0 ? (
               <>
               <div className={classes.title}>
                 <img src={ TitleImage } className={classes.titleSize}/>
               </div>
               <Grid container className={classes.container}>
               {
-              currentDreamDiaries.map((dreamDiary: DreamDiary, index: number) => {
+              diaryItems?.data.slice(offset, offset + perPage).map((dreamDiary: DreamDiary, index: number) => {
                 return (
                   <Grid item container key={index} xs={2}>
                     <CardComp
@@ -119,7 +121,7 @@ const DreamDiaries: React.FC = () => {
             }
             </Grid>
             <Pagenation
-              dreamDiaries={dreamDiaries}
+              dreamDiaries={diaryItems?.data}
               perPage={perPage}
               setOffset={setOffset}
              />
@@ -142,15 +144,15 @@ const DreamDiaries: React.FC = () => {
         isTabletSite && (
           <>
            {
-             !loading ? (
-            dreamDiaries.length > 0 ? (
+             !isLoading ? (
+              diaryItems?.data.length > 0 ? (
               <>
               <div className={classes.title}>
                 <img src={ TitleImage } className={classes.titleSize}/>
               </div>
               <Grid container className={classes.tContainer}>
               {
-              currentDreamDiaries.map((dreamDiary: DreamDiary, index: number) => {
+              diaryItems?.data.slice(offset, offset + perPage).map((dreamDiary: DreamDiary, index: number) => {
                 return (
                   <Grid item container key={index} xs={3}>
                     <CardComp
@@ -172,7 +174,7 @@ const DreamDiaries: React.FC = () => {
             }
             </Grid>
             <Pagenation
-              dreamDiaries={dreamDiaries}
+              dreamDiaries={diaryItems?.data}
               perPage={perPage}
               setOffset={setOffset}
              />
@@ -195,15 +197,15 @@ const DreamDiaries: React.FC = () => {
         isMobileSite && (
           <>
            {
-             !loading ? (
-            dreamDiaries.length > 0 ? (
+             !isLoading ? (
+              diaryItems?.data.length > 0 ? (
               <>
               <div className={classes.mTitle}>
                 <img src={ TitleImage } className={classes.mTitleSize}/>
               </div>
               <Grid container className={classes.mContainer}>
               {
-              currentDreamDiaries.map((dreamDiary: DreamDiary, index: number) => {
+              diaryItems?.data.slice(offset, offset + perPage).map((dreamDiary: DreamDiary, index: number) => {
                 return (
                   <Grid item container key={index} xs={6}>
                     <CardComp
@@ -225,8 +227,8 @@ const DreamDiaries: React.FC = () => {
             }
             </Grid>
             <Pagenation
-              dreamDiaries={dreamDiaries}
-              perPage={mPerPage}
+              dreamDiaries={diaryItems?.data}
+              perPage={perPage}
               setOffset={setOffset}
              />
             </>

@@ -5,6 +5,8 @@ class Api::V1::DreamDiariesController < ApplicationController
 
   def index
     dream_diaries = DreamDiary.where(state: true).order(created_at: :desc)
+    # ページ数を入れた場合
+    # dream_diaries = DreamDiary.where(state: true).order(created_at: :desc).limit(params[:per_page].to_i).offset(params[:per_page].to_i * (params[:page].to_i - 1) + 1)
     render json: dream_diaries, include: [:user], status: 200
   end
   

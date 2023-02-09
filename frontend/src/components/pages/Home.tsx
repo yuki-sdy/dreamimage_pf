@@ -1,7 +1,8 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { makeStyles, Theme } from "@material-ui/core/styles"
 import { AuthContext } from "../../App"
 import Cookies from "js-cookie"
+import useSWR from "swr"
 
 import { Link, useLocation, useNavigate } from "react-router-dom"
 
@@ -16,6 +17,7 @@ import { SignUpData } from "../../interfaces"
 import { signUp } from "../../lib/api/auth"
 import AlertMessage from "../utils/AlertMessage"
 import { useMediaQueryContext } from "../provider/MediaQueryPrivider"
+import { getDreamDiaries } from "../../lib/api/dreamdiaries"
 
 const useStyles = makeStyles((theme: Theme) => ({
   topImage: {
@@ -120,6 +122,27 @@ const Home: React.FC = () => {
       }
     }
   }
+
+  const useDiaryItemsState = () => {
+    const res = useSWR('DiaryItems', getDreamDiaries,
+    {revalidateOnMount: false,
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false
+    })
+    return {
+      ...res,
+      isLoading: res.isValidating || !res.data,
+    }
+  }
+  
+  const {data: diaryItems, mutate} = useDiaryItemsState()
+
+  useEffect(() => {
+   if(!diaryItems) {
+    mutate()
+   }
+  }, [diaryItems?.data, mutate])
 
   return (
     <>

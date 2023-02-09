@@ -3,8 +3,10 @@ import Cookies from "js-cookie"
 import { DreamDiaryFormData } from "../../interfaces"
 
 // indexへのgetリクエスト、公開済み日記を全件取得
+// export const getDreamDiaries = (page: number, perPage: number) => {
+  // return client.get(`dream_diaries?page=${page}&per_page=${perPage}`, { headers: {
 export const getDreamDiaries = () => {
-  return client.get("dream_diaries", { headers: {
+  return client.get(`dream_diaries`, { headers: {
     "access-token": Cookies.get("_access_token"),
     "client": Cookies.get("_client"),
     "uid": Cookies.get("_uid")
