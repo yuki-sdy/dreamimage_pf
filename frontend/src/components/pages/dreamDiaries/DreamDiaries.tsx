@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { useLocation } from "react-router-dom"
+import { useLocation, useSearchParams } from "react-router-dom"
 import useSWR from "swr"
 
 import { DreamDiary } from "../../../interfaces"
@@ -59,8 +59,10 @@ const DreamDiaries: React.FC = () => {
 
   const [offset, setOffset] = useState<number>(0)
   const perPage = isMobileSite ? 10 : 12
-  
-  // const [page, setPage] = useState<number>(1)
+  const [page, setPage] = useState<number>(0)
+  const [searchParams] = useSearchParams()
+  const pageNumber = searchParams.get("page")
+
   // const useDiaryItemsState = (page :number, perPage :number) => {
     // const res = useSWR(['DiaryItems', page, perPage], (_ :any, page :number, perPage :number) => getDreamDiaries(page, perPage))
 
@@ -114,6 +116,7 @@ const DreamDiaries: React.FC = () => {
                       userImage={dreamDiary.user === null ? '' : dreamDiary.user.image.url}
                       likeCount={dreamDiary.likeCount}
                       commentCount={dreamDiary.commentCount}
+                      fromPage={Number(pageNumber)}
                       />
                   </Grid>
                 )
@@ -124,6 +127,7 @@ const DreamDiaries: React.FC = () => {
               dreamDiaries={diaryItems?.data}
               perPage={perPage}
               setOffset={setOffset}
+              setPage={setPage}
              />
             </>
             ) : (
@@ -167,6 +171,7 @@ const DreamDiaries: React.FC = () => {
                       userImage={dreamDiary.user === null ? '' : dreamDiary.user.image.url}
                       likeCount={dreamDiary.likeCount}
                       commentCount={dreamDiary.commentCount}
+                      fromPage={Number(pageNumber)}
                       />
                   </Grid>
                 )
@@ -177,6 +182,7 @@ const DreamDiaries: React.FC = () => {
               dreamDiaries={diaryItems?.data}
               perPage={perPage}
               setOffset={setOffset}
+              setPage={setPage}
              />
             </>
             ) : (
@@ -220,6 +226,7 @@ const DreamDiaries: React.FC = () => {
                       userImage={dreamDiary.user === null ? '' : dreamDiary.user.image.url}
                       likeCount={dreamDiary.likeCount}
                       commentCount={dreamDiary.commentCount}
+                      fromPage={Number(pageNumber)}
                       />
                   </Grid>
                 )
@@ -230,6 +237,7 @@ const DreamDiaries: React.FC = () => {
               dreamDiaries={diaryItems?.data}
               perPage={perPage}
               setOffset={setOffset}
+              setPage={setPage}
              />
             </>
             ) : (

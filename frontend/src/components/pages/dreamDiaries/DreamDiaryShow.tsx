@@ -73,6 +73,8 @@ const DreamDiaryShow: React.FC = () => {
   const [currentUserBookmarked, setCurrentUserBookmarked] = useState<boolean>(false)
   const [commentBody, setCommentBody] = useState<string>("")
   const [comments, setComments] = useState<Comment[]>([])
+  const [fromPage, setFromPage] = useState<number>(location.state.fromPage)
+  console.log(location.state.fromPage)
 
   const [DlgOpen, setDlgOpen] = useState<boolean>(false)
   const [successOpen, setSuccessOpen]
@@ -381,7 +383,7 @@ const DreamDiaryShow: React.FC = () => {
         <Box style={{width: "800px", textAlign: "center", margin: "auto"}}>
           <Button
             component={Link}
-            to="/dreamdiaries"
+            to={fromPage ? `/dreamdiaries?page=${fromPage}` : "/dreamdiaries"}
           >
             ▶︎一覧画面に戻る
           </Button>
@@ -540,7 +542,7 @@ const DreamDiaryShow: React.FC = () => {
         <Box style={{width: "800px", textAlign: "center", margin: "auto"}}>
           <Button
             component={Link}
-            to="/dreamdiaries"
+            to={fromPage ? `/dreamdiaries?page=${fromPage}` : "/dreamdiaries"}
           >
             ▶︎一覧画面に戻る
           </Button>
@@ -696,8 +698,8 @@ const DreamDiaryShow: React.FC = () => {
         <Box style={{width: "100%", textAlign: "center", margin: "auto"}}>
           <Button
             component={Link}
-            to="/dreamdiaries"
-          >
+            to={fromPage ? `/dreamdiaries?page=${fromPage}` : "/dreamdiaries"}
+            >
             ▶︎一覧画面に戻る
           </Button>
           <Button
