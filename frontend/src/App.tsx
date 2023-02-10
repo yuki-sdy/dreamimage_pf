@@ -18,6 +18,7 @@ import SignUp from "./components/pages/auth/SignUp"
 import PrivacyPolicy from "./components/pages/terms/PrivacyPolicy"
 import TermOfService from "./components/pages/terms/TermOfService"
 import NotFound from "./components/pages/NotFound"
+import ScrollTop from "./components/pages/ScrollTop"
 
 import { User } from "./interfaces"
 import { getCurrentUser } from "./lib/api/auth"
@@ -83,6 +84,7 @@ const App: React.FC = () => {
 
   return (
     <Router>
+      <ScrollTop />
       <AuthContext.Provider value={{ loading, setLoading, isSignedIn, setIsSignedIn, currentUser, setCurrentUser}}>
         <MediaQueryProvider>
           <CommonLayout>
