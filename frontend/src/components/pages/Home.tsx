@@ -27,9 +27,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     zIndex: 1
   },
   mTopImage: {
-    width: "440px",
+    width: "365px",
     position: "absolute",
-    left:"-220px",
+    left:"-185px",
     top: "-30px",
     zIndex: 1
   },
@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   mContainerBox: {
     position: "relative",
-    height: "1520px",
+    height: "1300px",
     marginTop: 0
   },
   tContainerBox: {
@@ -216,12 +216,12 @@ const Home: React.FC = () => {
             <img src={mTopImage} className={classes.mTopImage} />
             <Button 
               className={classes.imageBox} 
-              style={{maxWidth: "50px", top: "1250px", left: "-29px"}}
+              style={{maxWidth: "50px", top: "1020px", left: "-29px"}}
               onClick={handleGuestLoginSubmit}
               >
               <img src={TopButton1} style={{width: "220px"}} />
             </Button>
-            <Box textAlign="center" className={classes.imageBox} style={{top: "1380px", left: "-60px"}}>
+            <Box textAlign="center" className={classes.imageBox} style={{top: "1140px", left: "-60px"}}>
                 <Link to="/dreamdiaries">
                   <img src={GoButtonImage} style={{width: "140px"}} />
                 </Link>

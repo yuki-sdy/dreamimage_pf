@@ -1,12 +1,14 @@
 import { makeStyles, Theme, Box } from "@material-ui/core"
-import React from "react"
+import React, { useEffect } from "react"
 import ReactPaginate from 'react-paginate'
+import { useNavigate, useSearchParams } from "react-router-dom"
 import { DreamDiary } from "../../../../interfaces"
 
 export interface PagenationProps {
   dreamDiaries: DreamDiary[],
   perPage: number,
   setOffset: Function,
+  setPage: Function,
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -43,13 +45,26 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }))
 
-const Pagenation = ({ dreamDiaries, perPage, setOffset }: PagenationProps) => {
+const Pagenation = ({ dreamDiaries, perPage, setOffset, setPage }: PagenationProps) => {
   const classes = useStyles()
   const pageCount =Math.ceil(dreamDiaries.length / perPage)
+  const navigation = useNavigate()
+
+  const [searchParams] = useSearchParams()
+  const pageNumber = searchParams.get("page")
+
+  const handlePageCheck = async (pageNumber: number | null) => {
+    const newOffset = !(pageNumber===0) ? ((Number(pageNumber)-1) * perPage) % dreamDiaries.length : 0
+    setOffset(newOffset)
+  }
+  useEffect(() => {
+    handlePageCheck(Number(pageNumber))
+    window.scrollTo(0, 0)
+   }, [pageNumber])
 
   const handlePageClick = (e : {selected: number}) => {
-    const newOffset = (e.selected * perPage) % dreamDiaries.length
-    setOffset(newOffset)
+    setPage(e.selected)
+    navigation(`/dreamdiaries?page=${e.selected + 1}`)
   }
 
   return (
@@ -60,6 +75,7 @@ const Pagenation = ({ dreamDiaries, perPage, setOffset }: PagenationProps) => {
         previousLabel={'<'}
         nextLabel={'>'}
         breakLabel={'...'}
+        forcePage={pageNumber ? Number(pageNumber)-1 : 0}
         marginPagesDisplayed={1}
         pageRangeDisplayed={3}
         containerClassName={classes.pagenation}

@@ -18,7 +18,8 @@ export interface CardInfoProps {
   userName: string
   userImage: string
   likeCount: number
-  commentCount: number
+  commentCount: number,
+  fromPage: number
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -91,7 +92,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }))
 
-const CardComp = ({ image, title, content, dreamDate, impression, dreamType, id, userName, userImage, likeCount, commentCount}: CardInfoProps) => {
+const CardComp = ({ image, title, content, dreamDate, impression, dreamType, id, userName, userImage, likeCount, commentCount, fromPage}: CardInfoProps) => {
   const classes = useStyles()
   const { isMobileSite, isTabletSite, isPcSite } = useMediaQueryContext()
 
@@ -108,7 +109,7 @@ const CardComp = ({ image, title, content, dreamDate, impression, dreamType, id,
     {
       isPcSite && (
       <div className="product-card-top">
-        <Link to={`/dreamdiaries/${id}`} className={classes.link}>
+        <Link to={`/dreamdiaries/${id}`} state={{fromPage: fromPage}} className={classes.link}>
         <Card className={classes.card} style={{padding: 0}}>
           <CardContent className={classes.content}>
             <CardMedia className={classes.media}>
@@ -152,7 +153,7 @@ const CardComp = ({ image, title, content, dreamDate, impression, dreamType, id,
     {
       isTabletSite && (
       <div className="product-card-top">
-        <Link to={`/dreamdiaries/${id}`} className={classes.link}>
+        <Link to={`/dreamdiaries/${id}`} state={{fromPage: fromPage}} className={classes.link}>
         <Card className={classes.card} style={{padding: 0}}>
           <CardContent className={classes.content}>
             <CardMedia className={classes.media}>
@@ -196,7 +197,7 @@ const CardComp = ({ image, title, content, dreamDate, impression, dreamType, id,
     {
       isMobileSite && (
       <div className="product-card-top" style={{width: "100%"}}>
-        <Link to={`/dreamdiaries/${id}`} className={classes.link}>
+        <Link to={`/dreamdiaries/${id}`} state={{fromPage: fromPage}} className={classes.link}>
         <Card className={classes.mCard} style={{padding: 0, width: "100%"}}>
           <CardContent className={classes.mContent}>
             <CardMedia className={classes.mMedia}>

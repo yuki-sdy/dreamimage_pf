@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react"
 import { makeStyles, Theme } from "@material-ui/core/styles"
 
 import { AuthContext } from "../../../App"
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useSearchParams } from "react-router-dom"
 import { Button, Grid, Tabs, Tab, Typography, Box, Avatar, Divider } from "@material-ui/core"
 import CreateIcon from "@material-ui/icons/Create"
 import CircularProgress from '@material-ui/core/CircularProgress'
@@ -68,6 +68,8 @@ const MyPage: React.FC = () => {
   const { isMobileSite, isTabletSite, isPcSite } = useMediaQueryContext()
   const classes = useStyles()
   const location = useLocation()
+  const [searchParams] = useSearchParams()
+  const pageNumber = searchParams.get("page")
 
   const [loading, setLoading] = useState<boolean>(true)
   const [dreamDiaries, setDreamDiaries] = useState<DreamDiary[]>([])
@@ -83,6 +85,7 @@ const MyPage: React.FC = () => {
   const [alertMsg, setAlertMsg]
    = useState<string>(location.state ? (location.state.alertMsg) : (""))
 
+  const [page, setPage] = useState<number>(1)
   const [offset, setOffset] = useState<number>(0)
   const perPage = isMobileSite ? 10: 12
   const currentDreamDiaries = dreamDiaries.slice(offset, offset + perPage)
@@ -217,6 +220,7 @@ const MyPage: React.FC = () => {
                       userImage={dreamDiary.user === null ? '' : dreamDiary.user.image.url}
                       likeCount={dreamDiary.likeCount}
                       commentCount={dreamDiary.commentCount}
+                      fromPage={Number(pageNumber)}
                       />
                   </Grid>
                 )
@@ -227,6 +231,7 @@ const MyPage: React.FC = () => {
               dreamDiaries={dreamDiaries}
               perPage={perPage}
               setOffset={setOffset}
+              setPage={setPage}
             />
             </>
             ) : (
@@ -333,6 +338,7 @@ const MyPage: React.FC = () => {
                       userImage={dreamDiary.user === null ? '' : dreamDiary.user.image.url}
                       likeCount={dreamDiary.likeCount}
                       commentCount={dreamDiary.commentCount}
+                      fromPage={Number(pageNumber)}
                       />
                   </Grid>
                 )
@@ -343,6 +349,7 @@ const MyPage: React.FC = () => {
               dreamDiaries={dreamDiaries}
               perPage={perPage}
               setOffset={setOffset}
+              setPage={setPage}
             />
             </>
             ) : (
@@ -450,6 +457,7 @@ const MyPage: React.FC = () => {
                       userImage={dreamDiary.user === null ? '' : dreamDiary.user.image.url}
                       likeCount={dreamDiary.likeCount}
                       commentCount={dreamDiary.commentCount}
+                      fromPage={Number(pageNumber)}
                       />
                   </Grid>
                 )
@@ -460,6 +468,7 @@ const MyPage: React.FC = () => {
               dreamDiaries={dreamDiaries}
               perPage={perPage}
               setOffset={setOffset}
+              setPage={setPage}
             />
             </>
             ) : (

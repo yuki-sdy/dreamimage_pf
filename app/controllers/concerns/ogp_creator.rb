@@ -76,7 +76,7 @@ class OgpCreator
         fix_x -= fontsize + 11
       end
       w.each_with_index do |c, i|
-        if c == "ー" || c == "…"
+        if c == "ー" || c == "…" || c == "〜"
           config.gravity 'SouthWest'
           config.rotate -90
           config.draw "text #{y + i * fontsize + fontsize / 4},#{fix_x - fontsize / 5} '#{c}'"

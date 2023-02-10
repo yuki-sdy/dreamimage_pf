@@ -7,7 +7,7 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins 'localhost:3000', 'https://dreamdiary-cc83b.web.app'
+    origins 'localhost:3000', 'https://dreamdiary-cc83b.web.app', 'https://www.dream-picturediary.com/'
 
     resource '*',
       headers: :any,
