@@ -7,18 +7,18 @@
   ![スクリーンショット 2023-03-02 18 32 50](https://user-images.githubusercontent.com/105707999/222639088-c2ce24a5-e5b7-48b2-8250-1eb06c8e07b9.png)
   ![スクリーンショット 2023-03-02 18 35 28](https://user-images.githubusercontent.com/105707999/222639114-fe3d68af-1fed-4b18-994b-eb9627f10cf4.png)
 
-## URL：
+## URL
 https://www.dream-picturediary.com/
 
-## 使用技術：
-Ruby 2.7.0
-Ruby on Rails 6.1.4
-React 18.2.0
-TypeScript 4.9.3
-PostgrSQL 1.4.5
-Firebase(デプロイ)
-Japanese Stabele Difusion(API)
-TwitterAPI
+## 使用技術
+- Ruby 2.7.0
+- Ruby on Rails 6.1.4
+- React 18.2.0
+- TypeScript 4.9.3
+- PostgrSQL 1.4.5
+- Firebase(デプロイ)
+- Japanese Stabele Difusion(API)
+- TwitterAPI
 
 ## 問題意識
 
@@ -36,7 +36,7 @@ TwitterAPI
 - 夢を他人に共有してみたい人
 - 他人がどんな夢を見ているのか気になる人
 
-## 機能等一覧：
+## 機能等一覧
  - ユーザー登録、ログイン機能、ゲストログイン機能(devise)
  - マイページ
  - 夢絵日記の投稿、編集、削除
@@ -56,5 +56,5 @@ TwitterAPI
 - 他ユーザーのプロフィール閲覧
 - コントローラーテスト
 
-## ER図：
+## ER図
 https://drive.google.com/file/d/190bA2tU1dG1A7jdlLGI2IZI-iBXfuFJB/view?usp=sharing
