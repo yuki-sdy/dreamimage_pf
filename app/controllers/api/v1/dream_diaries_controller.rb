@@ -5,14 +5,7 @@ class Api::V1::DreamDiariesController < ApplicationController
 
   def index
     dream_diaries = DreamDiary.where(state: true).order(created_at: :desc)
-    diary_data = []
-    dream_diaries.each do |diary|
-      diary[:diary_ogp] = nil
-      hash_data = diary.attributes
-      hash_data["user"] = diary.user.present? ? 
-        {name: diary.user[:name], image:{url: diary.user[:image]}} : nil
-      diary_data << hash_data
-    end
+    diary_data = json_fix(dream_diaries)
     # ページ数を入れた場合
     # params[:page] == "0" ? page = 1 : page = params[:page]
     # dream_diaries = DreamDiary.where(state: true).order(created_at: :desc).limit(params[:per_page].to_i).offset(params[:per_page].to_i * (page - 1) + 1)
@@ -89,5 +82,17 @@ class Api::V1::DreamDiariesController < ApplicationController
 
   def dream_diary_params_with_ogp
     params.require(:dream_diary).permit(:title, :body, :content, :prompt, :state, :impression, :dream_type, :dream_date, :image, :user_id).merge(params.permit(:diary_ogp))
+  end
+
+  def json_fix(dream_diaries)
+    diary_data = []
+    dream_diaries.each do |diary|
+      diary[:diary_ogp] = nil
+      hash_data = diary.attributes
+      hash_data["user"] = diary.user.present? ? 
+        {name: diary.user[:name], image:{url: diary.user[:image]}} : nil
+      diary_data << hash_data
+    end
+    diary_data
   end
 end

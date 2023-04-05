@@ -125,7 +125,7 @@ const DreamDiaries: React.FC = () => {
             }
             </Grid>
             <Pagenation
-              dreamDiaries={diaryItems?.data}
+              dreamDiaries={diaryItems?.data.dreamDiary}
               perPage={perPage}
               setOffset={setOffset}
               setPage={setPage}
@@ -180,7 +180,7 @@ const DreamDiaries: React.FC = () => {
             }
             </Grid>
             <Pagenation
-              dreamDiaries={diaryItems?.data}
+              dreamDiaries={diaryItems?.data.dreamDiary}
               perPage={perPage}
               setOffset={setOffset}
               setPage={setPage}
@@ -235,7 +235,7 @@ const DreamDiaries: React.FC = () => {
             }
             </Grid>
             <Pagenation
-              dreamDiaries={diaryItems?.data}
+              dreamDiaries={diaryItems?.data.dreamDiary}
               perPage={perPage}
               setOffset={setOffset}
               setPage={setPage}
