@@ -5,9 +5,18 @@ class Api::V1::DreamDiariesController < ApplicationController
 
   def index
     dream_diaries = DreamDiary.where(state: true).order(created_at: :desc)
+    diary_data = []
+    dream_diaries.each do |diary|
+      diary[:diary_ogp] = nil
+      hash_data = diary.attributes
+      hash_data["user"] = diary.user.present? ? 
+        {name: diary.user[:name], image:{url: diary.user[:image]}} : nil
+      diary_data << hash_data
+    end
     # ページ数を入れた場合
-    # dream_diaries = DreamDiary.where(state: true).order(created_at: :desc).limit(params[:per_page].to_i).offset(params[:per_page].to_i * (params[:page].to_i - 1) + 1)
-    render json: dream_diaries, include: [:user], status: 200
+    # params[:page] == "0" ? page = 1 : page = params[:page]
+    # dream_diaries = DreamDiary.where(state: true).order(created_at: :desc).limit(params[:per_page].to_i).offset(params[:per_page].to_i * (page - 1) + 1)
+    render json: { dream_diary: diary_data, status: 200 }
   end
   
   def show

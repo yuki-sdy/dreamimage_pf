@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useLocation, useSearchParams } from "react-router-dom"
 import useSWR from "swr"
+// import useSWRInfinite from "swr"
 
 import { DreamDiary } from "../../../interfaces"
 import { getDreamDiaries } from "../../../lib/api/dreamdiaries"
@@ -94,14 +95,14 @@ const DreamDiaries: React.FC = () => {
           <>
            {
              !isLoading ? (
-              diaryItems?.data.length > 0 ? (
+              diaryItems?.data.dreamDiary.length > 0 ? (
               <>
               <div className={classes.title}>
                 <img src={ TitleImage } className={classes.titleSize}/>
               </div>
               <Grid container className={classes.container}>
               {
-              diaryItems?.data.slice(offset, offset + perPage).map((dreamDiary: DreamDiary, index: number) => {
+              diaryItems?.data.dreamDiary.slice(offset, offset + perPage).map((dreamDiary: DreamDiary, index: number) => {
                 return (
                   <Grid item container key={index} xs={2}>
                     <CardComp
@@ -149,14 +150,14 @@ const DreamDiaries: React.FC = () => {
           <>
            {
              !isLoading ? (
-              diaryItems?.data.length > 0 ? (
+              diaryItems?.data.dreamDiary.length > 0 ? (
               <>
               <div className={classes.title}>
                 <img src={ TitleImage } className={classes.titleSize}/>
               </div>
               <Grid container className={classes.tContainer}>
               {
-              diaryItems?.data.slice(offset, offset + perPage).map((dreamDiary: DreamDiary, index: number) => {
+              diaryItems?.data.dreamDiary.slice(offset, offset + perPage).map((dreamDiary: DreamDiary, index: number) => {
                 return (
                   <Grid item container key={index} xs={3}>
                     <CardComp
@@ -204,14 +205,14 @@ const DreamDiaries: React.FC = () => {
           <>
            {
              !isLoading ? (
-              diaryItems?.data.length > 0 ? (
+              diaryItems?.data.dreamDiary.length > 0 ? (
               <>
               <div className={classes.mTitle}>
                 <img src={ TitleImage } className={classes.mTitleSize}/>
               </div>
               <Grid container className={classes.mContainer}>
               {
-              diaryItems?.data.slice(offset, offset + perPage).map((dreamDiary: DreamDiary, index: number) => {
+              diaryItems?.data.dreamDiary.slice(offset, offset + perPage).map((dreamDiary: DreamDiary, index: number) => {
                 return (
                   <Grid item container key={index} xs={6}>
                     <CardComp
