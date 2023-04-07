@@ -66,8 +66,8 @@ class Api::V1::DreamDiariesController < ApplicationController
   end
   
   def share
-    display_url = TwitterShare.send(params[:url])   
-    render json: { status: 200, display_url: display_url}
+    tweet_id = TwitterShare.send(params[:url])   
+    render json: { status: 200, tweet_id: tweet_id}
   end
 
   private

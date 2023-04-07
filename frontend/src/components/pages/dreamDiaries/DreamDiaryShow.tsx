@@ -77,6 +77,7 @@ const DreamDiaryShow: React.FC = () => {
   console.log(location.state.fromPage)
 
   const [DlgOpen, setDlgOpen] = useState<boolean>(false)
+  const [twitterDlgOpen, setTwitterDlgOpen] = useState<boolean>(false)
   const [successOpen, setSuccessOpen]
    = useState<boolean>(location.state ? (location.state.successOpen) : (false))
   const [successMsg, setSuccessMsg]
@@ -276,14 +277,14 @@ const DreamDiaryShow: React.FC = () => {
 
   // twitterシェア
   const handleTwitterSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
+    setTwitterDlgOpen(false)
     const url = `https://dreamdiary.magia.runteq.jp/api/v1/dream_diaries/${dreamDiary?.id}/images`
     try {
       const res = await TwitterShare(dreamDiary?.id, url)
       console.log(res)
 
       if (res?.status === 200) {
-        const tweet = `https://twitter.com/intent/tweet?text=画像生成で夢を絵日記に！%20%23夢絵日記%20%0a${res.data.displayUrl}&url=${process.env.REACT_APP_FRONT}`
+        const tweet = `https://twitter.com/intent/tweet?text=画像生成で夢を絵日記に！%20%23夢絵日記%20%0a他の日記も見に行こう！https://www.dream-picturediary.com/dreamdiaries%0ahttps://twitter.com/DreamdiaryApp/status/${res.data.tweetId}`
         window.open(tweet, '_blank')
         
       } else {
@@ -341,7 +342,7 @@ const DreamDiaryShow: React.FC = () => {
           ):(<></>)
         }
           <Button
-            onClick={handleTwitterSubmit}
+            onClick={() => setTwitterDlgOpen(true)}
               color="primary"
                 disabled={!isSignedIn ? true : false}
                 startIcon={<TwitterIcon/>}
@@ -500,7 +501,7 @@ const DreamDiaryShow: React.FC = () => {
           ):(<></>)
         }
           <Button
-            onClick={handleTwitterSubmit}
+            onClick={() => setTwitterDlgOpen(true)}
               color="primary"
                 disabled={!isSignedIn ? true : false}
                 startIcon={<TwitterIcon/>}
@@ -676,7 +677,7 @@ const DreamDiaryShow: React.FC = () => {
           ) : (<></>)
         }
         <Button
-        onClick={handleTwitterSubmit}
+        onClick={() => setTwitterDlgOpen(true)}
           color="primary"
           disabled={!isSignedIn ? true : false}
           style={{ marginTop: "1rem", marginBottom: "1rem" }}
@@ -777,6 +778,12 @@ const DreamDiaryShow: React.FC = () => {
       open={DlgOpen}
       setOpen={setDlgOpen}
       doYes={handleDeleteDreamDiary}
+    />
+    <CommonDialog // tweet確認ダイアログ
+      message={`このボタンからツイッターシェアを行う場合、\n夢絵日記twitter公式アカウントにて日記画像がツイートされます。\n「はい」を選ぶと、しばらくしてTwitterに移動します。`}
+      open={twitterDlgOpen}
+      setOpen={setTwitterDlgOpen}
+      doYes={handleTwitterSubmit}
     />
     <AlertMessage
       open={alertOpen}
