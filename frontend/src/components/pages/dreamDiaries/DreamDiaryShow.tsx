@@ -284,7 +284,7 @@ const DreamDiaryShow: React.FC = () => {
       console.log(res)
 
       if (res?.status === 200) {
-        const tweet = `https://twitter.com/intent/tweet?text=画像生成で夢を絵日記に！%20%23夢絵日記%20%0ahttps://www.dream-picturediary.com/dreamdiaries/${dreamDiary?.id}%0ahttps://twitter.com/DreamdiaryApp/status/${res.data.tweetId}`
+        const tweet = `https://twitter.com/intent/tweet?text=画像生成で夢を絵日記に！%20%23夢絵日記%20%0a他の日記も見に行こう！https://www.dream-picturediary.com/dreamdiaries%0ahttps://twitter.com/DreamdiaryApp/status/${res.data.tweetId}`
         window.open(tweet, '_blank')
         
       } else {
